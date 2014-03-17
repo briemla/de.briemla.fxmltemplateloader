@@ -1,17 +1,30 @@
 package de.briemla.fxmltemplateloader;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Map.Entry;
+
 public class Template {
 
 	private final Class<?> clazz;
+	private final Map<Method, Object> properties;
 
-	public Template(Class<?> clazz) {
+	public Template(Class<?> clazz, Map<Method, Object> properties) {
 		super();
 		this.clazz = clazz;
+		this.properties = properties;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T create() throws InstantiationException, IllegalAccessException {
-		return (T) clazz.newInstance();
+	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Object newInstance = clazz.newInstance();
+		for (Entry<Method, Object> property : properties.entrySet()) {
+			Method method = property.getKey();
+			Object value = property.getValue();
+			method.invoke(newInstance, value);
+		}
+		return (T) newInstance;
 	}
 
 }

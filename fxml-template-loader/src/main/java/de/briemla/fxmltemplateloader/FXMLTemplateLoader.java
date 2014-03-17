@@ -4,12 +4,18 @@ import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -37,7 +43,7 @@ public class FXMLTemplateLoader {
 			return parseXml(eventReader).create();
 		} catch (XMLStreamException exception) {
 			throw new IOException("Could not parse XML", exception);
-		} catch (InstantiationException | IllegalAccessException exception) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
 			throw new IOException("Could not instatiate Nodes", exception);
 		}
 	}
@@ -58,7 +64,36 @@ public class FXMLTemplateLoader {
 	private void parseElement(StartElement element, XMLEventReader reader) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
-		rootNode = new Template(clazz);
+		Map<Method, Object> properties = findProperties(element, clazz);
+		rootNode = new Template(clazz, properties);
+	}
+
+	@SuppressWarnings({ "restriction", "unchecked" })
+	private Map<Method, Object> findProperties(StartElement element, Class<?> clazz) {
+		HashMap<Method, Object> properties = new HashMap<>();
+		Iterator<Attribute> attributes = element.getAttributes();
+		while (attributes.hasNext()) {
+			Attribute attribute = attributes.next();
+			Method method = findSetter(clazz, attribute);
+			Object value = convertToCorrectType(method, attribute);
+			properties.put(method, value);
+		}
+		return properties;
+	}
+
+	private Object convertToCorrectType(Method method, Attribute attribute) {
+		return Double.parseDouble(attribute.getValue().toString());
+	}
+
+	private Method findSetter(Class<?> clazz, Attribute attribute) {
+		String propertyName = attribute.getName().getLocalPart();
+		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		for (Method method : clazz.getMethods()) {
+			if (setterName.equals(method.getName())) {
+				return method;
+			}
+		}
+		throw new IllegalStateException("Could not find setter for property: " + propertyName);
 	}
 
 	private Class<?> findClass(String className) {

@@ -1,5 +1,9 @@
 package de.briemla.fxmltemplateloader;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 
 import javafx.scene.layout.HBox;
@@ -27,6 +31,20 @@ public class FXMLTemplateLoaderTest {
 	@Test
 	public void loadSimpleHBoxRootWithSingleFullQualifiedImport() throws Exception {
 		HBox hbox = load("SimpleHBoxRootWithSingleFullQualifiedImport.fxml");
+	}
+
+	@Test
+	public void loadVBoxRootWithPropertiesAndSingleFullQualifiedImport() throws Exception {
+		VBox vbox = load("VBoxRootWithPropertiesAndSingleFullQualifiedImport.fxml");
+
+		assertThat(vbox.getSpacing(), is(equalTo(200.0d)));
+	}
+
+	@Test
+	public void loadHBoxRootWithPropertiesAndSingleFullQualifiedImport() throws Exception {
+		HBox hbox = load("HBoxRootWithPropertiesAndSingleFullQualifiedImport.fxml");
+
+		assertThat(hbox.getSpacing(), is(equalTo(30.0d)));
 	}
 
 	private <T> T load(String fileName) throws IOException {
