@@ -2,6 +2,6 @@
 
 <?import javafx.scene.layout.HBox?>
 
-<HBox spacing="30.0" xmlns:fx="http://javafx.com/fxml">
+<HBox spacing="30.0" id="diNaSiSiht" xmlns:fx="http://javafx.com/fxml">
 </HBox>
 

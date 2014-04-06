@@ -82,7 +82,18 @@ public class FXMLTemplateLoader {
 	}
 
 	private Object convertToCorrectType(Method method, Attribute attribute) {
-		return Double.parseDouble(attribute.getValue().toString());
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		if (parameterTypes.length != 1) {
+			throw new RuntimeException("Incorrect number of arguments for setter found.");
+		}
+		Class<?> attributeType = parameterTypes[0];
+		if (String.class.equals(attributeType)) {
+			return attribute.getValue();
+		}
+		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
+			return Double.parseDouble(attribute.getValue().toString());
+		}
+		throw new RuntimeException("Attribute type not supported.");
 	}
 
 	private Method findSetter(Class<?> clazz, Attribute attribute) {

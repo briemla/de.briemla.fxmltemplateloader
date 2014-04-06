@@ -2,6 +2,6 @@
 
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="200.0" xmlns:fx="http://javafx.com/fxml">
+<VBox spacing="200.0" id="thisIsAnId" xmlns:fx="http://javafx.com/fxml">
 </VBox>
 
