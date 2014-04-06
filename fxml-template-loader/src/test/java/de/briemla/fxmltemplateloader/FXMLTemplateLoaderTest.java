@@ -39,6 +39,7 @@ public class FXMLTemplateLoaderTest {
 
 		assertThat(vbox.getSpacing(), is(equalTo(200.0d)));
 		assertThat(vbox.getId(), is(equalTo("thisIsAnId")));
+		assertThat(vbox.isVisible(), is(false));
 	}
 
 	@Test
@@ -47,6 +48,7 @@ public class FXMLTemplateLoaderTest {
 
 		assertThat(hbox.getSpacing(), is(equalTo(30.0d)));
 		assertThat(hbox.getId(), is(equalTo("diNaSiSiht")));
+		assertThat(hbox.isVisible(), is(false));
 	}
 
 	private <T> T load(String fileName) throws IOException {

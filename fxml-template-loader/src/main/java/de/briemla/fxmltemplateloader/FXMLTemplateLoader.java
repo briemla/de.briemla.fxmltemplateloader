@@ -93,6 +93,9 @@ public class FXMLTemplateLoader {
 		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
 			return Double.parseDouble(attribute.getValue().toString());
 		}
+		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
+			return Boolean.parseBoolean(attribute.getValue());
+		}
 		throw new RuntimeException("Attribute type not supported.");
 	}
 
