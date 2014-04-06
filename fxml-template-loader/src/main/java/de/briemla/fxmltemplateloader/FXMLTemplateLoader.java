@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import javafx.geometry.Pos;
+
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -68,7 +70,7 @@ public class FXMLTemplateLoader {
 		rootNode = new Template(clazz, properties);
 	}
 
-	@SuppressWarnings({ "restriction", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	private Map<Method, Object> findProperties(StartElement element, Class<?> clazz) {
 		HashMap<Method, Object> properties = new HashMap<>();
 		Iterator<Attribute> attributes = element.getAttributes();
@@ -95,6 +97,9 @@ public class FXMLTemplateLoader {
 		}
 		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
 			return Boolean.parseBoolean(attribute.getValue());
+		}
+		if (Pos.class.equals(attributeType)) {
+			return Pos.valueOf(attribute.getValue());
 		}
 		throw new RuntimeException("Attribute type not supported.");
 	}
