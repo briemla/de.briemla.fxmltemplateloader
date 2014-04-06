@@ -38,6 +38,7 @@ public class FXMLTemplateLoaderTest {
 		VBox vbox = load("VBoxRootWithPropertiesAndSingleFullQualifiedImport.fxml");
 
 		assertThat(vbox.getSpacing(), is(equalTo(200.0d)));
+		assertThat(vbox.getId(), is(equalTo("thisIsAnId")));
 	}
 
 	@Test
@@ -45,6 +46,7 @@ public class FXMLTemplateLoaderTest {
 		HBox hbox = load("HBoxRootWithPropertiesAndSingleFullQualifiedImport.fxml");
 
 		assertThat(hbox.getSpacing(), is(equalTo(30.0d)));
+		assertThat(hbox.getId(), is(equalTo("diNaSiSiht")));
 	}
 
 	private <T> T load(String fileName) throws IOException {
