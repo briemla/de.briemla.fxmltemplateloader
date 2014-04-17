@@ -65,6 +65,7 @@ public class FXMLTemplateLoaderTest {
 		assertThat(dummyClass.getCharMember(), is(equalTo('c')));
 		assertThat(dummyClass.getDoubleMember(), is(equalTo(12.345d)));
 		assertThat(dummyClass.getEnumMember(), is(equalTo(DummyEnum.DUMMY_1)));
+		assertThat(dummyClass.getIntMember(), is(equalTo(1234567)));
 		assertThat(dummyClass.getStringMember(), is(equalTo("sadjlsad")));
 	}
 

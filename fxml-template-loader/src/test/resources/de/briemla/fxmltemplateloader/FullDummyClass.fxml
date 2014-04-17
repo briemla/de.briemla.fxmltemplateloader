@@ -2,7 +2,7 @@
 
 <?import de.briemla.fxmltemplateloader.FullDummyClass?>
 
-<FullDummyClass xmlns:fx="http://javafx.com/fxml" booleanMember="true" byteMember="2" charMember="c" doubleMember="12.345" enumMember="DUMMY_1" stringMember="sadjlsad">
+<FullDummyClass xmlns:fx="http://javafx.com/fxml" booleanMember="true" byteMember="2" charMember="c" doubleMember="12.345" enumMember="DUMMY_1" intMember="1234567" stringMember="sadjlsad">
 	
 </FullDummyClass>
 

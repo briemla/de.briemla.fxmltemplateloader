@@ -101,11 +101,14 @@ public class FXMLTemplateLoader {
 			return attribute.getValue().charAt(0);
 		}
 		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
-			return Double.parseDouble(attribute.getValue().toString());
+			return Double.parseDouble(attribute.getValue());
 		}
 		if (attributeType.isEnum()) {
 			Class<Enum> enumType = (Class<Enum>)attributeType;
 			return Enum.valueOf(enumType, attribute.getValue());
+		}
+		if (Integer.class.equals(attributeType) || int.class.equals(attributeType)) {
+			return Integer.parseInt(attribute.getValue());
 		}
 		if (String.class.equals(attributeType)) {
 			return attribute.getValue();
