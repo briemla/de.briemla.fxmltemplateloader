@@ -94,6 +94,12 @@ public class FXMLTemplateLoader {
 		if (Byte.class.equals(attributeType) || byte.class.equals(attributeType)) {
 			return Byte.parseByte(attribute.getValue());
 		}
+		if (Character.class.equals(attributeType) || char.class.equals(attributeType)) {
+			if (attribute.getValue().length() != 1) {
+				throw new IllegalArgumentException("Attribute must be a character, but contains more than one character.");
+			}
+			return attribute.getValue().charAt(0);
+		}
 		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
 			return Double.parseDouble(attribute.getValue().toString());
 		}
