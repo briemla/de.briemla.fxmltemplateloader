@@ -88,18 +88,18 @@ public class FXMLTemplateLoader {
 			throw new RuntimeException("Incorrect number of arguments for setter found.");
 		}
 		Class<?> attributeType = parameterTypes[0];
-		if (String.class.equals(attributeType)) {
-			return attribute.getValue();
+		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
+			return Boolean.parseBoolean(attribute.getValue());
 		}
 		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
 			return Double.parseDouble(attribute.getValue().toString());
 		}
-		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
-			return Boolean.parseBoolean(attribute.getValue());
-		}
 		if (attributeType.isEnum()) {
 			Class<Enum> enumType = (Class<Enum>)attributeType;
 			return Enum.valueOf(enumType, attribute.getValue());
+		}
+		if (String.class.equals(attributeType)) {
+			return attribute.getValue();
 		}
 		throw new RuntimeException("Attribute type not supported.");
 	}
