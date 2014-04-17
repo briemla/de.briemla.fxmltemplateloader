@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import javafx.geometry.Pos;
-
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -83,6 +81,7 @@ public class FXMLTemplateLoader {
 		return properties;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object convertToCorrectType(Method method, Attribute attribute) {
 		Class<?>[] parameterTypes = method.getParameterTypes();
 		if (parameterTypes.length != 1) {
@@ -124,7 +123,7 @@ public class FXMLTemplateLoader {
 	}
 
 	private Class<?> load(String importQualifier) {
-		ClassLoader classLoader = FXMLTemplateLoaderTest.class.getClassLoader();
+		ClassLoader classLoader = FXMLTemplateLoader.class.getClassLoader();
 		try {
 			return classLoader.loadClass(importQualifier);
 		} catch (ClassNotFoundException e) {

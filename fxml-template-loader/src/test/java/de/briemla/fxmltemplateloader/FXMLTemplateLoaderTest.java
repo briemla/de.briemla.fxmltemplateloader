@@ -19,6 +19,7 @@ public class FXMLTemplateLoaderTest {
 	 *
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	@Test
 	public void loadSimpleVBoxRootWithSingleFullQualifiedImport() throws Exception {
 		VBox vbox = load("SimpleVBoxRootWithSingleFullQualifiedImport.fxml");
@@ -29,6 +30,7 @@ public class FXMLTemplateLoaderTest {
 	 *
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	@Test
 	public void loadSimpleHBoxRootWithSingleFullQualifiedImport() throws Exception {
 		HBox hbox = load("SimpleHBoxRootWithSingleFullQualifiedImport.fxml");
