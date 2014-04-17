@@ -2,7 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
@@ -54,6 +54,16 @@ public class FXMLTemplateLoaderTest {
 		assertThat(hbox.getId(), is(equalTo("diNaSiSiht")));
 		assertThat(hbox.isVisible(), is(false));
 		assertThat(hbox.getAlignment(), is(equalTo(Pos.CENTER_RIGHT)));
+	}
+	
+	@Test
+	public void fullDummyClass() throws Exception {
+		FullDummyClass dummyClass = load("FullDummyClass.fxml");
+		
+		assertThat(dummyClass.isBooleanMember(), is(true));
+		assertThat(dummyClass.getDoubleMember(), is(equalTo(12.345d)));
+		assertThat(dummyClass.getEnumMember(), is(equalTo(DummyEnum.DUMMY_1)));
+		assertThat(dummyClass.getStringMember(), is(equalTo("sadjlsad")));
 	}
 
 	private <T> T load(String fileName) throws IOException {

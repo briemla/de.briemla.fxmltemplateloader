@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.briemla.fxmltemplateloader.FullDummyClass?>
+
+<FullDummyClass xmlns:fx="http://javafx.com/fxml" booleanMember="true" doubleMember="12.345" enumMember="DUMMY_1" stringMember="sadjlsad">
+	
+</FullDummyClass>
+
