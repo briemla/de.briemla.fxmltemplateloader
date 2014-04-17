@@ -110,6 +110,9 @@ public class FXMLTemplateLoader {
 		if (Integer.class.equals(attributeType) || int.class.equals(attributeType)) {
 			return Integer.parseInt(attribute.getValue());
 		}
+		if (Short.class.equals(attributeType) || short.class.equals(attributeType)) {
+			return Short.parseShort(attribute.getValue());
+		}
 		if (String.class.equals(attributeType)) {
 			return attribute.getValue();
 		}
