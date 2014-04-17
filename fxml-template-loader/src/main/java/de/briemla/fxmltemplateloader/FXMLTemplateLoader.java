@@ -98,8 +98,9 @@ public class FXMLTemplateLoader {
 		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
 			return Boolean.parseBoolean(attribute.getValue());
 		}
-		if (Pos.class.equals(attributeType)) {
-			return Pos.valueOf(attribute.getValue());
+		if (attributeType.isEnum()) {
+			Class<Enum> enumType = (Class<Enum>)attributeType;
+			return Enum.valueOf(enumType, attribute.getValue());
 		}
 		throw new RuntimeException("Attribute type not supported.");
 	}
