@@ -91,6 +91,9 @@ public class FXMLTemplateLoader {
 		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
 			return Boolean.parseBoolean(attribute.getValue());
 		}
+		if (Byte.class.equals(attributeType) || byte.class.equals(attributeType)) {
+			return Byte.parseByte(attribute.getValue());
+		}
 		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
 			return Double.parseDouble(attribute.getValue().toString());
 		}
