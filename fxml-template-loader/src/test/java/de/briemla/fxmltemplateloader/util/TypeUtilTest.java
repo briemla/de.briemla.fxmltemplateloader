@@ -52,6 +52,7 @@ public class TypeUtilTest {
 	@Test
 	public void intType() {
 		assertThat(convert("1234567", int.class), is(equalTo(1234567)));
+		assertThat(convert("2345678", Integer.class), is(equalTo(new Integer(2345678))));
 	}
 
 	@Test
