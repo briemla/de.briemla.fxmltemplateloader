@@ -64,5 +64,6 @@ public class TypeUtilTest {
 	@Test
 	public void stringType() {
 		assertThat(convert("sadjlsad", String.class), is(equalTo("sadjlsad")));
+		assertThat(convert("kksladjklas", String.class), is(equalTo("kksladjklas")));
 	}
 }
