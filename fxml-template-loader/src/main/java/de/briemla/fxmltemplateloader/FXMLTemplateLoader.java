@@ -20,6 +20,8 @@ import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import de.briemla.fxmltemplateloader.util.TypeUtil;
+
 public class FXMLTemplateLoader {
 
 	private static final String WILDCARD_MATCH = "*";
@@ -75,51 +77,10 @@ public class FXMLTemplateLoader {
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
 			Method method = findSetter(clazz, attribute);
-			Object value = convertToCorrectType(method, attribute);
+			Object value = TypeUtil.convertToCorrectType(method, attribute);
 			properties.put(method, value);
 		}
 		return properties;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Object convertToCorrectType(Method method, Attribute attribute) {
-		Class<?>[] parameterTypes = method.getParameterTypes();
-		if (parameterTypes.length != 1) {
-			throw new RuntimeException("Incorrect number of arguments for setter found.");
-		}
-		Class<?> attributeType = parameterTypes[0];
-		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
-			return Boolean.parseBoolean(attribute.getValue());
-		}
-		if (Byte.class.equals(attributeType) || byte.class.equals(attributeType)) {
-			return Byte.parseByte(attribute.getValue());
-		}
-		if (Character.class.equals(attributeType) || char.class.equals(attributeType)) {
-			if (attribute.getValue().length() != 1) {
-				throw new IllegalArgumentException("Attribute must be a character, but contains more than one character.");
-			}
-			return attribute.getValue().charAt(0);
-		}
-		if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
-			return Double.parseDouble(attribute.getValue());
-		}
-		if (attributeType.isEnum()) {
-			Class<Enum> enumType = (Class<Enum>) attributeType;
-			return Enum.valueOf(enumType, attribute.getValue());
-		}
-		if (Float.class.equals(attributeType) || float.class.equals(attributeType)) {
-			return Float.parseFloat(attribute.getValue());
-		}
-		if (Integer.class.equals(attributeType) || int.class.equals(attributeType)) {
-			return Integer.parseInt(attribute.getValue());
-		}
-		if (Short.class.equals(attributeType) || short.class.equals(attributeType)) {
-			return Short.parseShort(attribute.getValue());
-		}
-		if (String.class.equals(attributeType)) {
-			return attribute.getValue();
-		}
-		throw new RuntimeException("Attribute type not supported.");
 	}
 
 	private Method findSetter(Class<?> clazz, Attribute attribute) {
