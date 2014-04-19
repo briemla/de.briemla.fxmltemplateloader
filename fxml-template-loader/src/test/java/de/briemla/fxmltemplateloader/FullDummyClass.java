@@ -7,6 +7,7 @@ public class FullDummyClass {
 	private char charMember;
 	private double doubleMember;
 	private DummyEnum enumMember;
+	private float floatMember;
 	private int intMember;
 	private short shortMember;
 	private String stringMember;
@@ -49,6 +50,14 @@ public class FullDummyClass {
 
 	public void setEnumMember(DummyEnum enumMember) {
 		this.enumMember = enumMember;
+	}
+
+	public float getFloatMember() {
+		return floatMember;
+	}
+
+	public void setFloatMember(float floatMember) {
+		this.floatMember = floatMember;
 	}
 
 	public int getIntMember() {

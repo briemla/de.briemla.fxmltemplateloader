@@ -104,8 +104,11 @@ public class FXMLTemplateLoader {
 			return Double.parseDouble(attribute.getValue());
 		}
 		if (attributeType.isEnum()) {
-			Class<Enum> enumType = (Class<Enum>)attributeType;
+			Class<Enum> enumType = (Class<Enum>) attributeType;
 			return Enum.valueOf(enumType, attribute.getValue());
+		}
+		if (Float.class.equals(attributeType) || float.class.equals(attributeType)) {
+			return Float.parseFloat(attribute.getValue());
 		}
 		if (Integer.class.equals(attributeType) || int.class.equals(attributeType)) {
 			return Integer.parseInt(attribute.getValue());
