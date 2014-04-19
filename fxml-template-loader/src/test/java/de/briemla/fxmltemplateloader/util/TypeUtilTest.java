@@ -58,6 +58,7 @@ public class TypeUtilTest {
 	@Test
 	public void shortType() {
 		assertThat(convert("123", short.class), is(equalTo((short) 123)));
+		assertThat(convert("234", Short.class), is(equalTo(new Short((short) 234))));
 	}
 
 	@Test
