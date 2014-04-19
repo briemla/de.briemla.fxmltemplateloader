@@ -34,6 +34,7 @@ public class TypeUtilTest {
 	@Test
 	public void doubleType() {
 		assertThat(convert("12.345", double.class), is(equalTo(12.345d)));
+		assertThat(convert("23.456", Double.class), is(equalTo(new Double(23.456d))));
 	}
 
 	@Test
