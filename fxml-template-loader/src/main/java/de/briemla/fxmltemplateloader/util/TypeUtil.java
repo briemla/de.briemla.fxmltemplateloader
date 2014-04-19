@@ -38,6 +38,9 @@ public class TypeUtil {
 		if (Integer.class.equals(attributeType) || int.class.equals(attributeType)) {
 			return Integer.parseInt(value);
 		}
+		if (Number.class.equals(attributeType)) {
+			return Integer.parseInt(value);
+		}
 		if (Short.class.equals(attributeType) || short.class.equals(attributeType)) {
 			return Short.parseShort(value);
 		}

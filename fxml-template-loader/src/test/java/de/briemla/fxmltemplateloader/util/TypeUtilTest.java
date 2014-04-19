@@ -71,6 +71,12 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void numberType() {
+		assertThat(convert("13141230", Number.class), is(equalTo(new Integer(13141230))));
+		assertThat(convert("743911239", Number.class), is(equalTo(new Integer(743911239))));
+	}
+
+	@Test
 	public void shortType() {
 		assertThat(convert("123", short.class), is(equalTo((short) 123)));
 		assertThat(convert("234", Short.class), is(equalTo(new Short((short) 234))));
