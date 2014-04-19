@@ -46,6 +46,7 @@ public class TypeUtilTest {
 	@Test
 	public void floatType() {
 		assertThat(convert("54.321", float.class), is(equalTo(54.321f)));
+		assertThat(convert("43.210", Float.class), is(equalTo(new Float(43.210f))));
 	}
 
 	@Test
