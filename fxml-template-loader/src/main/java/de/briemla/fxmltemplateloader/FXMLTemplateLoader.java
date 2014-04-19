@@ -77,10 +77,21 @@ public class FXMLTemplateLoader {
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
 			Method method = findSetter(clazz, attribute);
-			Object value = TypeUtil.convertToCorrectType(method, attribute);
-			properties.put(method, value);
+			Class<?> type = extractType(method);
+			String value = attribute.getValue();
+			Object convertedValue = TypeUtil.convert(value, type);
+			properties.put(method, convertedValue);
 		}
 		return properties;
+	}
+
+	private static Class<?> extractType(Method method) {
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		if (parameterTypes.length != 1) {
+			throw new RuntimeException("Incorrect number of arguments for setter found.");
+		}
+		Class<?> type = parameterTypes[0];
+		return type;
 	}
 
 	private Method findSetter(Class<?> clazz, Attribute attribute) {

@@ -1,20 +1,7 @@
 package de.briemla.fxmltemplateloader.util;
 
-import java.lang.reflect.Method;
-
-import javax.xml.stream.events.Attribute;
 
 public class TypeUtil {
-
-	public static Object convertToCorrectType(Method method, Attribute attribute) {
-		Class<?>[] parameterTypes = method.getParameterTypes();
-		if (parameterTypes.length != 1) {
-			throw new RuntimeException("Incorrect number of arguments for setter found.");
-		}
-		Class<?> attributeType = parameterTypes[0];
-
-		return convert(attribute.getValue(), attributeType);
-	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Object convert(String value, Class<?> attributeType) {
