@@ -5,11 +5,18 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.math.BigInteger;
+
 import org.junit.Test;
 
 import de.briemla.fxmltemplateloader.DummyEnum;
 
 public class TypeUtilTest {
+
+	@Test
+	public void bigIntegerType() {
+		assertThat(convert("2423424", BigInteger.class), is(equalTo(new BigInteger("2423424"))));
+	}
 
 	@Test
 	public void booleanType() {

@@ -1,10 +1,14 @@
 package de.briemla.fxmltemplateloader.util;
 
+import java.math.BigInteger;
 
 public class TypeUtil {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Object convert(String value, Class<?> attributeType) {
+		if (BigInteger.class.equals(attributeType)) {
+			return new BigInteger(value);
+		}
 		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
 			return Boolean.parseBoolean(value);
 		}
