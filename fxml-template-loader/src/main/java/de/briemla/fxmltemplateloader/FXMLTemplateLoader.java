@@ -1,6 +1,8 @@
 package de.briemla.fxmltemplateloader;
 
 import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
+import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
+import static de.briemla.fxmltemplateloader.util.TypeUtil.convert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +21,6 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import de.briemla.fxmltemplateloader.util.TypeUtil;
 
 public class FXMLTemplateLoader {
 
@@ -79,7 +79,7 @@ public class FXMLTemplateLoader {
 			Method method = findSetter(clazz, attribute);
 			Class<?> type = extractType(method);
 			String value = attribute.getValue();
-			Object convertedValue = TypeUtil.convert(value, type);
+			Object convertedValue = convert(value, to(type));
 			properties.put(method, convertedValue);
 		}
 		return properties;
