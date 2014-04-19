@@ -7,6 +7,9 @@ public class TypeUtil {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Object convert(String value, Class<?> attributeType) {
+		if (value == null) {
+			return null;
+		}
 		if (BigInteger.class.equals(attributeType)) {
 			return new BigInteger(value);
 		}
