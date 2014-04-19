@@ -14,6 +14,9 @@ public class TypeUtilTest {
 	@Test
 	public void booleanType() {
 		assertThat(convert("true", boolean.class), is(true));
+		assertThat(convert("false", boolean.class), is(false));
+		assertThat(convert("true", Boolean.class), is(true));
+		assertThat(convert("false", Boolean.class), is(false));
 	}
 
 	@Test
