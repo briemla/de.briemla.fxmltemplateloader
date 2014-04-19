@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader.util;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class TypeUtil {
@@ -8,6 +9,9 @@ public class TypeUtil {
 	public static Object convert(String value, Class<?> attributeType) {
 		if (BigInteger.class.equals(attributeType)) {
 			return new BigInteger(value);
+		}
+		if (BigDecimal.class.equals(attributeType)) {
+			return new BigDecimal(value);
 		}
 		if (Boolean.class.equals(attributeType) || boolean.class.equals(attributeType)) {
 			return Boolean.parseBoolean(value);

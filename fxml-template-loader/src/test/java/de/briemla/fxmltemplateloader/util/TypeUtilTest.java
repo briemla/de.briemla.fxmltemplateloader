@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.Test;
@@ -17,6 +18,12 @@ public class TypeUtilTest {
 	public void bigIntegerType() {
 		assertThat(convert("2423424", BigInteger.class), is(equalTo(new BigInteger("2423424"))));
 		assertThat(convert("40981418340912", BigInteger.class), is(equalTo(new BigInteger("40981418340912"))));
+	}
+
+	@Test
+	public void bigDecimalType() {
+		assertThat(convert("23479249.234798324", BigDecimal.class), is(equalTo(new BigDecimal("23479249.234798324"))));
+		assertThat(convert("798109843179.6587164313876132", BigDecimal.class), is(equalTo(new BigDecimal("798109843179.6587164313876132"))));
 	}
 
 	@Test
