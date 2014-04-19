@@ -22,6 +22,7 @@ public class TypeUtilTest {
 	@Test
 	public void byteType() {
 		assertThat(convert("2", byte.class), is(equalTo((byte) 2)));
+		assertThat(convert("2", Byte.class), is(equalTo(new Byte((byte) 2))));
 	}
 
 	@Test
