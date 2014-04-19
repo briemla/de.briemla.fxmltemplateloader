@@ -39,6 +39,9 @@ public class TypeUtil {
 			return Integer.parseInt(value);
 		}
 		if (Number.class.equals(attributeType)) {
+			if (value.contains(".")) {
+				return Double.parseDouble(value);
+			}
 			return Integer.parseInt(value);
 		}
 		if (Short.class.equals(attributeType) || short.class.equals(attributeType)) {

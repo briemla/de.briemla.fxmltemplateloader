@@ -74,6 +74,8 @@ public class TypeUtilTest {
 	public void numberType() {
 		assertThat(convert("13141230", Number.class), is(equalTo(new Integer(13141230))));
 		assertThat(convert("743911239", Number.class), is(equalTo(new Integer(743911239))));
+		assertThat(convert("13141230.37129313", Number.class), is(equalTo(new Double(13141230.37129313d))));
+		assertThat(convert("743911239.571987123", Number.class), is(equalTo(new Double(743911239.571987123d))));
 	}
 
 	@Test
