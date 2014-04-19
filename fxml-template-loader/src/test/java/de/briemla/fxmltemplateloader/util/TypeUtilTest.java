@@ -16,6 +16,7 @@ public class TypeUtilTest {
 	@Test
 	public void bigIntegerType() {
 		assertThat(convert("2423424", BigInteger.class), is(equalTo(new BigInteger("2423424"))));
+		assertThat(convert("40981418340912", BigInteger.class), is(equalTo(new BigInteger("40981418340912"))));
 	}
 
 	@Test
