@@ -28,6 +28,7 @@ public class TypeUtilTest {
 	@Test
 	public void charType() {
 		assertThat(convert("c", char.class), is(equalTo('c')));
+		assertThat(convert("d", Character.class), is(equalTo(new Character('d'))));
 	}
 
 	@Test
