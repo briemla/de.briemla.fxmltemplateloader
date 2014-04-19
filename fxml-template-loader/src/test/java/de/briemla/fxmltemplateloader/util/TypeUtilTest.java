@@ -40,6 +40,7 @@ public class TypeUtilTest {
 	@Test
 	public void enumType() {
 		assertThat(convert("DUMMY_1", DummyEnum.class), is(equalTo(DummyEnum.DUMMY_1)));
+		assertThat(convert("DUMMY_0", DummyEnum.class), is(equalTo(DummyEnum.DUMMY_0)));
 	}
 
 	@Test
