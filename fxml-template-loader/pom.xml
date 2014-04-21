@@ -3,6 +3,7 @@
   <groupId>de.briemla</groupId>
   <artifactId>fxml-template-loader</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <name>FXML Template Loader</name>
   <build>
     <plugins>
       <plugin>
