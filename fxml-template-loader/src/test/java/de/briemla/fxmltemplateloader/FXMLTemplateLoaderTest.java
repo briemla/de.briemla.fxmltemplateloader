@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 
 import org.junit.Test;
 
+import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+
 public class FXMLTemplateLoaderTest {
 
 	/**
@@ -78,6 +80,12 @@ public class FXMLTemplateLoaderTest {
 	@Test
 	public void loadVBoxRootWithWildcardImport() throws IOException {
 		VBox vbox = load("VBoxRootWithWildcardImport.fxml");
+	}
+
+	@SuppressWarnings("unused")
+	@Test
+	public void onlyLoadImportProcessingInstructions() throws IOException {
+		ProcessingInstructionTestClass testClass = load("ProcessingInstructionTest.fxml");
 	}
 
 	@Test

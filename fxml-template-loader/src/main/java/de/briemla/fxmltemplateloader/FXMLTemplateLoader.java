@@ -115,7 +115,7 @@ public class FXMLTemplateLoader {
 				return load(importQualifier, className);
 			}
 		}
-		return null;
+		throw new RuntimeException("Could not find class for name: " + className);
 	}
 
 	private boolean matches(String className, String importQualifier) {
@@ -143,9 +143,9 @@ public class FXMLTemplateLoader {
 	}
 
 	private void parseProcessingInstruction(ProcessingInstruction instruction) {
-		// if (!IMPORT.equals(event.getTarget())) {
-		// return;
-		// }
+		if (!IMPORT.equals(instruction.getTarget())) {
+			return;
+		}
 		imports.add(instruction.getData());
 	}
 }

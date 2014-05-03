@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?tropmi de.briemla.fxmltemplateloader.processinginstruction.wrong.ProcessingInstructionTestClass?>
+<?import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass?>
+
+<ProcessingInstructionTestClass xmlns:fx="http://javafx.com/fxml">
+</ProcessingInstructionTestClass>
+
