@@ -68,6 +68,12 @@ public class FXMLTemplateLoaderTest {
 		VBox vbox = load("VBoxRootWithSeveralFullQualifiedImports.fxml");
 	}
 
+	@SuppressWarnings("unused")
+	@Test
+	public void loadHBoxRootWithWildcardImport() throws IOException {
+		HBox hbox = load("HBoxRootWithWildcardImport.fxml");
+	}
+
 	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass.fxml");

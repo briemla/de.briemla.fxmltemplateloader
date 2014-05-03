@@ -25,7 +25,7 @@ import javax.xml.stream.events.XMLEvent;
 
 public class FXMLTemplateLoader {
 
-	private static final String WILDCARD_MATCH = "*";
+	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private final List<String> imports;
 	private static Template rootNode;
@@ -111,6 +111,9 @@ public class FXMLTemplateLoader {
 			if (matches(className, importQualifier)) {
 				return load(importQualifier);
 			}
+			if (isWildcard(importQualifier)) {
+				return load(importQualifier, className);
+			}
 		}
 		return null;
 	}
@@ -126,6 +129,16 @@ public class FXMLTemplateLoader {
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Could not load import");
 		}
+	}
+
+	private boolean isWildcard(String importQualifier) {
+		return importQualifier.endsWith(WILDCARD_MATCH);
+	}
+
+	private Class<?> load(String importQualifier, String className) {
+		String removedWildcard = importQualifier.substring(importQualifier.length() - 2);
+		String fullQualifiedImport = removedWildcard + className;
+		return load(fullQualifiedImport);
 	}
 
 	private void parseProcessingInstruction(ProcessingInstruction instruction) {
