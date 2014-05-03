@@ -58,7 +58,7 @@ public class FXMLTemplateLoaderTest {
 
 	@SuppressWarnings("unused")
 	@Test
-	public void loadHBoxWithWildcardImport() throws IOException {
+	public void loadHBoxRootWithSeveralFullQualifiedImports() throws IOException {
 		HBox hbox = load("HBoxRootWithSeveralFullQualifiedImports.fxml");
 	}
 
