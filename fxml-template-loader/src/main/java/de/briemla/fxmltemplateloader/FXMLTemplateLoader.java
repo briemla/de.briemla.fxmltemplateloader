@@ -127,7 +127,7 @@ public class FXMLTemplateLoader {
 		try {
 			return classLoader.loadClass(importQualifier);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Could not load import");
+			throw new RuntimeException("Could not load import: " + importQualifier);
 		}
 	}
 
@@ -136,7 +136,8 @@ public class FXMLTemplateLoader {
 	}
 
 	private Class<?> load(String importQualifier, String className) {
-		String removedWildcard = importQualifier.substring(importQualifier.length() - 2);
+		int indexBeforeWildcard = importQualifier.length() - 1;
+		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
 		String fullQualifiedImport = removedWildcard + className;
 		return load(fullQualifiedImport);
 	}

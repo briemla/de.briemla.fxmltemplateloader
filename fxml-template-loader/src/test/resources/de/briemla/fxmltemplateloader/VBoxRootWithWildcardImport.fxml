@@ -2,6 +2,6 @@
 
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns:fx="http://javafx.com/fxml">
-</HBox>
+<VBox xmlns:fx="http://javafx.com/fxml">
+</VBox>
 
