@@ -56,6 +56,12 @@ public class FXMLTemplateLoaderTest {
 		assertThat(hbox.getAlignment(), is(equalTo(Pos.CENTER_RIGHT)));
 	}
 
+	@SuppressWarnings("unused")
+	@Test
+	public void loadHBoxWithWildcardImport() throws IOException {
+		HBox hbox = load("HBoxRootWithSeveralFullQualifiedImports.fxml");
+	}
+
 	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass.fxml");

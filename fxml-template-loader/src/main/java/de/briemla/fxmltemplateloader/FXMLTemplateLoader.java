@@ -9,9 +9,10 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
@@ -26,12 +27,12 @@ public class FXMLTemplateLoader {
 
 	private static final String WILDCARD_MATCH = "*";
 	private static final String IMPORT = "import";
-	private final HashSet<String> imports;
+	private final List<String> imports;
 	private static Template rootNode;
 
 	public FXMLTemplateLoader() {
 		super();
-		imports = new HashSet<>();
+		imports = new ArrayList<>();
 	}
 
 	public static <T> T load(URL resource) throws IOException {
@@ -107,9 +108,14 @@ public class FXMLTemplateLoader {
 
 	private Class<?> findClass(String className) {
 		for (String importQualifier : imports) {
-			return load(importQualifier);
+			if (matches(className, importQualifier))
+				return load(importQualifier);
 		}
 		return null;
+	}
+
+	private boolean matches(String className, String importQualifier) {
+		return importQualifier.endsWith(className);
 	}
 
 	private Class<?> load(String importQualifier) {
