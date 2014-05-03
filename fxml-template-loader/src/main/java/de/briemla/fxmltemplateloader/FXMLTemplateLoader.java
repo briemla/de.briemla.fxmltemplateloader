@@ -108,8 +108,9 @@ public class FXMLTemplateLoader {
 
 	private Class<?> findClass(String className) {
 		for (String importQualifier : imports) {
-			if (matches(className, importQualifier))
+			if (matches(className, importQualifier)) {
 				return load(importQualifier);
+			}
 		}
 		return null;
 	}
