@@ -70,7 +70,7 @@ public class FXMLTemplateLoader {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<String, IProperty> properties = findProperties(element, clazz);
-		currentTemplate = new Template(currentTemplate, clazz, properties);
+		currentTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
 
 		if (rootTemplate == null) {
 			rootTemplate = currentTemplate;

@@ -3,13 +3,13 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-class Template implements ITemplate {
+class InstantiationTemplate implements ITemplate {
 
 	private final ITemplate parent;
 	private final Class<?> clazz;
 	private final Map<String, IProperty> properties;
 
-	Template(ITemplate parent, Class<?> clazz, Map<String, IProperty> properties) {
+	InstantiationTemplate(ITemplate parent, Class<?> clazz, Map<String, IProperty> properties) {
 		super();
 		this.parent = parent;
 		this.clazz = clazz;
