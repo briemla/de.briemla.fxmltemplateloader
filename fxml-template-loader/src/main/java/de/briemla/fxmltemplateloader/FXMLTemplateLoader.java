@@ -28,9 +28,9 @@ public class FXMLTemplateLoader {
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private final List<String> imports;
-	private static Template currentTemplate;
+	private static ITemplate currentTemplate;
 	private XMLEventReader eventReader;
-	private Template rootTemplate;
+	private ITemplate rootTemplate;
 
 	public FXMLTemplateLoader() {
 		super();
@@ -53,7 +53,7 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	private Template parseXml() throws XMLStreamException {
+	private ITemplate parseXml() throws XMLStreamException {
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
 			if (event.isProcessingInstruction()) {
