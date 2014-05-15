@@ -103,7 +103,7 @@ public class FXMLTemplateLoaderTest {
 		assertThat(dummyClass.getStringMember(), is(equalTo("sadjlsad")));
 	}
 
-	private <T> T load(String fileName) throws IOException {
+	private static <T> T load(String fileName) throws IOException {
 		return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fileName));
 	}
 }

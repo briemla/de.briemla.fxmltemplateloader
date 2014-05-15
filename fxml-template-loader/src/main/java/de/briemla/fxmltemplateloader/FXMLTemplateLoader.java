@@ -29,6 +29,7 @@ public class FXMLTemplateLoader {
 	private static final String IMPORT = "import";
 	private final List<String> imports;
 	private static Template rootNode;
+	private XMLEventReader eventReader;
 
 	public FXMLTemplateLoader() {
 		super();
@@ -42,8 +43,8 @@ public class FXMLTemplateLoader {
 	private <T> T doLoad(URL resource) throws IOException {
 		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
 		try (InputStream xmlInput = resource.openStream()) {
-			XMLEventReader eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
-			return parseXml(eventReader).create();
+			eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
+			return parseXml().create();
 		} catch (XMLStreamException exception) {
 			throw new IOException("Could not parse XML", exception);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
@@ -51,20 +52,20 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	private Template parseXml(XMLEventReader eventReader) throws XMLStreamException {
+	private Template parseXml() throws XMLStreamException {
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
 			if (event.isProcessingInstruction()) {
 				parseProcessingInstruction((ProcessingInstruction) event);
 			}
 			if (event.isStartElement()) {
-				parseElement(event.asStartElement(), eventReader);
+				parseElement(event.asStartElement());
 			}
 		}
 		return rootNode;
 	}
 
-	private void parseElement(StartElement element, XMLEventReader reader) {
+	private void parseElement(StartElement element) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<Method, Object> properties = findProperties(element, clazz);
@@ -72,7 +73,7 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private Map<Method, Object> findProperties(StartElement element, Class<?> clazz) {
+	private static Map<Method, Object> findProperties(StartElement element, Class<?> clazz) {
 		HashMap<Method, Object> properties = new HashMap<>();
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
@@ -95,7 +96,7 @@ public class FXMLTemplateLoader {
 		return type;
 	}
 
-	private Method findSetter(Class<?> clazz, Attribute attribute) {
+	private static Method findSetter(Class<?> clazz, Attribute attribute) {
 		String propertyName = attribute.getName().getLocalPart();
 		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
 		for (Method method : clazz.getMethods()) {
@@ -118,11 +119,11 @@ public class FXMLTemplateLoader {
 		throw new RuntimeException("Could not find class for name: " + className);
 	}
 
-	private boolean matches(String className, String importQualifier) {
+	private static boolean matches(String className, String importQualifier) {
 		return importQualifier.endsWith(className);
 	}
 
-	private Class<?> load(String importQualifier) {
+	private static Class<?> load(String importQualifier) {
 		ClassLoader classLoader = FXMLTemplateLoader.class.getClassLoader();
 		try {
 			return classLoader.loadClass(importQualifier);
@@ -131,11 +132,11 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	private boolean isWildcard(String importQualifier) {
+	private static boolean isWildcard(String importQualifier) {
 		return importQualifier.endsWith(WILDCARD_MATCH);
 	}
 
-	private Class<?> load(String importQualifier, String className) {
+	private static Class<?> load(String importQualifier, String className) {
 		int indexBeforeWildcard = importQualifier.length() - 1;
 		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
 		String fullQualifiedImport = removedWildcard + className;
