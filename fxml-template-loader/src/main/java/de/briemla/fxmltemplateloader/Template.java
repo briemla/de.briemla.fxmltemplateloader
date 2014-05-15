@@ -3,13 +3,13 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class Template {
+class Template {
 
 	private final Template parent;
 	private final Class<?> clazz;
 	private final Map<String, IProperty> properties;
 
-	public Template(Template parent, Class<?> clazz, Map<String, IProperty> properties) {
+	Template(Template parent, Class<?> clazz, Map<String, IProperty> properties) {
 		super();
 		this.parent = parent;
 		this.clazz = clazz;
@@ -25,7 +25,7 @@ public class Template {
 		return (T) newInstance;
 	}
 
-	public Template getParent() {
+	Template getParent() {
 		return parent;
 	}
 

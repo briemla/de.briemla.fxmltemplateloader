@@ -3,12 +3,12 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class PropertyTemplate implements IProperty {
+class PropertyTemplate implements IProperty {
 
 	private final Method method;
 	private final Object value;
 
-	public PropertyTemplate(Method method, Object value) {
+	PropertyTemplate(Method method, Object value) {
 		this.method = method;
 		this.value = value;
 	}
