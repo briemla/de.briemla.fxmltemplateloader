@@ -7,11 +7,13 @@ import java.util.Map.Entry;
 
 public class Template {
 
+	private final Template parent;
 	private final Class<?> clazz;
 	private final Map<Method, Object> properties;
 
-	public Template(Class<?> clazz, Map<Method, Object> properties) {
+	public Template(Template parent, Class<?> clazz, Map<Method, Object> properties) {
 		super();
+		this.parent = parent;
 		this.clazz = clazz;
 		this.properties = properties;
 	}
@@ -25,6 +27,10 @@ public class Template {
 			method.invoke(newInstance, value);
 		}
 		return (T) newInstance;
+	}
+
+	public Template getParent() {
+		return parent;
 	}
 
 }

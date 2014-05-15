@@ -30,6 +30,7 @@ public class FXMLTemplateLoader {
 	private final List<String> imports;
 	private static Template currentTemplate;
 	private XMLEventReader eventReader;
+	private Template rootTemplate;
 
 	public FXMLTemplateLoader() {
 		super();
@@ -62,14 +63,18 @@ public class FXMLTemplateLoader {
 				parseStartElement(event.asStartElement());
 			}
 		}
-		return currentTemplate;
+		return rootTemplate;
 	}
 
 	private void parseStartElement(StartElement element) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<Method, Object> properties = findProperties(element, clazz);
-		currentTemplate = new Template(clazz, properties);
+		currentTemplate = new Template(currentTemplate, clazz, properties);
+
+		if (rootTemplate == null) {
+			rootTemplate = currentTemplate;
+		}
 	}
 
 	@SuppressWarnings({ "unchecked" })
