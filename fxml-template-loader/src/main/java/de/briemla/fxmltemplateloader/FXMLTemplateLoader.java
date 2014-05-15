@@ -57,16 +57,16 @@ public class FXMLTemplateLoader {
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
 			if (event.isProcessingInstruction()) {
-				parseProcessingInstruction((ProcessingInstruction) event);
+				processProcessingInstruction((ProcessingInstruction) event);
 			}
 			if (event.isStartElement()) {
-				parseStartElement(event.asStartElement());
+				processStartElement(event.asStartElement());
 			}
 		}
 		return rootTemplate;
 	}
 
-	private void parseStartElement(StartElement element) {
+	private void processStartElement(StartElement element) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<String, IProperty> properties = findProperties(element, clazz);
@@ -151,7 +151,7 @@ public class FXMLTemplateLoader {
 		return load(fullQualifiedImport);
 	}
 
-	private void parseProcessingInstruction(ProcessingInstruction instruction) {
+	private void processProcessingInstruction(ProcessingInstruction instruction) {
 		if (!IMPORT.equals(instruction.getTarget())) {
 			return;
 		}
