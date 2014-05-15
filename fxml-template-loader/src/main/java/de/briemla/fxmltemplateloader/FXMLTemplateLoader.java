@@ -69,7 +69,7 @@ public class FXMLTemplateLoader {
 	private void parseStartElement(StartElement element) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
-		Map<Method, Object> properties = findProperties(element, clazz);
+		Map<String, IProperty> properties = findProperties(element, clazz);
 		currentTemplate = new Template(currentTemplate, clazz, properties);
 
 		if (rootTemplate == null) {
@@ -78,8 +78,8 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private static Map<Method, Object> findProperties(StartElement element, Class<?> clazz) {
-		HashMap<Method, Object> properties = new HashMap<>();
+	private static HashMap<String, IProperty> findProperties(StartElement element, Class<?> clazz) {
+		HashMap<String, IProperty> properties = new HashMap<>();
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
@@ -87,7 +87,10 @@ public class FXMLTemplateLoader {
 			Class<?> type = extractType(method);
 			String value = attribute.getValue();
 			Object convertedValue = convert(value, to(type));
-			properties.put(method, convertedValue);
+
+			String name = attribute.getName().getLocalPart();
+			IProperty property = new PropertyTemplate(method, convertedValue);
+			properties.put(name, property);
 		}
 		return properties;
 	}
