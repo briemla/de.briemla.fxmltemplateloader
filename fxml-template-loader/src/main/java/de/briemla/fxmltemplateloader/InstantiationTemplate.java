@@ -8,7 +8,7 @@ class InstantiationTemplate extends Template implements ITemplate {
 	private final Class<?> clazz;
 	private final Map<String, IProperty> properties;
 
-	InstantiationTemplate(ITemplate parent, Class<?> clazz, Map<String, IProperty> properties) {
+	InstantiationTemplate(Template parent, Class<?> clazz, Map<String, IProperty> properties) {
 		super(parent);
 		this.clazz = clazz;
 		this.properties = properties;

@@ -28,7 +28,7 @@ public class FXMLTemplateLoader {
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private final List<String> imports;
-	private static ITemplate currentTemplate;
+	private static Template currentTemplate;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
 
@@ -70,10 +70,11 @@ public class FXMLTemplateLoader {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<String, IProperty> properties = findProperties(element, clazz);
-		currentTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
+		InstantiationTemplate instantiationTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
+		currentTemplate = instantiationTemplate;
 
 		if (rootTemplate == null) {
-			rootTemplate = currentTemplate;
+			rootTemplate = instantiationTemplate;
 		}
 	}
 

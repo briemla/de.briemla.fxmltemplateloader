@@ -2,14 +2,14 @@ package de.briemla.fxmltemplateloader;
 
 public class Template {
 
-	private final ITemplate parent;
+	private final Template parent;
 
-	public Template(ITemplate parent) {
+	public Template(Template parent) {
 		super();
 		this.parent = parent;
 	}
 
-	ITemplate getParent() {
+	Template getParent() {
 		return parent;
 	}
 
