@@ -28,7 +28,7 @@ public class FXMLTemplateLoader {
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private final List<String> imports;
-	private static Template rootNode;
+	private static Template currentTemplate;
 	private XMLEventReader eventReader;
 
 	public FXMLTemplateLoader() {
@@ -59,17 +59,17 @@ public class FXMLTemplateLoader {
 				parseProcessingInstruction((ProcessingInstruction) event);
 			}
 			if (event.isStartElement()) {
-				parseElement(event.asStartElement());
+				parseStartElement(event.asStartElement());
 			}
 		}
-		return rootNode;
+		return currentTemplate;
 	}
 
-	private void parseElement(StartElement element) {
+	private void parseStartElement(StartElement element) {
 		String className = element.getName().getLocalPart();
 		Class<?> clazz = findClass(className);
 		Map<Method, Object> properties = findProperties(element, clazz);
-		rootNode = new Template(clazz, properties);
+		currentTemplate = new Template(clazz, properties);
 	}
 
 	@SuppressWarnings({ "unchecked" })
