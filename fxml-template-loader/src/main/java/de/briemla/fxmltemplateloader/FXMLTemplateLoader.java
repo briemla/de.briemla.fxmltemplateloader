@@ -68,9 +68,29 @@ public class FXMLTemplateLoader {
 
 	private void processStartElement(StartElement element) {
 		String className = element.getName().getLocalPart();
+
+		int index = className.lastIndexOf('.');
+		if (Character.isLowerCase(className.charAt(index + 1))) {
+			String propertyName = className.substring(index + 1);
+			Method getter = findGetter(currentTemplate.getInstanceClass(), propertyName);
+			Class<?> returnType = getter.getReturnType();
+			if (returnType == null) {
+				throw new RuntimeException("Found getter without return type for property: " + propertyName);
+			}
+			if (List.class.isAssignableFrom(returnType)) {
+				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
+				currentTemplate.addProperty(propertyName, listProperty);
+				currentTemplate = listProperty;
+			}
+			return;
+		}
+
 		Class<?> clazz = findClass(className);
 		Map<String, IProperty> properties = findProperties(element, clazz);
 		InstantiationTemplate instantiationTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
+		if (currentTemplate != null) {
+			currentTemplate.addProperty(null, instantiationTemplate);
+		}
 		currentTemplate = instantiationTemplate;
 
 		if (rootTemplate == null) {
@@ -105,8 +125,22 @@ public class FXMLTemplateLoader {
 		return type;
 	}
 
+	private static Method findGetter(Class<?> clazz, String propertyName) {
+		String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		for (Method method : clazz.getMethods()) {
+			if (getterName.equals(method.getName()) && method.getParameterCount() == 0) {
+				return method;
+			}
+		}
+		throw new IllegalStateException("Could not find getter without parameters for property: " + propertyName);
+	}
+
 	private static Method findSetter(Class<?> clazz, Attribute attribute) {
 		String propertyName = attribute.getName().getLocalPart();
+		return findSetter(clazz, propertyName);
+	}
+
+	private static Method findSetter(Class<?> clazz, String propertyName) {
 		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
 		for (Method method : clazz.getMethods()) {
 			if (setterName.equals(method.getName())) {

@@ -1,6 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
-public class Template {
+public abstract class Template {
 
 	private final Template parent;
 
@@ -12,5 +12,9 @@ public class Template {
 	Template getParent() {
 		return parent;
 	}
+
+	protected abstract Class<?> getInstanceClass();
+
+	protected abstract void addProperty(String propertyName, IProperty property);
 
 }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -86,6 +87,17 @@ public class FXMLTemplateLoaderTest {
 	@Test
 	public void onlyLoadImportProcessingInstructions() throws IOException {
 		ProcessingInstructionTestClass testClass = load("ProcessingInstructionTest.fxml");
+	}
+
+	@Test
+	public void loadNestedElement() throws Exception {
+		VBox root = load("VBoxRootWithNestedVBox.fxml");
+
+		assertThat("Number of children", root.getChildren().size(), is(equalTo(1)));
+		assertThat("Parent id", root.getId(), is(equalTo("parent")));
+		
+		Node child = root.getChildren().get(0);
+		assertThat("Child id", child.getId(), is(equalTo("child")));
 	}
 
 	@Test

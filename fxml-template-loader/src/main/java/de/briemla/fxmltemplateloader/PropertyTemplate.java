@@ -18,4 +18,10 @@ class PropertyTemplate implements IProperty {
 		method.invoke(parent, value);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		return (T) value;
+	}
+
 }
