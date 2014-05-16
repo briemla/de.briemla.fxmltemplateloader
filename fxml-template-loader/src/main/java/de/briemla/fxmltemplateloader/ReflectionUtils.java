@@ -14,4 +14,14 @@ public class ReflectionUtils {
 		throw new IllegalStateException("Could not find getter without parameters for property: " + propertyName);
 	}
 
+	public static Method findSetter(Class<?> clazz, String propertyName) {
+		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		for (Method method : clazz.getMethods()) {
+			if (setterName.equals(method.getName())) {
+				return method;
+			}
+		}
+		throw new IllegalStateException("Could not find setter for property: " + propertyName);
+	}
+
 }

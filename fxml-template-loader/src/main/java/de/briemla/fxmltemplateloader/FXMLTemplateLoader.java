@@ -124,17 +124,7 @@ public class FXMLTemplateLoader {
 
 	private static Method findSetter(Class<?> clazz, Attribute attribute) {
 		String propertyName = attribute.getName().getLocalPart();
-		return findSetter(clazz, propertyName);
-	}
-
-	private static Method findSetter(Class<?> clazz, String propertyName) {
-		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
-		for (Method method : clazz.getMethods()) {
-			if (setterName.equals(method.getName())) {
-				return method;
-			}
-		}
-		throw new IllegalStateException("Could not find setter for property: " + propertyName);
+		return ReflectionUtils.findSetter(clazz, propertyName);
 	}
 
 	private Class<?> findClass(String className) {
