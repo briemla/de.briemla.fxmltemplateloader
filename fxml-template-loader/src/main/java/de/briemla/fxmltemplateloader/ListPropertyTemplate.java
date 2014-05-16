@@ -28,7 +28,7 @@ public class ListPropertyTemplate extends Template implements IProperty {
 	}
 
 	@Override
-	public void addProperty(String propertyName, IProperty property) {
+	public void addProperty(IProperty property) {
 		children.add(property);
 	}
 

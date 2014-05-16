@@ -1,14 +1,14 @@
 package de.briemla.fxmltemplateloader;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import java.util.List;
 
 class InstantiationTemplate extends Template implements ITemplate, IProperty {
 
 	private final Class<?> instanceClass;
-	private final Map<String, IProperty> properties;
+	private final List<IProperty> properties;
 
-	InstantiationTemplate(Template parent, Class<?> instanceClass, Map<String, IProperty> properties) {
+	InstantiationTemplate(Template parent, Class<?> instanceClass, List<IProperty> properties) {
 		super(parent);
 		this.instanceClass = instanceClass;
 		this.properties = properties;
@@ -18,7 +18,7 @@ class InstantiationTemplate extends Template implements ITemplate, IProperty {
 	@SuppressWarnings("unchecked")
 	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Object newInstance = instanceClass.newInstance();
-		for (IProperty child : properties.values()) {
+		for (IProperty child : properties) {
 			child.apply(newInstance);
 		}
 		return (T) newInstance;
@@ -30,12 +30,13 @@ class InstantiationTemplate extends Template implements ITemplate, IProperty {
 	}
 
 	@Override
-	protected void addProperty(String propertyName, IProperty child) {
-		if (properties.containsKey(propertyName)) {
-			// TODO Check out FXMLLoader and apply handling from FXMLLoader.
-			throw new RuntimeException("Property already exists.");
-		}
-		properties.put(propertyName, child);
+	protected void addProperty(IProperty child) {
+		// TODO Check out FXMLLoader and apply handling from FXMLLoader.
+		// What has to be done when property already exists
+		// if (properties.containsKey(propertyName)) {
+		// throw new RuntimeException("Property already exists.");
+		// }
+		properties.add(child);
 	}
 
 	@Override

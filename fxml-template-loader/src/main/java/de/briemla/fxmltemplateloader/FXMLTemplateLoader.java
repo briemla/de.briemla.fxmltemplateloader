@@ -10,10 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -79,17 +77,17 @@ public class FXMLTemplateLoader {
 			}
 			if (List.class.isAssignableFrom(returnType)) {
 				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
-				currentTemplate.addProperty(propertyName, listProperty);
+				currentTemplate.addProperty(listProperty);
 				currentTemplate = listProperty;
 			}
 			return;
 		}
 
 		Class<?> clazz = findClass(className);
-		Map<String, IProperty> properties = findProperties(element, clazz);
+		List<IProperty> properties = findProperties(element, clazz);
 		InstantiationTemplate instantiationTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
 		if (currentTemplate != null) {
-			currentTemplate.addProperty(null, instantiationTemplate);
+			currentTemplate.addProperty(instantiationTemplate);
 		}
 		currentTemplate = instantiationTemplate;
 
@@ -99,8 +97,8 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private static HashMap<String, IProperty> findProperties(StartElement element, Class<?> clazz) {
-		HashMap<String, IProperty> properties = new HashMap<>();
+	private static List<IProperty> findProperties(StartElement element, Class<?> clazz) {
+		List<IProperty> properties = new ArrayList<>();
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
@@ -109,9 +107,8 @@ public class FXMLTemplateLoader {
 			String value = attribute.getValue();
 			Object convertedValue = convert(value, to(type));
 
-			String name = attribute.getName().getLocalPart();
 			IProperty property = new PropertyTemplate(method, convertedValue);
-			properties.put(name, property);
+			properties.add(property);
 		}
 		return properties;
 	}

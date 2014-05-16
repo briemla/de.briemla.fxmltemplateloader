@@ -15,6 +15,6 @@ public abstract class Template {
 
 	protected abstract Class<?> getInstanceClass();
 
-	protected abstract void addProperty(String propertyName, IProperty property);
+	protected abstract void addProperty(IProperty property);
 
 }
