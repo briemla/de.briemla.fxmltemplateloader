@@ -119,8 +119,7 @@ public class FXMLTemplateLoader {
 		if (parameterTypes.length != 1) {
 			throw new RuntimeException("Incorrect number of arguments for setter found.");
 		}
-		Class<?> type = parameterTypes[0];
-		return type;
+		return parameterTypes[0];
 	}
 
 	private Class<?> findClass(String className) {
