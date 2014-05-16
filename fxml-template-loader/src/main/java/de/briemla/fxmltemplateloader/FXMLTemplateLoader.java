@@ -102,7 +102,8 @@ public class FXMLTemplateLoader {
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
-			Method method = findSetter(clazz, attribute);
+			String propertyName = attribute.getName().getLocalPart();
+			Method method = ReflectionUtils.findSetter(clazz, propertyName);
 			Class<?> type = extractType(method);
 			String value = attribute.getValue();
 			Object convertedValue = convert(value, to(type));
@@ -120,11 +121,6 @@ public class FXMLTemplateLoader {
 		}
 		Class<?> type = parameterTypes[0];
 		return type;
-	}
-
-	private static Method findSetter(Class<?> clazz, Attribute attribute) {
-		String propertyName = attribute.getName().getLocalPart();
-		return ReflectionUtils.findSetter(clazz, propertyName);
 	}
 
 	private Class<?> findClass(String className) {
