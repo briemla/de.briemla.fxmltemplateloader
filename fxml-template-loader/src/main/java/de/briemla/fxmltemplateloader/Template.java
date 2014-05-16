@@ -1,5 +1,7 @@
 package de.briemla.fxmltemplateloader;
 
+import java.lang.reflect.Method;
+
 public abstract class Template {
 
 	private final Template parent;
@@ -13,8 +15,8 @@ public abstract class Template {
 		return parent;
 	}
 
-	protected abstract Class<?> getInstanceClass();
-
 	protected abstract void addProperty(IProperty property);
+
+	abstract Method findGetter(String propertyName);
 
 }

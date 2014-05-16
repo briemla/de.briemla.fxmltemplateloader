@@ -70,7 +70,7 @@ public class FXMLTemplateLoader {
 		int index = className.lastIndexOf('.');
 		if (Character.isLowerCase(className.charAt(index + 1))) {
 			String propertyName = className.substring(index + 1);
-			Method getter = findGetter(currentTemplate.getInstanceClass(), propertyName);
+			Method getter = currentTemplate.findGetter(propertyName);
 			Class<?> returnType = getter.getReturnType();
 			if (returnType == null) {
 				throw new RuntimeException("Found getter without return type for property: " + propertyName);
@@ -120,16 +120,6 @@ public class FXMLTemplateLoader {
 		}
 		Class<?> type = parameterTypes[0];
 		return type;
-	}
-
-	private static Method findGetter(Class<?> clazz, String propertyName) {
-		String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
-		for (Method method : clazz.getMethods()) {
-			if (getterName.equals(method.getName()) && method.getParameterCount() == 0) {
-				return method;
-			}
-		}
-		throw new IllegalStateException("Could not find getter without parameters for property: " + propertyName);
 	}
 
 	private static Method findSetter(Class<?> clazz, Attribute attribute) {

@@ -17,11 +17,6 @@ public class ListPropertyTemplate extends Template implements IProperty {
 	}
 
 	@Override
-	protected Class<?> getInstanceClass() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void apply(Object parent) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 		List<?> list = (List<?>) getter.invoke(parent);
 		list.addAll(create());
@@ -40,6 +35,11 @@ public class ListPropertyTemplate extends Template implements IProperty {
 			arrayList.add(child.create());
 		}
 		return (T) arrayList;
+	}
+
+	@Override
+	Method findGetter(String propertyName) {
+		return ReflectionUtils.findGetter(List.class, propertyName);
 	}
 
 }

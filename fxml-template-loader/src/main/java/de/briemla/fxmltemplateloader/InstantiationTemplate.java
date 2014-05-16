@@ -1,6 +1,7 @@
 package de.briemla.fxmltemplateloader;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 class InstantiationTemplate extends Template implements ITemplate, IProperty {
@@ -25,11 +26,6 @@ class InstantiationTemplate extends Template implements ITemplate, IProperty {
 	}
 
 	@Override
-	protected Class<?> getInstanceClass() {
-		return instanceClass;
-	}
-
-	@Override
 	protected void addProperty(IProperty child) {
 		// TODO Check out FXMLLoader and apply handling from FXMLLoader.
 		// What has to be done when property already exists
@@ -42,6 +38,11 @@ class InstantiationTemplate extends Template implements ITemplate, IProperty {
 	@Override
 	public void apply(Object newInstance) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	Method findGetter(String propertyName) {
+		return ReflectionUtils.findGetter(instanceClass, propertyName);
 	}
 
 }
