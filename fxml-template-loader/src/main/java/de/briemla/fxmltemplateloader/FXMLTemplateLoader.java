@@ -122,13 +122,23 @@ public class FXMLTemplateLoader {
 		return parameterTypes[0];
 	}
 
+	// FIXME
 	private Class<?> findClass(String className) {
 		for (String importQualifier : imports) {
 			if (matches(className, importQualifier)) {
-				return load(importQualifier);
+				try {
+					return load(importQualifier);
+				} catch (ClassNotFoundException e) {
+					break;
+				}
 			}
 			if (isWildcard(importQualifier)) {
-				return load(importQualifier, className);
+				try {
+					return load(importQualifier, className);
+				} catch (ClassNotFoundException e) {
+					// continue loading, maybe there are other matching imports
+					continue;
+				}
 			}
 		}
 		throw new RuntimeException("Could not find class for name: " + className);
@@ -138,20 +148,16 @@ public class FXMLTemplateLoader {
 		return importQualifier.endsWith(className);
 	}
 
-	private static Class<?> load(String importQualifier) {
+	private static Class<?> load(String importQualifier) throws ClassNotFoundException {
 		ClassLoader classLoader = FXMLTemplateLoader.class.getClassLoader();
-		try {
-			return classLoader.loadClass(importQualifier);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Could not load import: " + importQualifier);
-		}
+		return classLoader.loadClass(importQualifier);
 	}
 
 	private static boolean isWildcard(String importQualifier) {
 		return importQualifier.endsWith(WILDCARD_MATCH);
 	}
 
-	private static Class<?> load(String importQualifier, String className) {
+	private static Class<?> load(String importQualifier, String className) throws ClassNotFoundException {
 		int indexBeforeWildcard = importQualifier.length() - 1;
 		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
 		String fullQualifiedImport = removedWildcard + className;
