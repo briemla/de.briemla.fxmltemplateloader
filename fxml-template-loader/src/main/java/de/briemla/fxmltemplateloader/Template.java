@@ -19,4 +19,6 @@ public abstract class Template {
 
 	abstract Method findGetter(String propertyName);
 
+	abstract Method findSetter(String propertyName);
+
 }

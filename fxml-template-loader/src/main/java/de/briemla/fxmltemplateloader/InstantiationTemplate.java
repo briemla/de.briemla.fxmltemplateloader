@@ -4,29 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-class InstantiationTemplate extends Template implements ITemplate, IProperty {
+abstract class InstantiationTemplate extends Template implements IInstantiationTemplate {
 
-	private final Class<?> instanceClass;
 	private final List<IProperty> properties;
 
-	InstantiationTemplate(Template parent, Class<?> instanceClass, List<IProperty> properties) {
+	InstantiationTemplate(Template parent, List<IProperty> properties) {
 		super(parent);
-		this.instanceClass = instanceClass;
 		this.properties = properties;
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Object newInstance = instanceClass.newInstance();
-		for (IProperty child : properties) {
-			child.apply(newInstance);
-		}
-		return (T) newInstance;
-	}
-
-	@Override
-	protected void addProperty(IProperty child) {
+	public void addProperty(IProperty child) {
 		// TODO Check out FXMLLoader and apply handling from FXMLLoader.
 		// What has to be done when property already exists
 		// if (properties.containsKey(propertyName)) {
@@ -41,8 +29,23 @@ class InstantiationTemplate extends Template implements ITemplate, IProperty {
 	}
 
 	@Override
-	Method findGetter(String propertyName) {
-		return ReflectionUtils.findGetter(instanceClass, propertyName);
+	public Method findGetter(String propertyName) {
+		return ReflectionUtils.findGetter(instanceType(), propertyName);
+	}
+
+	@Override
+	Method findSetter(String propertyName) {
+		return ReflectionUtils.findSetter(instanceType(), propertyName);
+	}
+
+	protected Class<?> instanceType() {
+		return null;
+	}
+
+	protected void applyProperties(Object newInstance) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+		for (IProperty child : properties) {
+			child.apply(newInstance);
+		}
 	}
 
 }

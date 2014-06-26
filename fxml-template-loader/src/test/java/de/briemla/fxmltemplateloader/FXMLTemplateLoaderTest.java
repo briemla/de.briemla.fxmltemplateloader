@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -95,9 +96,20 @@ public class FXMLTemplateLoaderTest {
 
 		assertThat("Number of children", root.getChildren().size(), is(equalTo(1)));
 		assertThat("Parent id", root.getId(), is(equalTo("parent")));
-		
+
 		Node child = root.getChildren().get(0);
 		assertThat("Child id", child.getId(), is(equalTo("child")));
+	}
+
+	@Test
+	public void loadNestedProperties() throws IOException {
+		VBox root = load("VBoxWithNestedProperty.fxml");
+
+		VBox nestedBox = (VBox) root.getChildren().get(0);
+		Insets insets = nestedBox.getPadding();
+
+		Insets expectedInsets = new Insets(12.0, 10.0, 31.0, 23.0);
+		assertThat(insets, is(equalTo(expectedInsets)));
 	}
 
 	@Test

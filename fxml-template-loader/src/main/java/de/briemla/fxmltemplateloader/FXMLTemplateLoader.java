@@ -6,12 +6,17 @@ import static de.briemla.fxmltemplateloader.util.TypeUtil.convert;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.util.Builder;
+import javafx.util.BuilderFactory;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -21,18 +26,22 @@ import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import com.sun.javafx.fxml.builder.ProxyBuilder;
+
 public class FXMLTemplateLoader {
 
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
-	private final List<String> imports;
 	private static Template currentTemplate;
+	private final List<String> imports;
+	private final BuilderFactory builderFactory;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
 
 	public FXMLTemplateLoader() {
 		super();
 		imports = new ArrayList<>();
+		builderFactory = new JavaFXBuilderFactory();
 	}
 
 	public static <T> T load(URL resource) throws IOException {
@@ -79,13 +88,18 @@ public class FXMLTemplateLoader {
 				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
 				currentTemplate.addProperty(listProperty);
 				currentTemplate = listProperty;
+				return;
 			}
+			Method setter = currentTemplate.findSetter(propertyName);
+			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
+			currentTemplate.addProperty(singleElementProperty);
+			currentTemplate = singleElementProperty;
+			// TODO create SinglePropertyTemplate for single elements and create a new InstantiationTemplate for it.
+			// SinglePropertyTemplage must call create method instead of apply method.
 			return;
 		}
 
-		Class<?> clazz = findClass(className);
-		List<IProperty> properties = findProperties(element, clazz);
-		InstantiationTemplate instantiationTemplate = new InstantiationTemplate(currentTemplate, clazz, properties);
+		InstantiationTemplate instantiationTemplate = createInstatiationTemplate(element, className);
 		if (currentTemplate != null) {
 			currentTemplate.addProperty(instantiationTemplate);
 		}
@@ -96,22 +110,52 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	private static List<IProperty> findProperties(StartElement element, Class<?> clazz) {
+	@SuppressWarnings("unchecked")
+	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) {
+		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
+		List<Property> unsettableProperties = new ArrayList<>();
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
 			String propertyName = attribute.getName().getLocalPart();
-			Method method = ReflectionUtils.findSetter(clazz, propertyName);
-			Class<?> type = extractType(method);
 			String value = attribute.getValue();
-			Object convertedValue = convert(value, to(type));
+			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
+				Method method = ReflectionUtils.findSetter(clazz, propertyName);
+				Class<?> type = extractType(method);
+				Object convertedValue = convert(value, to(type));
 
-			IProperty property = new PropertyTemplate(method, convertedValue);
-			properties.add(property);
+				IProperty property = new PropertyTemplate(method, convertedValue);
+				properties.add(property);
+				continue;
+			}
+			unsettableProperties.add(new Property(propertyName, value));
 		}
-		return properties;
+		try {
+			if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
+				Constructor<?> constructor = clazz.getConstructor();
+				return new ConstructorTemplate(currentTemplate, constructor, properties);
+			}
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		List<IProperty> unsettableConvertedProperties = new ArrayList<>();
+		Builder<?> builder = builderFactory.getBuilder(clazz);
+		for (Property property : unsettableProperties) {
+			String propertyName = property.getName();
+			String value = property.getValue();
+			if (builder instanceof ProxyBuilder) {
+				((ProxyBuilder) builder).put(propertyName, value);
+			}
+			// if (ReflectionUtils.hasSetter(builder.getClass(), propertyName)) {
+			// Method method = ReflectionUtils.findSetter(clazz, propertyName);
+			// Class<?> type = extractType(method);
+			// Object convertedValue = convert(value, to(type));
+			//
+			// unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
+			// }
+		}
+		return new BuilderTemplate(currentTemplate, properties, builder, unsettableConvertedProperties, clazz);
 	}
 
 	private static Class<?> extractType(Method method) {

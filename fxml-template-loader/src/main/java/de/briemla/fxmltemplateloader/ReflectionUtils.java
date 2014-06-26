@@ -15,7 +15,7 @@ public class ReflectionUtils {
 	}
 
 	public static Method findSetter(Class<?> clazz, String propertyName) {
-		String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		String setterName = setter(propertyName);
 		for (Method method : clazz.getMethods()) {
 			if (setterName.equals(method.getName())) {
 				return method;
@@ -24,4 +24,17 @@ public class ReflectionUtils {
 		throw new IllegalStateException("Could not find setter for property: " + propertyName);
 	}
 
+	private static String setter(String propertyName) {
+		return "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+	}
+
+	public static boolean hasSetter(Class<?> clazz, String propertyName) {
+		String setterName = setter(propertyName);
+		for (Method method : clazz.getMethods()) {
+			if (setterName.equals(method.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -42,4 +42,9 @@ public class ListPropertyTemplate extends Template implements IProperty {
 		return ReflectionUtils.findGetter(List.class, propertyName);
 	}
 
+	@Override
+	Method findSetter(String propertyName) {
+		throw new UnsupportedOperationException("Setter search not supported for: " + propertyName);
+	}
+
 }
