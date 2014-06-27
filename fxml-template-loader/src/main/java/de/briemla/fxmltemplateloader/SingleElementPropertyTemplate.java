@@ -20,7 +20,7 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 
 	@Override
 	protected void prepare(IProperty value) {
-		this.property = value;
+		property = value;
 		// TODO log warning when called more than once. Check behavior of FXMLLoader
 	}
 
@@ -31,12 +31,12 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 
 	@Override
 	Method findGetter(String propertyName) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Setter search not supported here.");
 	}
 
 	@Override
 	Method findSetter(String propertyName) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Setter search not supported here.");
 	}
 
 }
