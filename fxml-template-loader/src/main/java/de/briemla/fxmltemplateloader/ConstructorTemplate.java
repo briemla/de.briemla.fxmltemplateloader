@@ -8,8 +8,8 @@ class ConstructorTemplate extends InstantiationTemplate {
 
 	private final Constructor<?> constructor;
 
-	ConstructorTemplate(Template parent, Constructor<?> constructor, List<IProperty> properties) {
-		super(parent, properties);
+	ConstructorTemplate(Constructor<?> constructor, List<IProperty> properties) {
+		super(properties);
 		this.constructor = constructor;
 	}
 

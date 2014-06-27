@@ -11,8 +11,8 @@ class BuilderTemplate extends InstantiationTemplate {
 	private final List<IProperty> builderProperties;
 	private final Class<?> instanceType;
 
-	BuilderTemplate(Template parent, List<IProperty> properties, Builder<?> builder, List<IProperty> builderProperties, Class<?> instanceType) {
-		super(parent, properties);
+	BuilderTemplate(List<IProperty> properties, Builder<?> builder, List<IProperty> builderProperties, Class<?> instanceType) {
+		super(properties);
 		this.builder = builder;
 		this.builderProperties = builderProperties;
 		this.instanceType = instanceType;

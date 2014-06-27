@@ -4,15 +4,8 @@ import java.lang.reflect.Method;
 
 public abstract class Template {
 
-	private final Template parent;
-
-	public Template(Template parent) {
+	public Template() {
 		super();
-		this.parent = parent;
-	}
-
-	Template getParent() {
-		return parent;
 	}
 
 	protected abstract void addProperty(IProperty property);

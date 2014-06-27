@@ -10,8 +10,8 @@ public class ListPropertyTemplate extends Template implements IProperty {
 	private final Method getter;
 	private final List<IProperty> children;
 
-	public ListPropertyTemplate(Template parent, Method getter) {
-		super(parent);
+	public ListPropertyTemplate(Method getter) {
+		super();
 		children = new ArrayList<>();
 		this.getter = getter;
 	}

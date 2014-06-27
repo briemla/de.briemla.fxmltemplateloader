@@ -85,13 +85,13 @@ public class FXMLTemplateLoader {
 				throw new RuntimeException("Found getter without return type for property: " + propertyName);
 			}
 			if (List.class.isAssignableFrom(returnType)) {
-				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
+				ListPropertyTemplate listProperty = new ListPropertyTemplate(getter);
 				currentTemplate.addProperty(listProperty);
 				currentTemplate = listProperty;
 				return;
 			}
 			Method setter = currentTemplate.findSetter(propertyName);
-			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
+			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(setter);
 			currentTemplate.addProperty(singleElementProperty);
 			currentTemplate = singleElementProperty;
 			return;
@@ -123,7 +123,8 @@ public class FXMLTemplateLoader {
 				Class<?> type = extractType(method);
 				Object convertedValue = convert(value, to(type));
 
-				IProperty property = new PropertyTemplate(method, convertedValue);
+				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(method);
+				property.addProperty(new PropertyTemplate(method, convertedValue));
 				properties.add(property);
 				continue;
 			}
@@ -132,7 +133,7 @@ public class FXMLTemplateLoader {
 		try {
 			if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
 				Constructor<?> constructor = clazz.getConstructor();
-				return new ConstructorTemplate(currentTemplate, constructor, properties);
+				return new ConstructorTemplate(constructor, properties);
 			}
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
@@ -154,7 +155,7 @@ public class FXMLTemplateLoader {
 				unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
 			}
 		}
-		return new BuilderTemplate(currentTemplate, properties, builder, unsettableConvertedProperties, clazz);
+		return new BuilderTemplate(properties, builder, unsettableConvertedProperties, clazz);
 	}
 
 	private static Class<?> extractType(Method method) {
