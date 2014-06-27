@@ -13,12 +13,8 @@ class ConstructorTemplate extends InstantiationTemplate {
 		this.constructor = constructor;
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Object newInstance = constructor.newInstance();
-		applyProperties(newInstance);
-		return (T) newInstance;
+	protected Object newInstance() throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		return constructor.newInstance();
 	}
 
 	@Override
