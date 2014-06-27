@@ -17,4 +17,10 @@
       	</opaqueInsets>
       </VBox>
    </children>
+   <padding>
+   		<Insets top="43.0" right="38.0" bottom="1536.0" left="7635.0" />
+   	</padding>
+   	<opaqueInsets>
+   		<Insets top="756318.0" right="913.0" bottom="654.0" left="684.0" />
+   	</opaqueInsets>
 </VBox>
