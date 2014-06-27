@@ -19,8 +19,9 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 	}
 
 	@Override
-	protected void prepare(IProperty property) {
-		this.property = property;
+	protected void prepare(IProperty value) {
+		this.property = value;
+		// TODO log warning when called more than once. Check behavior of FXMLLoader
 	}
 
 	@Override
