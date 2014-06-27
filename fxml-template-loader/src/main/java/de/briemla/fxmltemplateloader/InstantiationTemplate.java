@@ -8,8 +8,8 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 
 	private final List<IProperty> properties;
 
-	InstantiationTemplate(List<IProperty> properties) {
-		super();
+	InstantiationTemplate(Template parent, List<IProperty> properties) {
+		super(parent);
 		this.properties = properties;
 	}
 

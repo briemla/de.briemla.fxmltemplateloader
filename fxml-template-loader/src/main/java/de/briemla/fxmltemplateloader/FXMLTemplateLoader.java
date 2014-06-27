@@ -22,6 +22,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -69,8 +70,15 @@ public class FXMLTemplateLoader {
 			if (event.isStartElement()) {
 				processStartElement(event.asStartElement());
 			}
+			if (event.isEndElement()) {
+				processEndElement(event.asEndElement());
+			}
 		}
 		return rootTemplate;
+	}
+
+	private void processEndElement(EndElement element) {
+		currentTemplate = currentTemplate.getParent();
 	}
 
 	private void processStartElement(StartElement element) {
@@ -85,13 +93,13 @@ public class FXMLTemplateLoader {
 				throw new RuntimeException("Found getter without return type for property: " + propertyName);
 			}
 			if (List.class.isAssignableFrom(returnType)) {
-				ListPropertyTemplate listProperty = new ListPropertyTemplate(getter);
+				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
 				currentTemplate.addProperty(listProperty);
 				currentTemplate = listProperty;
 				return;
 			}
 			Method setter = currentTemplate.findSetter(propertyName);
-			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(setter);
+			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
 			currentTemplate.addProperty(singleElementProperty);
 			currentTemplate = singleElementProperty;
 			return;
@@ -123,7 +131,7 @@ public class FXMLTemplateLoader {
 				Class<?> type = extractType(method);
 				Object convertedValue = convert(value, to(type));
 
-				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(method);
+				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
 				property.addProperty(new PropertyTemplate(method, convertedValue));
 				properties.add(property);
 				continue;
@@ -133,7 +141,7 @@ public class FXMLTemplateLoader {
 		try {
 			if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
 				Constructor<?> constructor = clazz.getConstructor();
-				return new ConstructorTemplate(constructor, properties);
+				return new ConstructorTemplate(currentTemplate, constructor, properties);
 			}
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
@@ -155,7 +163,7 @@ public class FXMLTemplateLoader {
 				unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
 			}
 		}
-		return new BuilderTemplate(properties, builder, unsettableConvertedProperties, clazz);
+		return new BuilderTemplate(currentTemplate, properties, builder, unsettableConvertedProperties, clazz);
 	}
 
 	private static Class<?> extractType(Method method) {

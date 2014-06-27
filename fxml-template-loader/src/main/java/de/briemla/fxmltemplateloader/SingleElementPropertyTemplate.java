@@ -8,8 +8,8 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 	private final Method setter;
 	private IProperty property;
 
-	public SingleElementPropertyTemplate(Method setter) {
-		super();
+	public SingleElementPropertyTemplate(Template parent, Method setter) {
+		super(parent);
 		this.setter = setter;
 	}
 
