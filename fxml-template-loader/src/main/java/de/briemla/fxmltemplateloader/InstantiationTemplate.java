@@ -14,7 +14,7 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 	}
 
 	@Override
-	public void addProperty(IProperty child) {
+	public void prepare(IProperty child) {
 		// TODO Check out FXMLLoader and apply handling from FXMLLoader.
 		// What has to be done when property already exists
 		// if (properties.containsKey(propertyName)) {

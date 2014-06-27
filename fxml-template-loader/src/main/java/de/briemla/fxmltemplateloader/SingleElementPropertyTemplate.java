@@ -19,7 +19,7 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 	}
 
 	@Override
-	protected void addProperty(IProperty property) {
+	protected void prepare(IProperty property) {
 		this.property = property;
 	}
 

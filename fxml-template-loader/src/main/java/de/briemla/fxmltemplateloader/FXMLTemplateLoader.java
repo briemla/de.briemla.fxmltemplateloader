@@ -94,20 +94,20 @@ public class FXMLTemplateLoader {
 			}
 			if (List.class.isAssignableFrom(returnType)) {
 				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
-				currentTemplate.addProperty(listProperty);
+				currentTemplate.prepare(listProperty);
 				currentTemplate = listProperty;
 				return;
 			}
 			Method setter = currentTemplate.findSetter(propertyName);
 			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
-			currentTemplate.addProperty(singleElementProperty);
+			currentTemplate.prepare(singleElementProperty);
 			currentTemplate = singleElementProperty;
 			return;
 		}
 
 		InstantiationTemplate instantiationTemplate = createInstatiationTemplate(element, className);
 		if (currentTemplate != null) {
-			currentTemplate.addProperty(instantiationTemplate);
+			currentTemplate.prepare(instantiationTemplate);
 		}
 		currentTemplate = instantiationTemplate;
 
@@ -132,7 +132,7 @@ public class FXMLTemplateLoader {
 				Object convertedValue = convert(value, to(type));
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
-				property.addProperty(new PropertyTemplate(method, convertedValue));
+				property.prepare(new PropertyTemplate(method, convertedValue));
 				properties.add(property);
 				continue;
 			}
