@@ -44,7 +44,7 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
 	@Override
 	Method findSetter(String propertyName) {
-		throw new UnsupportedOperationException("Setter search not supported for: " + propertyName);
+		throw new UnsupportedOperationException("Setter search in List class not supported for: " + propertyName);
 	}
 
 }
