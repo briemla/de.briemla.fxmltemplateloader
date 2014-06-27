@@ -106,10 +106,10 @@ public class FXMLTemplateLoaderTest {
 		VBox root = load("VBoxWithNestedProperty.fxml");
 
 		VBox nestedBox = (VBox) root.getChildren().get(0);
-		Insets insets = nestedBox.getPadding();
+		Insets padding = nestedBox.getPadding();
 
-		Insets expectedInsets = new Insets(12.0, 10.0, 31.0, 23.0);
-		assertThat(insets, is(equalTo(expectedInsets)));
+		Insets expectedPadding = new Insets(12.0, 10.0, 31.0, 23.0);
+		assertThat(padding, is(equalTo(expectedPadding)));
 	}
 
 	@Test
