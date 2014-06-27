@@ -94,8 +94,6 @@ public class FXMLTemplateLoader {
 			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
 			currentTemplate.addProperty(singleElementProperty);
 			currentTemplate = singleElementProperty;
-			// TODO create SinglePropertyTemplate for single elements and create a new InstantiationTemplate for it.
-			// SinglePropertyTemplage must call create method instead of apply method.
 			return;
 		}
 
@@ -144,16 +142,17 @@ public class FXMLTemplateLoader {
 		for (Property property : unsettableProperties) {
 			String propertyName = property.getName();
 			String value = property.getValue();
+			// update default JavaFX Builder
 			if (builder instanceof ProxyBuilder) {
 				((ProxyBuilder) builder).put(propertyName, value);
 			}
-			// if (ReflectionUtils.hasSetter(builder.getClass(), propertyName)) {
-			// Method method = ReflectionUtils.findSetter(clazz, propertyName);
-			// Class<?> type = extractType(method);
-			// Object convertedValue = convert(value, to(type));
-			//
-			// unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
-			// }
+			if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
+				Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
+				Class<?> type = extractType(method);
+				Object convertedValue = convert(value, to(type));
+
+				unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
+			}
 		}
 		return new BuilderTemplate(currentTemplate, properties, builder, unsettableConvertedProperties, clazz);
 	}

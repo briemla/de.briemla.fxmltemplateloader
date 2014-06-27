@@ -37,4 +37,22 @@ public class ReflectionUtils {
 		}
 		return false;
 	}
+
+	public static Method findBuilderMethod(Class<?> clazz, String propertyName) {
+		for (Method method : clazz.getMethods()) {
+			if (propertyName.equals(method.getName())) {
+				return method;
+			}
+		}
+		throw new IllegalStateException("Could not find builder method for property: " + propertyName);
+	}
+
+	public static boolean hasBuilderMethod(Class<?> clazz, String propertyName) {
+		for (Method method : clazz.getMethods()) {
+			if (propertyName.equals(method.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
