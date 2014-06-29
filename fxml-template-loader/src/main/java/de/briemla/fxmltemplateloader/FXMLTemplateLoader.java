@@ -54,13 +54,15 @@ public class FXMLTemplateLoader {
 			eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
 			return parseXml().create();
 		} catch (XMLStreamException exception) {
-			throw new IOException("Could not parse XML", exception);
+			throw new IOException("Could not parse XML.", exception);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-			throw new IOException("Could not instatiate Nodes", exception);
+			throw new IOException("Could not instatiate Nodes.", exception);
+		} catch (NoSuchMethodException | SecurityException exception) {
+			throw new IOException("Could not find correct classes.", exception);
 		}
 	}
 
-	private ITemplate parseXml() throws XMLStreamException {
+	private ITemplate parseXml() throws XMLStreamException, NoSuchMethodException, SecurityException {
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
 			if (event.isProcessingInstruction()) {
@@ -73,7 +75,7 @@ public class FXMLTemplateLoader {
 		return rootTemplate;
 	}
 
-	private void processStartElement(StartElement element) {
+	private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException {
 		String className = element.getName().getLocalPart();
 
 		int index = className.lastIndexOf('.');
@@ -109,7 +111,7 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) {
+	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
@@ -129,22 +131,20 @@ public class FXMLTemplateLoader {
 			}
 			unsettableProperties.add(new Property(propertyName, value));
 		}
-		try {
-			if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
-				Constructor<?> constructor = clazz.getConstructor();
-				return new ConstructorTemplate(currentTemplate, constructor, properties);
-			}
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+		if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
+			Constructor<?> constructor = clazz.getConstructor();
+			return new ConstructorTemplate(currentTemplate, constructor, properties);
 		}
 		List<IProperty> unsettableConvertedProperties = new ArrayList<>();
 		Builder<?> builder = builderFactory.getBuilder(clazz);
 		for (Property property : unsettableProperties) {
 			String propertyName = property.getName();
 			String value = property.getValue();
-			// update default JavaFX Builder
 			if (builder instanceof ProxyBuilder) {
-				((ProxyBuilder) builder).put(propertyName, value);
+				// FIXME builder method should only be searched once.
+				// FIXME rename
+				Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
+				unsettableConvertedProperties.add(new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value));
 			}
 			if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
 				Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
@@ -154,7 +154,7 @@ public class FXMLTemplateLoader {
 				unsettableConvertedProperties.add(new PropertyTemplate(method, convertedValue));
 			}
 		}
-		return new BuilderTemplate(currentTemplate, properties, builder, unsettableConvertedProperties, clazz);
+		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
 
 	private static Class<?> extractType(Method method) {
