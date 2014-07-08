@@ -158,6 +158,13 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
+	public void loadLocalizedResourcesWithMissingResourceKey() throws Exception {
+		thrown.expect(LoadException.class);
+		thrown.expectMessage("Resource \"missingKey\" not found.");
+		loadWithResources("VBoxWithMissingLocalizedText", Locale.GERMAN);
+	}
+
+	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass");
 

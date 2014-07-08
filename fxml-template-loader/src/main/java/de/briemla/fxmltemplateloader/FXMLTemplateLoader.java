@@ -197,7 +197,11 @@ public class FXMLTemplateLoader {
 		if (bundle == null) {
 			throw new LoadException("No resources specified.");
 		}
-		return bundle.getObject(value.substring(1));
+		String resourceKey = value.substring(1);
+		if (bundle.containsKey(resourceKey)) {
+			return bundle.getString(resourceKey);
+		}
+		throw new LoadException("Resource \"" + resourceKey + "\" not found.");
 	}
 
 	private static Class<?> extractType(Method method) {
