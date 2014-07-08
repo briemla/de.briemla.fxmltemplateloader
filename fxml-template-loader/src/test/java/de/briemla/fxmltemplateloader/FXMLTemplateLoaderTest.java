@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,13 +16,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
 
 public class FXMLTemplateLoaderTest {
 
 	private static final String FXML_FILE_EXTENSION = ".fxml";
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	/**
 	 * Fails if cast to {@link VBox} does not match
@@ -136,6 +141,13 @@ public class FXMLTemplateLoaderTest {
 
 		assertThat(germanText.getText(), is(equalTo("German Hallo")));
 
+	}
+
+	@Test
+	public void loadLocalizedResourcesWithMissingBundle() throws Exception {
+		thrown.expect(LoadException.class);
+		thrown.expectMessage("No resources specified.");
+		load("VBoxWithLocalizedText");
 	}
 
 	@Test

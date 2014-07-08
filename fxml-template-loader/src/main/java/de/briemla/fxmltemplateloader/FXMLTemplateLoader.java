@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 
@@ -76,7 +77,7 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	private ITemplate parseXml() throws XMLStreamException, NoSuchMethodException, SecurityException {
+	private ITemplate parseXml() throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
 			if (event.isProcessingInstruction()) {
@@ -96,7 +97,7 @@ public class FXMLTemplateLoader {
 		currentTemplate = currentTemplate.getParent();
 	}
 
-	private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException {
+	private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException, LoadException {
 		String className = element.getName().getLocalPart();
 
 		int index = className.lastIndexOf('.');
@@ -132,7 +133,8 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException {
+	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
+	LoadException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
@@ -179,11 +181,18 @@ public class FXMLTemplateLoader {
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
 
-	private Object resolve(String value, Class<?> type) {
+	private Object resolve(String value, Class<?> type) throws LoadException {
 		if (value.startsWith(RESOURCE_PREFIX)) {
-			return bundle.getObject(value.substring(1));
+			return resolveResource(value);
 		}
 		return convert(value, to(type));
+	}
+
+	private Object resolveResource(String value) throws LoadException {
+		if (bundle == null) {
+			throw new LoadException("No resources specified.");
+		}
+		return bundle.getObject(value.substring(1));
 	}
 
 	private static Class<?> extractType(Method method) {
