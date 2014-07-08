@@ -11,9 +11,14 @@ public class ValueResolver {
 
 	private static final String RESOURCE_PREFIX = "%";
 
-	private ResourceBundle bundle;
+	private final ResourceBundle bundle;
 
-	public void setResourceBundle(ResourceBundle bundle) {
+	public ValueResolver() {
+		this(null);
+	}
+
+	public ValueResolver(ResourceBundle bundle) {
+		super();
 		this.bundle = bundle;
 	}
 
@@ -30,11 +35,11 @@ public class ValueResolver {
 	 * @throws LoadException
 	 *             when resource bundle has not been set or the resource key is not available. FXMLLoader throws same LoadExceptions
 	 */
-	public Object resolve(String value, Class<?> type) throws LoadException {
+	public <T> T resolve(String value, Class<T> type) throws LoadException {
 		if (value.startsWith(RESOURCE_PREFIX)) {
-			return resolveResource(value);
+			return (T) resolveResource(value);
 		}
-		return convert(value, to(type));
+		return (T) convert(value, to(type));
 	}
 
 	private Object resolveResource(String value) throws LoadException {

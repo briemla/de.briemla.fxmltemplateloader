@@ -37,7 +37,7 @@ public class FXMLTemplateLoader {
 	private static Template currentTemplate;
 	private final List<String> imports;
 	private final BuilderFactory builderFactory;
-	private final ValueResolver valueResolver;
+	private ValueResolver valueResolver;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
 
@@ -59,7 +59,7 @@ public class FXMLTemplateLoader {
 	}
 
 	private void setResourceBundle(ResourceBundle bundle) {
-		valueResolver.setResourceBundle(bundle);
+		valueResolver = new ValueResolver(bundle);
 	}
 
 	private <T> T doLoad(URL resource) throws IOException {
