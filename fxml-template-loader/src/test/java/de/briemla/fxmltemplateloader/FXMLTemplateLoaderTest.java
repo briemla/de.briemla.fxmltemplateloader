@@ -143,6 +143,14 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
+	public void loadLocalizedEnglishResources() throws Exception {
+		VBox germanBox = loadWithResources("VBoxWithLocalizedText", Locale.ENGLISH);
+		Text germanText = (Text) germanBox.getChildren().get(0);
+
+		assertThat(germanText.getText(), is(equalTo("English Hello")));
+	}
+
+	@Test
 	public void loadLocalizedResourcesWithMissingBundle() throws Exception {
 		thrown.expect(LoadException.class);
 		thrown.expectMessage("No resources specified.");
