@@ -19,15 +19,7 @@ class BuilderTemplate extends InstantiationTemplate {
 		this.instanceType = instanceType;
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Object newInstance = newInstance();
-		applyProperties(newInstance);
-		return (T) newInstance;
-	}
-
-	private Object newInstance() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+	protected Object newInstance() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Builder<?> builder = builderFactory.getBuilder(instanceType);
 		for (IProperty property : builderProperties) {
 			property.apply(builder);

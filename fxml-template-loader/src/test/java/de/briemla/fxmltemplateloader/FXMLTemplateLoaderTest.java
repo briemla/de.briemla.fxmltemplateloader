@@ -103,13 +103,25 @@ public class FXMLTemplateLoaderTest {
 
 	@Test
 	public void loadNestedProperties() throws IOException {
+		Insets expectedNestedPadding = new Insets(12.0, 10.0, 31.0, 23.0);
+		Insets expectedNestedOpaqueInsets = new Insets(54.0, 80.0, 46.0, 42.0);
+		Insets expectedPadding = new Insets(43.0, 38.0, 1536.0, 7635.0);
+		Insets expectedOpaqueInsets = new Insets(756318.0, 913.0, 654.0, 684.0);
+
 		VBox root = load("VBoxWithNestedProperty.fxml");
 
-		VBox nestedBox = (VBox) root.getChildren().get(0);
-		Insets insets = nestedBox.getPadding();
+		Insets padding = root.getPadding();
+		assertThat(padding, is(equalTo(expectedPadding)));
 
-		Insets expectedInsets = new Insets(12.0, 10.0, 31.0, 23.0);
-		assertThat(insets, is(equalTo(expectedInsets)));
+		Insets opaqueInsets = root.getOpaqueInsets();
+		assertThat(opaqueInsets, is(equalTo(expectedOpaqueInsets)));
+
+		VBox nestedBox = (VBox) root.getChildren().get(0);
+		Insets nestedPadding = nestedBox.getPadding();
+		assertThat(nestedPadding, is(equalTo(expectedNestedPadding)));
+
+		Insets nestedOpaqueInsets = nestedBox.getOpaqueInsets();
+		assertThat(nestedOpaqueInsets, is(equalTo(expectedNestedOpaqueInsets)));
 	}
 
 	@Test

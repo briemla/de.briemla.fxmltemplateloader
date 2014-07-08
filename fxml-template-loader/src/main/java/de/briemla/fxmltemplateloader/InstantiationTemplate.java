@@ -14,7 +14,7 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 	}
 
 	@Override
-	public void addProperty(IProperty child) {
+	public void prepare(IProperty child) {
 		// TODO Check out FXMLLoader and apply handling from FXMLLoader.
 		// What has to be done when property already exists
 		// if (properties.containsKey(propertyName)) {
@@ -25,7 +25,7 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 
 	@Override
 	public void apply(Object newInstance) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("You found a bug. Please call 911 to fix it!");
 	}
 
 	@Override
@@ -38,14 +38,21 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 		return ReflectionUtils.findSetter(instanceType(), propertyName);
 	}
 
-	protected Class<?> instanceType() {
-		return null;
+	protected abstract Class<?> instanceType();
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Object newInstance = newInstance();
+		applyProperties(newInstance);
+		return (T) newInstance;
 	}
 
-	protected void applyProperties(Object newInstance) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+	protected abstract Object newInstance() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException;
+
+	private void applyProperties(Object newInstance) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		for (IProperty child : properties) {
 			child.apply(newInstance);
 		}
 	}
-
 }

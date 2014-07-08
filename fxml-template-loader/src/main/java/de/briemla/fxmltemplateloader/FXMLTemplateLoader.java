@@ -22,6 +22,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -71,8 +72,15 @@ public class FXMLTemplateLoader {
 			if (event.isStartElement()) {
 				processStartElement(event.asStartElement());
 			}
+			if (event.isEndElement()) {
+				processEndElement(event.asEndElement());
+			}
 		}
 		return rootTemplate;
+	}
+
+	private void processEndElement(EndElement element) {
+		currentTemplate = currentTemplate.getParent();
 	}
 
 	private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException {
@@ -88,20 +96,20 @@ public class FXMLTemplateLoader {
 			}
 			if (List.class.isAssignableFrom(returnType)) {
 				ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
-				currentTemplate.addProperty(listProperty);
+				currentTemplate.prepare(listProperty);
 				currentTemplate = listProperty;
 				return;
 			}
 			Method setter = currentTemplate.findSetter(propertyName);
 			SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
-			currentTemplate.addProperty(singleElementProperty);
+			currentTemplate.prepare(singleElementProperty);
 			currentTemplate = singleElementProperty;
 			return;
 		}
 
 		InstantiationTemplate instantiationTemplate = createInstatiationTemplate(element, className);
 		if (currentTemplate != null) {
-			currentTemplate.addProperty(instantiationTemplate);
+			currentTemplate.prepare(instantiationTemplate);
 		}
 		currentTemplate = instantiationTemplate;
 
@@ -125,7 +133,8 @@ public class FXMLTemplateLoader {
 				Class<?> type = extractType(method);
 				Object convertedValue = convert(value, to(type));
 
-				IProperty property = new PropertyTemplate(method, convertedValue);
+				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
+				property.prepare(new PropertyTemplate(method, convertedValue));
 				properties.add(property);
 				continue;
 			}

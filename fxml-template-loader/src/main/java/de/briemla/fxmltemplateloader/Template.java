@@ -15,7 +15,7 @@ public abstract class Template {
 		return parent;
 	}
 
-	protected abstract void addProperty(IProperty property);
+	protected abstract void prepare(IProperty property);
 
 	abstract Method findGetter(String propertyName);
 
