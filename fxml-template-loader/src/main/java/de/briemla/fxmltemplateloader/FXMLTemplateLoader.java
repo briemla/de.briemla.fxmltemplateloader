@@ -134,7 +134,7 @@ public class FXMLTemplateLoader {
 
 	@SuppressWarnings("unchecked")
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	        LoadException {
+	LoadException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
@@ -162,28 +162,33 @@ public class FXMLTemplateLoader {
 		List<IProperty> unsettableConvertedProperties = new ArrayList<>();
 		Builder<?> builder = builderFactory.getBuilder(clazz);
 		for (Property property : unsettableProperties) {
-			IProperty newPropertyTemplate = null;
-			String propertyName = property.getName();
-			String value = property.getValue();
-			if (builder instanceof ProxyBuilder) {
-				// FIXME builder method should only be searched once.
-				// FIXME rename
-				Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
-				newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value);
-			}
-			if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
-				Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
-				Class<?> type = extractType(method);
-				Object convertedValue = resolve(value, to(type));
-
-				newPropertyTemplate = new PropertyTemplate(method, convertedValue);
-			}
+			IProperty newPropertyTemplate = createTemplate(builder, property);
 			if (newPropertyTemplate != null) {
 				unsettableConvertedProperties.add(newPropertyTemplate);
 			}
 		}
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
+
+	private IProperty createTemplate(Builder<?> builder, Property property) throws NoSuchMethodException, LoadException {
+	    IProperty newPropertyTemplate = null;
+	    String propertyName = property.getName();
+	    String value = property.getValue();
+	    if (builder instanceof ProxyBuilder) {
+	    	// FIXME builder method should only be searched once.
+	    	// FIXME rename
+	    	Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
+	    	newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value);
+	    }
+	    if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
+	    	Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
+	    	Class<?> type = extractType(method);
+	    	Object convertedValue = resolve(value, to(type));
+
+	    	newPropertyTemplate = new PropertyTemplate(method, convertedValue);
+	    }
+	    return newPropertyTemplate;
+    }
 
 	/**
 	 * Values for attributes in FXML can start with some special characters. This method resolves those strings.
