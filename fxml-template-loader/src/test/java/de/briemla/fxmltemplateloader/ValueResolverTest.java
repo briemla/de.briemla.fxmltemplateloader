@@ -26,7 +26,7 @@ public class ValueResolverTest {
 		String testValue = "testValue";
 		ValueResolver resolver = new ValueResolver(bundle);
 
-		String resolvedValue = resolver.resolve(keyWithResourcePrefix, String.class);
+		Object resolvedValue = resolver.resolve(keyWithResourcePrefix, String.class);
 
 		assertThat(resolvedValue, is(equalTo(testValue)));
 	}
