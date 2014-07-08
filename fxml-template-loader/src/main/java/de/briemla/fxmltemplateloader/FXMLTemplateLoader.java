@@ -130,6 +130,8 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
+	// FIXME too long method. Can be simpliefied. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
+	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
 	LoadException {
 		Class<?> clazz = findClass(className);
