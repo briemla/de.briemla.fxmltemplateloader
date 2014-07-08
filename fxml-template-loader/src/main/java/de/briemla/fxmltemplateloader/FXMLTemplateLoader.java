@@ -1,5 +1,7 @@
 package de.briemla.fxmltemplateloader;
 
+import static de.briemla.fxmltemplateloader.ReflectionUtils.extractType;
+import static de.briemla.fxmltemplateloader.ReflectionUtils.findSetter;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 
@@ -133,7 +135,7 @@ public class FXMLTemplateLoader {
 	// FIXME too long method. Can be simpliefied. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	LoadException {
+	        LoadException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
@@ -143,8 +145,8 @@ public class FXMLTemplateLoader {
 			String propertyName = attribute.getName().getLocalPart();
 			String value = attribute.getValue();
 			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-				Method method = ReflectionUtils.findSetter(clazz, propertyName);
-				Class<?> type = ReflectionUtils.extractType(method);
+				Method method = findSetter(clazz, propertyName);
+				Class<?> type = extractType(method);
 				Object convertedValue = resolve(value, to(type));
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
