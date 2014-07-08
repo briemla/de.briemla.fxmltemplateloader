@@ -135,7 +135,7 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
-	public void loadLocalizedResources() throws Exception {
+	public void loadLocalizedGermanResources() throws Exception {
 		VBox germanBox = loadWithResources("VBoxWithLocalizedText", Locale.GERMAN);
 		Text germanText = (Text) germanBox.getChildren().get(0);
 
