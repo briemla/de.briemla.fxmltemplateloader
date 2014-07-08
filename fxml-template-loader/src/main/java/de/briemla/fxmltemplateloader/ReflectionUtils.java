@@ -55,4 +55,12 @@ public class ReflectionUtils {
 		}
 		return false;
 	}
+
+	public static Class<?> extractType(Method method) {
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		if (parameterTypes.length != 1) {
+			throw new RuntimeException("Incorrect number of arguments for setter found.");
+		}
+		return parameterTypes[0];
+	}
 }

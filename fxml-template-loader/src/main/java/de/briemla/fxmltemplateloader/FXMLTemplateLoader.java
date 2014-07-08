@@ -28,8 +28,6 @@ import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import com.sun.javafx.fxml.builder.ProxyBuilder;
-
 public class FXMLTemplateLoader {
 
 	private static final String WILDCARD_MATCH = ".*";
@@ -144,7 +142,7 @@ public class FXMLTemplateLoader {
 			String value = attribute.getValue();
 			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
 				Method method = ReflectionUtils.findSetter(clazz, propertyName);
-				Class<?> type = extractType(method);
+				Class<?> type = ReflectionUtils.extractType(method);
 				Object convertedValue = resolve(value, to(type));
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
@@ -161,7 +159,7 @@ public class FXMLTemplateLoader {
 		List<IProperty> unsettableConvertedProperties = new ArrayList<>();
 		Builder<?> builder = builderFactory.getBuilder(clazz);
 		for (Property property : unsettableProperties) {
-			IProperty newPropertyTemplate = createTemplate(builder, property);
+			IProperty newPropertyTemplate = property.createTemplate(builder, valueResolver);
 			if (newPropertyTemplate != null) {
 				unsettableConvertedProperties.add(newPropertyTemplate);
 			}
@@ -169,36 +167,8 @@ public class FXMLTemplateLoader {
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
 
-	private IProperty createTemplate(Builder<?> builder, Property property) throws NoSuchMethodException, LoadException {
-		IProperty newPropertyTemplate = null;
-		String propertyName = property.getName();
-		String value = property.getValue();
-		if (builder instanceof ProxyBuilder) {
-			// FIXME builder method should only be searched once.
-			// FIXME rename
-			Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
-			newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value);
-		}
-		if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
-			Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
-			Class<?> type = extractType(method);
-			Object convertedValue = resolve(value, to(type));
-
-			newPropertyTemplate = new PropertyTemplate(method, convertedValue);
-		}
-		return newPropertyTemplate;
-	}
-
 	private Object resolve(String value, Class<?> type) throws LoadException {
 		return valueResolver.resolve(value, type);
-	}
-
-	private static Class<?> extractType(Method method) {
-		Class<?>[] parameterTypes = method.getParameterTypes();
-		if (parameterTypes.length != 1) {
-			throw new RuntimeException("Incorrect number of arguments for setter found.");
-		}
-		return parameterTypes[0];
 	}
 
 	// FIXME
