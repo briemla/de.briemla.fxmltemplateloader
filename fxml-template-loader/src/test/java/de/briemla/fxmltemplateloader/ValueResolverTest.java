@@ -41,4 +41,13 @@ public class ValueResolverTest {
 		thrown.expectMessage(is(equalTo("Resource \"missingKey\" not found.")));
 		resolver.resolve("%missingKey", String.class);
 	}
+
+	@Test
+	public void resolveMissingResourceBundle() throws Exception {
+		ValueResolver resolver = new ValueResolver();
+
+		thrown.expect(LoadException.class);
+		thrown.expectMessage(is(equalTo("No resources specified.")));
+		resolver.resolve("%noResourcesSpecified", String.class);
+	}
 }
