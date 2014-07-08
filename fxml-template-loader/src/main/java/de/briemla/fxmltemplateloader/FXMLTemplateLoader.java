@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.util.Builder;
@@ -31,6 +32,7 @@ import com.sun.javafx.fxml.builder.ProxyBuilder;
 
 public class FXMLTemplateLoader {
 
+	private static final String RESOURCE_PREFIX = "%";
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private static Template currentTemplate;
@@ -38,6 +40,7 @@ public class FXMLTemplateLoader {
 	private final BuilderFactory builderFactory;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
+	private ResourceBundle bundle;
 
 	public FXMLTemplateLoader() {
 		super();
@@ -47,6 +50,16 @@ public class FXMLTemplateLoader {
 
 	public static <T> T load(URL resource) throws IOException {
 		return new FXMLTemplateLoader().doLoad(resource);
+	}
+
+	public static <T> T load(URL resource, ResourceBundle bundle) throws IOException {
+		FXMLTemplateLoader fxmlTemplateLoader = new FXMLTemplateLoader();
+		fxmlTemplateLoader.setResourceBundle(bundle);
+		return fxmlTemplateLoader.doLoad(resource);
+	}
+
+	private void setResourceBundle(ResourceBundle bundle) {
+		this.bundle = bundle;
 	}
 
 	private <T> T doLoad(URL resource) throws IOException {
@@ -131,7 +144,7 @@ public class FXMLTemplateLoader {
 			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
 				Method method = ReflectionUtils.findSetter(clazz, propertyName);
 				Class<?> type = extractType(method);
-				Object convertedValue = convert(value, to(type));
+				Object convertedValue = resolve(value, type);
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
 				property.prepare(new PropertyTemplate(method, convertedValue));
@@ -164,6 +177,13 @@ public class FXMLTemplateLoader {
 			}
 		}
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
+	}
+
+	private Object resolve(String value, Class<?> type) {
+		if (value.startsWith(RESOURCE_PREFIX)) {
+			return bundle.getObject(value.substring(1));
+		}
+		return convert(value, to(type));
 	}
 
 	private static Class<?> extractType(Method method) {
@@ -222,4 +242,5 @@ public class FXMLTemplateLoader {
 		}
 		imports.add(instruction.getData());
 	}
+
 }
