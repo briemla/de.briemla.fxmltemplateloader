@@ -21,6 +21,8 @@ import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingIns
 
 public class FXMLTemplateLoaderTest {
 
+	private static final String FXML_FILE_EXTENSION = ".fxml";
+
 	/**
 	 * Fails if cast to {@link VBox} does not match
 	 *
@@ -152,14 +154,14 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	private static <T> T load(String fileName) throws IOException {
-		String fxmlName = fileName + ".fxml";
+		String fxmlName = fileName + FXML_FILE_EXTENSION;
 		return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fxmlName));
 	}
 
 	private static <T> T loadWithResources(String fileName, Locale locale) throws IOException {
 		String bundlePath = FXMLTemplateLoaderTest.class.getPackage().getName() + "." + fileName;
 		ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
-		String fxmlName = fileName + ".fxml";
+		String fxmlName = fileName + FXML_FILE_EXTENSION;
 		return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fxmlName), bundle);
 	}
 }
