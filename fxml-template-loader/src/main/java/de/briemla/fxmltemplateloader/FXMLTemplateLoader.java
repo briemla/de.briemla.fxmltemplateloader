@@ -134,7 +134,7 @@ public class FXMLTemplateLoader {
 
 	@SuppressWarnings("unchecked")
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	LoadException {
+	        LoadException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
@@ -181,6 +181,11 @@ public class FXMLTemplateLoader {
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
 
+	/**
+	 * Values for attributes in FXML can start with some special characters. This method resolves those strings.
+	 *
+	 * For more information about all special characters see FXMLLoader#Element#resolvePrefixedValue
+	 */
 	private Object resolve(String value, Class<?> type) throws LoadException {
 		if (value.startsWith(RESOURCE_PREFIX)) {
 			return resolveResource(value);
