@@ -140,7 +140,6 @@ public class FXMLTemplateLoaderTest {
 		Text germanText = (Text) germanBox.getChildren().get(0);
 
 		assertThat(germanText.getText(), is(equalTo("German Hallo")));
-
 	}
 
 	@Test
