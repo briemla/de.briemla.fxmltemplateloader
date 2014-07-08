@@ -2,7 +2,6 @@ package de.briemla.fxmltemplateloader;
 
 import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
-import static de.briemla.fxmltemplateloader.util.TypeUtil.convert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,20 +32,20 @@ import com.sun.javafx.fxml.builder.ProxyBuilder;
 
 public class FXMLTemplateLoader {
 
-	private static final String RESOURCE_PREFIX = "%";
 	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private static Template currentTemplate;
 	private final List<String> imports;
 	private final BuilderFactory builderFactory;
+	private final ValueResolver valueResolver;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
-	private ResourceBundle bundle;
 
 	public FXMLTemplateLoader() {
 		super();
 		imports = new ArrayList<>();
 		builderFactory = new JavaFXBuilderFactory();
+		valueResolver = new ValueResolver();
 	}
 
 	public static <T> T load(URL resource) throws IOException {
@@ -60,7 +59,7 @@ public class FXMLTemplateLoader {
 	}
 
 	private void setResourceBundle(ResourceBundle bundle) {
-		this.bundle = bundle;
+		valueResolver.setResourceBundle(bundle);
 	}
 
 	private <T> T doLoad(URL resource) throws IOException {
@@ -171,46 +170,27 @@ public class FXMLTemplateLoader {
 	}
 
 	private IProperty createTemplate(Builder<?> builder, Property property) throws NoSuchMethodException, LoadException {
-	    IProperty newPropertyTemplate = null;
-	    String propertyName = property.getName();
-	    String value = property.getValue();
-	    if (builder instanceof ProxyBuilder) {
-	    	// FIXME builder method should only be searched once.
-	    	// FIXME rename
-	    	Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
-	    	newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value);
-	    }
-	    if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
-	    	Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
-	    	Class<?> type = extractType(method);
-	    	Object convertedValue = resolve(value, to(type));
-
-	    	newPropertyTemplate = new PropertyTemplate(method, convertedValue);
-	    }
-	    return newPropertyTemplate;
-    }
-
-	/**
-	 * Values for attributes in FXML can start with some special characters. This method resolves those strings.
-	 *
-	 * For more information about all special characters see FXMLLoader#Element#resolvePrefixedValue
-	 */
-	private Object resolve(String value, Class<?> type) throws LoadException {
-		if (value.startsWith(RESOURCE_PREFIX)) {
-			return resolveResource(value);
+		IProperty newPropertyTemplate = null;
+		String propertyName = property.getName();
+		String value = property.getValue();
+		if (builder instanceof ProxyBuilder) {
+			// FIXME builder method should only be searched once.
+			// FIXME rename
+			Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
+			newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, propertyName, value);
 		}
-		return convert(value, to(type));
+		if (ReflectionUtils.hasBuilderMethod(builder.getClass(), propertyName)) {
+			Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), propertyName);
+			Class<?> type = extractType(method);
+			Object convertedValue = resolve(value, to(type));
+
+			newPropertyTemplate = new PropertyTemplate(method, convertedValue);
+		}
+		return newPropertyTemplate;
 	}
 
-	private Object resolveResource(String value) throws LoadException {
-		if (bundle == null) {
-			throw new LoadException("No resources specified.");
-		}
-		String resourceKey = value.substring(1);
-		if (bundle.containsKey(resourceKey)) {
-			return bundle.getString(resourceKey);
-		}
-		throw new LoadException("Resource \"" + resourceKey + "\" not found.");
+	private Object resolve(String value, Class<?> type) throws LoadException {
+		return valueResolver.resolve(value, type);
 	}
 
 	private static Class<?> extractType(Method method) {
