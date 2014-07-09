@@ -34,7 +34,7 @@ public class FXMLTemplateLoader {
 
 	private static final String IMPORT = "import";
 	private static Template currentTemplate;
-	private final List<Import> imports;
+	private final ImportCollection imports;
 	private final BuilderFactory builderFactory;
 	private ValueResolver valueResolver;
 	private XMLEventReader eventReader;
@@ -42,7 +42,7 @@ public class FXMLTemplateLoader {
 
 	public FXMLTemplateLoader() {
 		super();
-		imports = new ArrayList<>();
+		imports = new ImportCollection();
 		builderFactory = new JavaFXBuilderFactory();
 		valueResolver = new ValueResolver();
 	}
@@ -176,31 +176,13 @@ public class FXMLTemplateLoader {
 
 	// FIXME
 	private Class<?> findClass(String className) {
-		for (Import importQualifier : imports) {
-			if (importQualifier.matches(className)) {
-				try {
-					return importQualifier.load();
-				} catch (ClassNotFoundException e) {
-					break;
-				}
-			}
-			if (importQualifier.isWildcard()) {
-				try {
-					return importQualifier.load(className);
-				} catch (ClassNotFoundException e) {
-					// continue loading, maybe there are other matching imports
-					continue;
-				}
-			}
-		}
-		throw new RuntimeException("Could not find class for name: " + className);
+		return imports.findClass(className);
 	}
 
 	private void processProcessingInstruction(ProcessingInstruction instruction) {
 		if (!IMPORT.equals(instruction.getTarget())) {
 			return;
 		}
-		imports.add(new Import(instruction.getData()));
+		imports.add(instruction.getData());
 	}
-
 }
