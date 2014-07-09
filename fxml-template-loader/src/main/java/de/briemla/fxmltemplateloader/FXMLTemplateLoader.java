@@ -147,7 +147,7 @@ public class FXMLTemplateLoader {
 			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
 				Method method = findSetter(clazz, propertyName);
 				Class<?> type = extractType(method);
-				Object convertedValue = resolve(value, to(type));
+				IValue convertedValue = resolve(value, to(type));
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
 				property.prepare(new PropertyTemplate(method, convertedValue));
@@ -171,7 +171,7 @@ public class FXMLTemplateLoader {
 		return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
 	}
 
-	private Object resolve(String value, Class<?> type) throws LoadException {
+	private IValue resolve(String value, Class<?> type) throws LoadException {
 		return valueResolver.resolve(value, type);
 	}
 

@@ -35,11 +35,11 @@ public class ValueResolver {
 	 * @throws LoadException
 	 *             when resource bundle has not been set or the resource key is not available. FXMLLoader throws same LoadExceptions
 	 */
-	public Object resolve(String value, Class<?> type) throws LoadException {
+	public IValue resolve(String value, Class<?> type) throws LoadException {
 		if (value.startsWith(RESOURCE_PREFIX)) {
-			return resolveResource(value);
+			return new BasicTypeValue(resolveResource(value));
 		}
-		return convert(value, to(type));
+		return new BasicTypeValue(convert(value, to(type)));
 	}
 
 	private Object resolveResource(String value) throws LoadException {

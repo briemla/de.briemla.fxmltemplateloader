@@ -6,22 +6,22 @@ import java.lang.reflect.Method;
 class PropertyTemplate implements IProperty {
 
 	private final Method method;
-	private final Object value;
+	private final IValue value;
 
-	PropertyTemplate(Method method, Object value) {
+	PropertyTemplate(Method method, IValue value) {
 		this.method = method;
 		this.value = value;
 	}
 
 	@Override
 	public void apply(Object parent) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		method.invoke(parent, value);
+		method.invoke(parent, value.create());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return (T) value;
+		return (T) value.create();
 	}
 
 }

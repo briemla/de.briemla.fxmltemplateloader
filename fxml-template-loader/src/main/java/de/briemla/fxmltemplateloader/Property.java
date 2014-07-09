@@ -31,7 +31,7 @@ public class Property {
 		if (ReflectionUtils.hasBuilderMethod(builder.getClass(), name)) {
 			Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), name);
 			Class<?> type = ReflectionUtils.extractType(method);
-			Object convertedValue = valueResolver.resolve(value, to(type));
+			IValue convertedValue = valueResolver.resolve(value, to(type));
 
 			return new PropertyTemplate(method, convertedValue);
 		}

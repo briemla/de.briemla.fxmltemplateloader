@@ -23,10 +23,10 @@ public class ValueResolverTest {
 		String bundlePath = ValueResolverTest.class.getPackage().getName() + ".ValueResolverTest";
 		ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, Locale.GERMAN);
 		String keyWithResourcePrefix = "%testKey";
-		String testValue = "testValue";
+		IValue testValue = new BasicTypeValue("testValue");
 		ValueResolver resolver = new ValueResolver(bundle);
 
-		Object resolvedValue = resolver.resolve(keyWithResourcePrefix, String.class);
+		IValue resolvedValue = resolver.resolve(keyWithResourcePrefix, String.class);
 
 		assertThat(resolvedValue, is(equalTo(testValue)));
 	}
