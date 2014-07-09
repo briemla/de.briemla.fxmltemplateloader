@@ -32,10 +32,9 @@ import javax.xml.stream.events.XMLEvent;
 
 public class FXMLTemplateLoader {
 
-	private static final String WILDCARD_MATCH = ".*";
 	private static final String IMPORT = "import";
 	private static Template currentTemplate;
-	private final List<String> imports;
+	private final List<Import> imports;
 	private final BuilderFactory builderFactory;
 	private ValueResolver valueResolver;
 	private XMLEventReader eventReader;
@@ -177,17 +176,17 @@ public class FXMLTemplateLoader {
 
 	// FIXME
 	private Class<?> findClass(String className) {
-		for (String importQualifier : imports) {
-			if (matches(className, importQualifier)) {
+		for (Import importQualifier : imports) {
+			if (importQualifier.matches(className)) {
 				try {
-					return load(importQualifier);
+					return importQualifier.load();
 				} catch (ClassNotFoundException e) {
 					break;
 				}
 			}
-			if (isWildcard(importQualifier)) {
+			if (importQualifier.isWildcard()) {
 				try {
-					return load(importQualifier, className);
+					return importQualifier.load(className);
 				} catch (ClassNotFoundException e) {
 					// continue loading, maybe there are other matching imports
 					continue;
@@ -197,31 +196,11 @@ public class FXMLTemplateLoader {
 		throw new RuntimeException("Could not find class for name: " + className);
 	}
 
-	private static boolean matches(String className, String importQualifier) {
-		return importQualifier.endsWith(className);
-	}
-
-	private static Class<?> load(String importQualifier) throws ClassNotFoundException {
-		ClassLoader classLoader = FXMLTemplateLoader.class.getClassLoader();
-		return classLoader.loadClass(importQualifier);
-	}
-
-	private static boolean isWildcard(String importQualifier) {
-		return importQualifier.endsWith(WILDCARD_MATCH);
-	}
-
-	private static Class<?> load(String importQualifier, String className) throws ClassNotFoundException {
-		int indexBeforeWildcard = importQualifier.length() - 1;
-		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
-		String fullQualifiedImport = removedWildcard + className;
-		return load(fullQualifiedImport);
-	}
-
 	private void processProcessingInstruction(ProcessingInstruction instruction) {
 		if (!IMPORT.equals(instruction.getTarget())) {
 			return;
 		}
-		imports.add(instruction.getData());
+		imports.add(new Import(instruction.getData()));
 	}
 
 }
