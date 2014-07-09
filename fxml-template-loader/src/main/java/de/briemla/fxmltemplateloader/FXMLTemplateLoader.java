@@ -132,10 +132,10 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	// FIXME too long method. Can be simpliefied. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
+	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	        LoadException {
+			LoadException {
 		Class<?> clazz = findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
