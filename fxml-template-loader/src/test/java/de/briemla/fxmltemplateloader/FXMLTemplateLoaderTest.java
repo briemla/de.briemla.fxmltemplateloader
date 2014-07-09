@@ -165,6 +165,12 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
+	public void loadMissingImport() throws IOException {
+		thrown.expect(LoadException.class);
+		load("VBoxRootWithMissingImport");
+	}
+
+	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass");
 

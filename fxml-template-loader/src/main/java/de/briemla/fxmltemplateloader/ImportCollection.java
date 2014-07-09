@@ -3,6 +3,8 @@ package de.briemla.fxmltemplateloader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.fxml.LoadException;
+
 public class ImportCollection {
 
 	private static final String WILDCARD_MATCH = ".*";
@@ -14,17 +16,17 @@ public class ImportCollection {
 		imports = new ArrayList<>();
 	}
 
-	public Class<?> findClass(String className) {
-		for (Import importQualifier : imports) {
-			if (importQualifier.matches(className)) {
-				try {
+	public Class<?> findClass(String className) throws LoadException {
+		try {
+			for (Import importQualifier : imports) {
+				if (importQualifier.matches(className)) {
 					return importQualifier.load(className);
-				} catch (ClassNotFoundException e) {
-					break;
 				}
 			}
+		} catch (ClassNotFoundException e) {
+			throw new LoadException(e);
 		}
-		throw new RuntimeException("Could not find class for name: " + className);
+		throw new LoadException("No matching import available for class with name: " + className);
 	}
 
 	public void add(String data) {

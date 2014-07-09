@@ -135,7 +135,7 @@ public class FXMLTemplateLoader {
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
 			LoadException {
-		Class<?> clazz = findClass(className);
+		Class<?> clazz = imports.findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
 		Iterator<Attribute> attributes = element.getAttributes();
@@ -172,11 +172,6 @@ public class FXMLTemplateLoader {
 
 	private IValue resolve(String value, Class<?> type) throws LoadException {
 		return valueResolver.resolve(value, type);
-	}
-
-	// FIXME
-	private Class<?> findClass(String className) {
-		return imports.findClass(className);
 	}
 
 	private void processProcessingInstruction(ProcessingInstruction instruction) {
