@@ -5,8 +5,11 @@ import java.util.List;
 
 import javafx.fxml.LoadException;
 
+import javax.xml.stream.events.ProcessingInstruction;
+
 public class ImportCollection {
 
+	private static final String IMPORT = "import";
 	private static final String WILDCARD_MATCH = ".*";
 
 	private final List<Import> imports;
@@ -29,11 +32,14 @@ public class ImportCollection {
 		throw new LoadException("No matching import available for class with name: " + className);
 	}
 
-	public void add(String data) {
-		if (data.endsWith(WILDCARD_MATCH)) {
-			imports.add(new WildcardImport(data));
+	public void add(ProcessingInstruction instruction) {
+		if (!IMPORT.equals(instruction.getTarget())) {
+			return;
 		}
-		imports.add(new FullQualifiedImport(data));
+		String importClassifier = instruction.getData();
+		if (importClassifier.endsWith(WILDCARD_MATCH)) {
+			imports.add(new WildcardImport(importClassifier));
+		}
+		imports.add(new FullQualifiedImport(importClassifier));
 	}
-
 }

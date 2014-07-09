@@ -32,7 +32,6 @@ import javax.xml.stream.events.XMLEvent;
 
 public class FXMLTemplateLoader {
 
-	private static final String IMPORT = "import";
 	private static Template currentTemplate;
 	private final ImportCollection imports;
 	private final BuilderFactory builderFactory;
@@ -175,8 +174,6 @@ public class FXMLTemplateLoader {
 	}
 
 	private void processProcessingInstruction(ProcessingInstruction instruction) {
-		if (IMPORT.equals(instruction.getTarget())) {
-			imports.add(instruction.getData());
-		}
+		imports.add(instruction);
 	}
 }
