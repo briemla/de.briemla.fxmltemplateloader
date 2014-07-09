@@ -18,9 +18,9 @@ public class Import {
 		return loadInternal(importQualifier);
 	}
 
-	private Class<?> loadInternal(String importQualifier2) throws ClassNotFoundException {
-		ClassLoader classLoader = FXMLTemplateLoader.class.getClassLoader();
-		return classLoader.loadClass(importQualifier2);
+	private Class<?> loadInternal(String importQualifier) throws ClassNotFoundException {
+		ClassLoader classLoader = Import.class.getClassLoader();
+		return classLoader.loadClass(importQualifier);
 	}
 
 	boolean isWildcard() {
