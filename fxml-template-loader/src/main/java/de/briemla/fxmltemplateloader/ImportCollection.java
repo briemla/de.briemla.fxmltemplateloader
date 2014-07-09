@@ -23,14 +23,6 @@ public class ImportCollection {
 					break;
 				}
 			}
-			if (importQualifier.isWildcard()) {
-				try {
-					return importQualifier.load(className);
-				} catch (ClassNotFoundException e) {
-					// continue loading, maybe there are other matching imports
-					continue;
-				}
-			}
 		}
 		throw new RuntimeException("Could not find class for name: " + className);
 	}

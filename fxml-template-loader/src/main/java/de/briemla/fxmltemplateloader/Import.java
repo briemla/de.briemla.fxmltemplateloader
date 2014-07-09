@@ -8,9 +8,9 @@ abstract class Import {
 
 	abstract boolean matches(String className);
 
-	protected Class<?> load(String importQualifier) throws ClassNotFoundException {
+	protected Class<?> load(String className) throws ClassNotFoundException {
 		ClassLoader classLoader = Import.class.getClassLoader();
-		return classLoader.loadClass(importQualifier);
+		return classLoader.loadClass(className);
 	}
 
 	protected abstract boolean isWildcard();
