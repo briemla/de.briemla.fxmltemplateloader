@@ -20,22 +20,22 @@ public class Property {
 		this.value = value;
 	}
 
+	// FIXME maybe introduce different Properties and throw LoadException in FXMLTemplateLoader with line information
 	public IProperty createTemplate(Builder<?> builder, ValueResolver valueResolver) throws NoSuchMethodException, SecurityException, LoadException {
-		IProperty newPropertyTemplate = null;
 		if (builder instanceof ProxyBuilder) {
 			// FIXME builder method should only be searched once.
 			// FIXME rename
 			Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
-			newPropertyTemplate = new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, name, value);
+			return new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, name, value);
 		}
 		if (ReflectionUtils.hasBuilderMethod(builder.getClass(), name)) {
 			Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), name);
 			Class<?> type = ReflectionUtils.extractType(method);
 			Object convertedValue = valueResolver.resolve(value, to(type));
 
-			newPropertyTemplate = new PropertyTemplate(method, convertedValue);
+			return new PropertyTemplate(method, convertedValue);
 		}
-		return newPropertyTemplate;
+		throw new LoadException("Could not create IProperty");
 	}
 
 }
