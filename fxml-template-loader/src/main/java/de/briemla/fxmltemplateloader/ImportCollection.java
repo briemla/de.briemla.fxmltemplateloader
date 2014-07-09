@@ -5,6 +5,8 @@ import java.util.List;
 
 public class ImportCollection {
 
+	private static final String WILDCARD_MATCH = ".*";
+
 	private final List<Import> imports;
 
 	public ImportCollection() {
@@ -16,7 +18,7 @@ public class ImportCollection {
 		for (Import importQualifier : imports) {
 			if (importQualifier.matches(className)) {
 				try {
-					return importQualifier.load();
+					return importQualifier.load(className);
 				} catch (ClassNotFoundException e) {
 					break;
 				}
@@ -34,7 +36,10 @@ public class ImportCollection {
 	}
 
 	public void add(String data) {
-		imports.add(new Import(data));
+		if (data.endsWith(WILDCARD_MATCH)) {
+			imports.add(new WildcardImport(data));
+		}
+		imports.add(new FullQualifiedImport(data));
 	}
 
 }

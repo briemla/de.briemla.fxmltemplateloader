@@ -1,37 +1,18 @@
 package de.briemla.fxmltemplateloader;
 
-public class Import {
+abstract class Import {
 
-	private static final String WILDCARD_MATCH = ".*";
-	private final String importQualifier;
-
-	public Import(String importQualifier) {
+	public Import() {
 		super();
-		this.importQualifier = importQualifier;
 	}
 
-	boolean matches(String className) {
-		return importQualifier.endsWith(className);
-	}
+	abstract boolean matches(String className);
 
-	Class<?> load() throws ClassNotFoundException {
-		return loadInternal(importQualifier);
-	}
-
-	private Class<?> loadInternal(String importQualifier) throws ClassNotFoundException {
+	protected Class<?> load(String importQualifier) throws ClassNotFoundException {
 		ClassLoader classLoader = Import.class.getClassLoader();
 		return classLoader.loadClass(importQualifier);
 	}
 
-	boolean isWildcard() {
-		return importQualifier.endsWith(WILDCARD_MATCH);
-	}
-
-	Class<?> load(String className) throws ClassNotFoundException {
-		int indexBeforeWildcard = importQualifier.length() - 1;
-		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
-		String fullQualifiedImport = removedWildcard + className;
-		return loadInternal(fullQualifiedImport);
-	}
+	protected abstract boolean isWildcard();
 
 }
