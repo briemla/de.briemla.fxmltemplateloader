@@ -19,9 +19,4 @@ public class FullQualifiedImport extends Import {
 		return super.load(importQualifier);
 	}
 
-	@Override
-	protected boolean isWildcard() {
-		return false;
-	}
-
 }

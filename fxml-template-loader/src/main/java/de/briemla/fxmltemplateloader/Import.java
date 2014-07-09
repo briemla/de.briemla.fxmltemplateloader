@@ -13,6 +13,4 @@ abstract class Import {
 		return classLoader.loadClass(className);
 	}
 
-	protected abstract boolean isWildcard();
-
 }

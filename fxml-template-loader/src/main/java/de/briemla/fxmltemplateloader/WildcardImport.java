@@ -19,11 +19,6 @@ public class WildcardImport extends Import {
 	}
 
 	@Override
-	protected boolean isWildcard() {
-		return true;
-	}
-
-	@Override
 	protected Class<?> load(String className) throws ClassNotFoundException {
 		int indexBeforeWildcard = importQualifier.length() - 1;
 		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
