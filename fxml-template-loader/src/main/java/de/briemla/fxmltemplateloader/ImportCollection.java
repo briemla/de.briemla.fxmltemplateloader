@@ -37,9 +37,13 @@ public class ImportCollection {
 			return;
 		}
 		String importClassifier = instruction.getData();
+		imports.add(create(importClassifier));
+	}
+
+	private Import create(String importClassifier) {
 		if (importClassifier.endsWith(WILDCARD_MATCH)) {
-			imports.add(new WildcardImport(importClassifier));
+			return new WildcardImport(importClassifier);
 		}
-		imports.add(new FullQualifiedImport(importClassifier));
+		return new FullQualifiedImport(importClassifier);
 	}
 }
