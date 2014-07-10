@@ -10,12 +10,13 @@ import javax.xml.stream.events.ProcessingInstruction;
 public class ImportCollection {
 
 	private static final String IMPORT = "import";
-	private static final String WILDCARD_MATCH = ".*";
 
 	private final List<Import> imports;
+	private final ImportFactory factory;
 
-	public ImportCollection() {
+	public ImportCollection(ImportFactory factory) {
 		super();
+		this.factory = factory;
 		imports = new ArrayList<>();
 	}
 
@@ -37,13 +38,6 @@ public class ImportCollection {
 			return;
 		}
 		String importClassifier = instruction.getData();
-		imports.add(create(importClassifier));
-	}
-
-	private Import create(String importClassifier) {
-		if (importClassifier.endsWith(WILDCARD_MATCH)) {
-			return new WildcardImport(importClassifier);
-		}
-		return new FullQualifiedImport(importClassifier);
+		imports.add(factory.create(importClassifier));
 	}
 }

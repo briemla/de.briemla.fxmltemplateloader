@@ -41,7 +41,7 @@ public class FXMLTemplateLoader {
 
 	public FXMLTemplateLoader() {
 		super();
-		imports = new ImportCollection();
+		imports = new ImportCollection(new ImportFactory());
 		builderFactory = new JavaFXBuilderFactory();
 		valueResolver = new ValueResolver();
 	}
@@ -133,7 +133,7 @@ public class FXMLTemplateLoader {
 	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	LoadException {
+			LoadException {
 		Class<?> clazz = imports.findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();

@@ -2,6 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import javafx.fxml.LoadException;
 
@@ -18,7 +19,9 @@ public class ImportCollectionTest {
 
 	@Test
 	public void findClassWithoutAddedImports() throws LoadException {
-		ImportCollection importCollection = new ImportCollection();
+		ImportFactory factory = mock(ImportFactory.class);
+		ImportCollection importCollection = new ImportCollection(factory);
+		verifyNoMoreInteractions(factory);
 
 		thrown.expect(LoadException.class);
 		thrown.expectMessage("No matching import available");
@@ -28,11 +31,13 @@ public class ImportCollectionTest {
 
 	@Test
 	public void findClassWithIncorrectProcessingInstruction() throws LoadException {
-		ImportCollection importCollection = new ImportCollection();
+		ImportFactory factory = mock(ImportFactory.class);
+		ImportCollection importCollection = new ImportCollection(factory);
 		ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
 		when(importInstruction.getTarget()).thenReturn("someOtherThanImport");
 		importCollection.add(importInstruction);
-		verify(importInstruction);
+		verify(importInstruction).getTarget();
+		verifyNoMoreInteractions(factory);
 
 		thrown.expect(LoadException.class);
 		thrown.expectMessage("No matching import available");
