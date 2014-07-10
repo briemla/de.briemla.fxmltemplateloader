@@ -1,6 +1,11 @@
 package de.briemla.fxmltemplateloader;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import javafx.fxml.LoadException;
+
+import javax.xml.stream.events.ProcessingInstruction;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +23,19 @@ public class ImportCollectionTest {
 		thrown.expect(LoadException.class);
 		thrown.expectMessage("No matching import available");
 
+		importCollection.findClass("TestClass");
+	}
+
+	@Test
+	public void findClassWithIncorrectProcessingInstruction() throws LoadException {
+		ImportCollection importCollection = new ImportCollection();
+		ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
+		when(importInstruction.getTarget()).thenReturn("someOtherThanImport");
+		importCollection.add(importInstruction);
+		verify(importInstruction);
+
+		thrown.expect(LoadException.class);
+		thrown.expectMessage("No matching import available");
 		importCollection.findClass("TestClass");
 	}
 }
