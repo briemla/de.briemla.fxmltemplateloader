@@ -17,4 +17,14 @@ public class ImportFactoryTest {
 
 		assertThat(actualImport, is(equalTo(expectedImport)));
 	}
+
+	@Test
+	public void createFullQualifiedImport() {
+		FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import");
+		ImportFactory factory = new ImportFactory();
+
+		Import actualImport = factory.create("full.qualified.Import");
+
+		assertThat(actualImport, is(equalTo(expectedImport)));
+	}
 }

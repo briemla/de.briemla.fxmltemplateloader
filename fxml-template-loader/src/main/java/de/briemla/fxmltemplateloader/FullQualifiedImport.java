@@ -19,4 +19,29 @@ public class FullQualifiedImport extends Import {
 		return super.load(importQualifier);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((importQualifier == null) ? 0 : importQualifier.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FullQualifiedImport other = (FullQualifiedImport) obj;
+		if (importQualifier == null) {
+			if (other.importQualifier != null)
+				return false;
+		} else if (!importQualifier.equals(other.importQualifier))
+			return false;
+		return true;
+	}
+
 }
