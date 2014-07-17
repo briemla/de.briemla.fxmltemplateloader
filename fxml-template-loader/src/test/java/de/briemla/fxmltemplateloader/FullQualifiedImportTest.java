@@ -42,7 +42,8 @@ public class FullQualifiedImportTest {
 		doReturn(clazz).when(classLoader).loadClass("importQualifier");
 		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", classLoader);
 
-		fullQualifiedImport.load("importQualifier");
+		Class<?> loadedClass = fullQualifiedImport.load("importQualifier");
+		assertThat(loadedClass, is(equalTo(clazz)));
 
 		verify(classLoader).loadClass("importQualifier");
 	}
@@ -52,6 +53,6 @@ public class FullQualifiedImportTest {
 		ClassLoader classLoader1 = mock(ClassLoader.class);
 		ClassLoader classLoader2 = mock(ClassLoader.class);
 		EqualsVerifier.forClass(FullQualifiedImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2)
-		.allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
+		        .allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
 	}
 }
