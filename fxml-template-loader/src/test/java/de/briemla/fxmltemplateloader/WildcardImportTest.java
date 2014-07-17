@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
@@ -30,6 +31,18 @@ public class WildcardImportTest {
 		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
 
 		assertThat(wildcardImport.matches(null), is(equalTo(false)));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void matchesNot() throws Exception {
+		ClassLoader classLoader = mock(ClassLoader.class);
+		when(classLoader.loadClass("importQualifier.notMatchingClassName")).thenThrow(ClassNotFoundException.class);
+		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
+
+		assertThat(wildcardImport.matches("notMatchingClassName"), is(equalTo(false)));
+
+		verify(classLoader).loadClass("importQualifier.notMatchingClassName");
 	}
 
 	@Test
