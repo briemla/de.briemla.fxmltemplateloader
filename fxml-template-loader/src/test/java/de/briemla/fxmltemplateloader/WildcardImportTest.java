@@ -13,13 +13,18 @@ import org.junit.Test;
 public class WildcardImportTest {
 
 	@Test
+	public void matches() throws Exception {
+
+	}
+
+	@Test
 	public void load() throws Exception {
 		ClassLoader classLoader = mock(ClassLoader.class);
 		Class<?> clazz = Object.class;
 		doReturn(clazz).when(classLoader).loadClass("importQualifier.className");
-		WildcardImport fullQualifiedImport = new WildcardImport("importQualifier.*", classLoader);
+		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
 
-		Class<?> load = fullQualifiedImport.load("className");
+		Class<?> load = wildcardImport.load("className");
 		assertThat(load, is(equalTo(clazz)));
 
 		verify(classLoader).loadClass("importQualifier.className");
@@ -30,7 +35,7 @@ public class WildcardImportTest {
 		ClassLoader classLoader1 = mock(ClassLoader.class);
 		ClassLoader classLoader2 = mock(ClassLoader.class);
 		EqualsVerifier.forClass(WildcardImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2)
-		        .allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
+		.allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
 	}
 
 }
