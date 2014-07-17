@@ -4,6 +4,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import javafx.fxml.LoadException;
 
@@ -67,5 +68,32 @@ public class ImportCollectionTest {
 		verify(mockedImport).load("single.import");
 		verify(importInstruction).getTarget();
 		verify(importInstruction).getData();
+	}
+
+	@Test
+	public void findClassAfterClear() throws Exception {
+		ImportFactory factory = mock(ImportFactory.class);
+		ImportCollection importCollection = new ImportCollection(factory);
+		ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
+		Import mockedImport = mock(Import.class);
+
+		when(importInstruction.getTarget()).thenReturn("import");
+		when(importInstruction.getData()).thenReturn("single.import");
+		Class<?> toBeReturned = Object.class;
+		doReturn(toBeReturned).when(mockedImport).load("single.import");
+		when(factory.create("single.import")).thenReturn(mockedImport);
+
+		importCollection.add(importInstruction);
+
+		verify(factory).create("single.import");
+		verify(importInstruction).getTarget();
+		verify(importInstruction).getData();
+		verifyZeroInteractions(mockedImport);
+		importCollection.clear();
+
+		thrown.expect(LoadException.class);
+		thrown.expectMessage("No matching import available");
+
+		importCollection.findClass("TestClass");
 	}
 }
