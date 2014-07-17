@@ -21,6 +21,8 @@ public class WildcardImportTest {
 		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
 
 		assertThat(wildcardImport.matches("className"), is(equalTo(true)));
+
+		verify(classLoader).loadClass("importQualifier.className");
 	}
 
 	@Test
@@ -63,7 +65,7 @@ public class WildcardImportTest {
 		ClassLoader classLoader1 = mock(ClassLoader.class);
 		ClassLoader classLoader2 = mock(ClassLoader.class);
 		EqualsVerifier.forClass(WildcardImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2)
-		        .allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
+		.allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
 	}
 
 }
