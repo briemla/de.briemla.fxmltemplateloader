@@ -13,7 +13,7 @@ public class ImportFactoryTest {
 	@Test
 	public void createWildcard() {
 		Import expectedImport = new WildcardImport("wildcard.import.classifier.*", CLASS_LOADER);
-		ImportFactory factory = new ImportFactory();
+		ImportFactory factory = new ImportFactory(CLASS_LOADER);
 
 		Import actualImport = factory.create("wildcard.import.classifier.*");
 
@@ -23,7 +23,7 @@ public class ImportFactoryTest {
 	@Test
 	public void createFullQualifiedImport() {
 		FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import", CLASS_LOADER);
-		ImportFactory factory = new ImportFactory();
+		ImportFactory factory = new ImportFactory(CLASS_LOADER);
 
 		Import actualImport = factory.create("full.qualified.Import");
 
