@@ -52,7 +52,7 @@ public class FullQualifiedImportTest {
 	public void equalsAndHashCode() throws Exception {
 		ClassLoader classLoader1 = mock(ClassLoader.class);
 		ClassLoader classLoader2 = mock(ClassLoader.class);
-		EqualsVerifier.forClass(FullQualifiedImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2)
-		        .allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
+		EqualsVerifier.forClass(FullQualifiedImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2).allFieldsShouldBeUsed()
+		        .usingGetClass().verify();
 	}
 }
