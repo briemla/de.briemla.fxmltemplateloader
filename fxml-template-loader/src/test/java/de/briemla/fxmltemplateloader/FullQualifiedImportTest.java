@@ -6,33 +6,38 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
 public class FullQualifiedImportTest {
 
-	private static final ClassLoader CLASS_LOADER = FullQualifiedImportTest.class.getClassLoader();
-
 	@Test
 	public void matches() throws Exception {
-		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", CLASS_LOADER);
+		ClassLoader classLoader = mock(ClassLoader.class);
+		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", classLoader);
 
 		assertThat(fullQualifiedImport.matches("importQualifier"), is(equalTo(true)));
+		verifyZeroInteractions(classLoader);
 	}
 
 	@Test()
 	public void matchesNull() throws Exception {
-		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", CLASS_LOADER);
+		ClassLoader classLoader = mock(ClassLoader.class);
+		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", classLoader);
 
 		assertThat(fullQualifiedImport.matches(null), is(equalTo(false)));
+		verifyZeroInteractions(classLoader);
 	}
 
 	@Test()
 	public void matchesNot() throws Exception {
-		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", CLASS_LOADER);
+		ClassLoader classLoader = mock(ClassLoader.class);
+		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier", classLoader);
 
 		assertThat(fullQualifiedImport.matches("notMatchingQualifier"), is(equalTo(false)));
+		verifyZeroInteractions(classLoader);
 	}
 
 	@Test
