@@ -14,7 +14,12 @@ public class WildcardImportTest {
 
 	@Test
 	public void matches() throws Exception {
+		ClassLoader classLoader = mock(ClassLoader.class);
+		Class<?> expectedClass = Object.class;
+		doReturn(expectedClass).when(classLoader).loadClass("importQualifier.className");
+		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
 
+		assertThat(wildcardImport.matches("className"), is(equalTo(true)));
 	}
 
 	@Test
