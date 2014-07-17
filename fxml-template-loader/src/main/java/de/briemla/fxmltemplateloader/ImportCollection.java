@@ -1,7 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javafx.fxml.LoadException;
 
@@ -11,7 +10,7 @@ public class ImportCollection {
 
 	private static final String IMPORT = "import";
 
-	private final List<Import> imports;
+	private final ArrayList<Import> imports;
 	private final ImportFactory factory;
 
 	public ImportCollection(ImportFactory factory) {

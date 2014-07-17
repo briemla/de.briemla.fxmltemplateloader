@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -49,18 +50,22 @@ public class ImportCollectionTest {
 		ImportFactory factory = mock(ImportFactory.class);
 		ImportCollection importCollection = new ImportCollection(factory);
 		ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
+		Import mockedImport = mock(Import.class);
+
 		when(importInstruction.getTarget()).thenReturn("import");
 		when(importInstruction.getData()).thenReturn("single.import");
-		Import mockedImport = mock(Import.class);
 		when(mockedImport.matches("single.import")).thenReturn(true);
-		// when(mockedImport.load("single.import")).thenReturn(any());
+		Class<?> toBeReturned = Object.class;
+		doReturn(toBeReturned).when(mockedImport).load("single.import");
 		when(factory.create("single.import")).thenReturn(mockedImport);
 
 		importCollection.add(importInstruction);
 		importCollection.findClass("single.import");
 
-		verify(factory);
+		verify(factory).create("single.import");
+		verify(mockedImport).matches("single.import");
 		verify(mockedImport).load("single.import");
-		// verify(importInstruction);
+		verify(importInstruction).getTarget();
+		verify(importInstruction).getData();
 	}
 }
