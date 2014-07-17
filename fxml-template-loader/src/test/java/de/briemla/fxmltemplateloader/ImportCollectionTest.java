@@ -1,6 +1,5 @@
 package de.briemla.fxmltemplateloader;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -54,12 +53,14 @@ public class ImportCollectionTest {
 		when(importInstruction.getData()).thenReturn("single.import");
 		Import mockedImport = mock(Import.class);
 		when(mockedImport.matches("single.import")).thenReturn(true);
-		when(mockedImport.load("single.import")).thenReturn(any());
+		// when(mockedImport.load("single.import")).thenReturn(any());
 		when(factory.create("single.import")).thenReturn(mockedImport);
 
 		importCollection.add(importInstruction);
 		importCollection.findClass("single.import");
 
 		verify(factory);
+		verify(mockedImport).load("single.import");
+		// verify(importInstruction);
 	}
 }
