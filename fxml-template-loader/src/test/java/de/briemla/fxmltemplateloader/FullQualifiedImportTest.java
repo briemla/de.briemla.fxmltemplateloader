@@ -23,6 +23,13 @@ public class FullQualifiedImportTest {
 		assertThat(fullQualifiedImport.matches(null), is(equalTo(false)));
 	}
 
+	@Test()
+	public void matchesNot() throws Exception {
+		FullQualifiedImport fullQualifiedImport = new FullQualifiedImport("importQualifier");
+
+		assertThat(fullQualifiedImport.matches("notMatchingQualifier"), is(equalTo(false)));
+	}
+
 	@Test
 	public void equalsAndHashCode() throws Exception {
 		EqualsVerifier.forClass(FullQualifiedImport.class).allFieldsShouldBeUsed().usingGetClass().verify();
