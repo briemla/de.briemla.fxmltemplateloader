@@ -39,4 +39,8 @@ public class ImportCollection {
 		String importClassifier = instruction.getData();
 		imports.add(factory.create(importClassifier));
 	}
+
+	public void clear() {
+		imports.clear();
+	}
 }
