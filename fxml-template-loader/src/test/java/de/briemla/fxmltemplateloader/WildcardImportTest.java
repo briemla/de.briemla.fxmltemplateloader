@@ -23,6 +23,16 @@ public class WildcardImportTest {
 	}
 
 	@Test
+	public void matchesNull() throws Exception {
+		ClassLoader classLoader = mock(ClassLoader.class);
+		Class<?> expectedClass = Object.class;
+		doReturn(expectedClass).when(classLoader).loadClass("importQualifier.className");
+		WildcardImport wildcardImport = new WildcardImport("importQualifier.*", classLoader);
+
+		assertThat(wildcardImport.matches(null), is(equalTo(false)));
+	}
+
+	@Test
 	public void load() throws Exception {
 		ClassLoader classLoader = mock(ClassLoader.class);
 		Class<?> clazz = Object.class;
@@ -40,7 +50,7 @@ public class WildcardImportTest {
 		ClassLoader classLoader1 = mock(ClassLoader.class);
 		ClassLoader classLoader2 = mock(ClassLoader.class);
 		EqualsVerifier.forClass(WildcardImport.class).withPrefabValues(ClassLoader.class, classLoader1, classLoader2)
-		.allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
+		        .allFieldsShouldBeUsedExcept("classLoader").usingGetClass().verify();
 	}
 
 }

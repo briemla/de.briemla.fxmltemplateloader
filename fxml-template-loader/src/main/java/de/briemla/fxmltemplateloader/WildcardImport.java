@@ -11,6 +11,9 @@ public class WildcardImport extends Import {
 
 	@Override
 	boolean matches(String className) {
+		if (className == null) {
+			return false;
+		}
 		try {
 			return load(className) != null;
 		} catch (ClassNotFoundException e) {
