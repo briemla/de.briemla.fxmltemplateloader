@@ -11,6 +11,9 @@ public class FullQualifiedImport extends Import {
 
 	@Override
 	boolean matches(String className) {
+		if (className == null) {
+			return false;
+		}
 		return importQualifier.endsWith(className);
 	}
 
