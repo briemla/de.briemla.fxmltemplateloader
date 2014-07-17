@@ -2,14 +2,16 @@ package de.briemla.fxmltemplateloader;
 
 abstract class Import {
 
-	public Import() {
+	private final ClassLoader classLoader;
+
+	public Import(ClassLoader classLoader) {
 		super();
+		this.classLoader = classLoader;
 	}
 
 	abstract boolean matches(String className);
 
 	protected Class<?> load(String className) throws ClassNotFoundException {
-		ClassLoader classLoader = Import.class.getClassLoader();
 		return classLoader.loadClass(className);
 	}
 

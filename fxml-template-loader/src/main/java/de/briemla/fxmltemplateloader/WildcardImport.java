@@ -4,8 +4,8 @@ public class WildcardImport extends Import {
 
 	private final String importQualifier;
 
-	public WildcardImport(String importQualifier) {
-		super();
+	public WildcardImport(String importQualifier, ClassLoader classLoader) {
+		super(classLoader);
 		this.importQualifier = importQualifier;
 	}
 

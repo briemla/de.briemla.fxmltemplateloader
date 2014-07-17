@@ -8,9 +8,11 @@ import org.junit.Test;
 
 public class ImportFactoryTest {
 
+	private static final ClassLoader CLASS_LOADER = ImportFactoryTest.class.getClassLoader();
+
 	@Test
 	public void createWildcard() {
-		Import expectedImport = new WildcardImport("wildcard.import.classifier.*");
+		Import expectedImport = new WildcardImport("wildcard.import.classifier.*", CLASS_LOADER);
 		ImportFactory factory = new ImportFactory();
 
 		Import actualImport = factory.create("wildcard.import.classifier.*");
@@ -20,7 +22,7 @@ public class ImportFactoryTest {
 
 	@Test
 	public void createFullQualifiedImport() {
-		FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import");
+		FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import", CLASS_LOADER);
 		ImportFactory factory = new ImportFactory();
 
 		Import actualImport = factory.create("full.qualified.Import");

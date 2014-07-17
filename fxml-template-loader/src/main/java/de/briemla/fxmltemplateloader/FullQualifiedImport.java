@@ -4,8 +4,8 @@ public class FullQualifiedImport extends Import {
 
 	private final String importQualifier;
 
-	public FullQualifiedImport(String importQualifier) {
-		super();
+	public FullQualifiedImport(String importQualifier, ClassLoader classLoader) {
+		super(classLoader);
 		this.importQualifier = importQualifier;
 	}
 
