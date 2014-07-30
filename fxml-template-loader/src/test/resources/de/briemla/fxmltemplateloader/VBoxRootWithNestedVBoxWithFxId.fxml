@@ -4,7 +4,7 @@
 
 <VBox fx:id="testId" id="parent" xmlns:fx="http://javafx.com/fxml">
 	<children>
-		<VBox id="child"/>
+		<VBox fx:id="childId" id="child"/>
 	</children>
 </VBox>
 

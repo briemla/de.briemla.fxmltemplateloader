@@ -7,8 +7,14 @@ public class TestController {
 
 	@FXML
 	private VBox testId;
+	@FXML
+	private VBox childId;
 
 	public VBox getTestId() {
 		return testId;
+	}
+
+	public VBox getChildId() {
+		return childId;
 	}
 }

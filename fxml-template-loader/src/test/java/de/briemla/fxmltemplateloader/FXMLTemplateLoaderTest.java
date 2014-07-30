@@ -183,6 +183,7 @@ public class FXMLTemplateLoaderTest {
 		assertThat("Child id", child.getId(), is(equalTo("child")));
 
 		assertThat(controller.getTestId(), is(sameInstance(root)));
+		assertThat(controller.getChildId(), is(sameInstance(child)));
 	}
 
 	@Test
