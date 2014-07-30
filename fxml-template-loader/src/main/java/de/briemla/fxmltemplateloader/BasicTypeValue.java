@@ -6,11 +6,11 @@ public class BasicTypeValue implements IValue {
 
 	public BasicTypeValue(Object object) {
 		super();
-		this.value = object;
+		value = object;
 	}
 
 	@Override
-	public Object create() {
+	public Object create(TemplateRegistry registry) {
 		return value;
 	}
 

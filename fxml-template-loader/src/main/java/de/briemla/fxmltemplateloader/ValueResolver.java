@@ -10,6 +10,7 @@ import javafx.fxml.LoadException;
 public class ValueResolver {
 
 	private static final String RESOURCE_PREFIX = "%";
+	private static final String CONTROLLER_METHOD_PREFIX = "#";
 
 	private final ResourceBundle bundle;
 
@@ -39,6 +40,9 @@ public class ValueResolver {
 		if (value.startsWith(RESOURCE_PREFIX)) {
 			return new BasicTypeValue(resolveResource(value));
 		}
+		if (value.startsWith(CONTROLLER_METHOD_PREFIX)) {
+			return new ControllerMethodValue(unwrap(value));
+		}
 		return new BasicTypeValue(convert(value, to(type)));
 	}
 
@@ -46,11 +50,15 @@ public class ValueResolver {
 		if (bundle == null) {
 			throw new LoadException("No resources specified.");
 		}
-		String resourceKey = value.substring(1);
+		String resourceKey = unwrap(value);
 		if (bundle.containsKey(resourceKey)) {
 			return bundle.getString(resourceKey);
 		}
 		throw new LoadException("Resource \"" + resourceKey + "\" not found.");
+	}
+
+	private static String unwrap(String value) {
+		return value.substring(1);
 	}
 
 }

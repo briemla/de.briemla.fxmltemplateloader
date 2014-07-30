@@ -4,15 +4,18 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javafx.event.EventHandler;
 import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -184,6 +187,19 @@ public class FXMLTemplateLoaderTest {
 
 		assertThat(controller.getTestId(), is(sameInstance(root)));
 		assertThat(controller.getChildId(), is(sameInstance(child)));
+	}
+
+	@Test
+	public void loadElementWithFxmlMethodHandle() throws Exception {
+		MethodHandleController controller = new MethodHandleController();
+		VBox root = loadWithController("VBoxRootWithFxmlMethodHandle", controller);
+
+		assertThat("Parent id", root.getId(), is(equalTo("parent")));
+		EventHandler<? super MouseEvent> eventHandler = root.onMouseClickedProperty().get();
+		MouseEvent mouseEvent = mock(MouseEvent.class);
+		eventHandler.handle(mouseEvent);
+
+		assertThat(controller.isHandlerInvoked(), is(true));
 	}
 
 	@Test

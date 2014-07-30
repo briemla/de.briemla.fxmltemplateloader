@@ -2,6 +2,6 @@ package de.briemla.fxmltemplateloader;
 
 public interface IValue {
 
-	Object create();
+	Object create(TemplateRegistry registry);
 
 }

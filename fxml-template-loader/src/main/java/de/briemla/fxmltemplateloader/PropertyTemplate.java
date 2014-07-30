@@ -15,13 +15,13 @@ class PropertyTemplate implements IProperty {
 
 	@Override
 	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		method.invoke(parent, value.create());
+		method.invoke(parent, value.create(registry));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return (T) value.create();
+		return (T) value.create(registry);
 	}
 
 }

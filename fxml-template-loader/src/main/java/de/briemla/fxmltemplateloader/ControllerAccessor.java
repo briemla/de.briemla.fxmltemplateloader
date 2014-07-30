@@ -21,8 +21,8 @@ import sun.reflect.Reflection;
 import sun.reflect.misc.ReflectUtil;
 
 /**
- * This class was copied from {@link FXMLLoader} and the method {@link #linkField(Object, Object)} was added. For more information see the original class. This is a
- * copy because I could not access the original class, but wanted to reuse the reflection mechanisms which were implemented there.
+ * This class was copied from {@link FXMLLoader} and the method {@link #linkField(Object, Object)} was added. For more information see the original class. This
+ * is a copy because I could not access the original class, but wanted to reuse the reflection mechanisms which were implemented there.
  *
  * @author Lars
  *
@@ -152,7 +152,7 @@ public final class ControllerAccessor {
 			final int memberModifiers = field.getModifiers();
 
 			if (((memberModifiers & (Modifier.STATIC | Modifier.FINAL)) != 0) || ((getAccess(memberModifiers) & allowedMemberAccess) == 0)
-					|| !isAccessibleToController(type, memberModifiers)) {
+			        || !isAccessibleToController(type, memberModifiers)) {
 				continue;
 			}
 
@@ -178,7 +178,7 @@ public final class ControllerAccessor {
 			final int memberModifiers = method.getModifiers();
 
 			if (((memberModifiers & (Modifier.STATIC | Modifier.NATIVE)) != 0) || ((getAccess(memberModifiers) & allowedMemberAccess) == 0)
-					|| !isAccessibleToController(type, memberModifiers)) {
+			        || !isAccessibleToController(type, memberModifiers)) {
 				continue;
 			}
 
@@ -277,7 +277,7 @@ public final class ControllerAccessor {
 			@Override
 			protected boolean methodIsOfType(Method m) {
 				return m.getParameterCount() == 3 && ObservableValue.class.isAssignableFrom(m.getParameterTypes()[0])
-				        && m.getParameterTypes()[1].equals(m.getParameterTypes()[2]);
+						&& m.getParameterTypes()[1].equals(m.getParameterTypes()[2]);
 			}
 
 		};
@@ -310,5 +310,10 @@ public final class ControllerAccessor {
 				throw new RuntimeException(exception);
 			}
 		}
+	}
+
+	public void linkMethodHandler(Object key, MethodHandlerStub<Event> handler) {
+		Method method = getControllerMethods().get(SupportedType.EVENT).get(key);
+		handler.bindTo(controller, method);
 	}
 }
