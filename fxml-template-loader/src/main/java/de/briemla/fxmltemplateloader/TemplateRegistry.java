@@ -17,13 +17,9 @@ public class TemplateRegistry {
 
 	public void link(ControllerAccessor controller) {
 		for (Object key : elements.keySet()) {
-			link(controller, key);
+			Object value = elements.get(key);
+			controller.linkField(key, value);
 		}
-	}
-
-	private void link(ControllerAccessor controller, Object key) {
-		Object value = elements.get(key);
-		controller.link(key, value);
 	}
 
 }

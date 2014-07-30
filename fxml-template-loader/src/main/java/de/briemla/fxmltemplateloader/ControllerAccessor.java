@@ -21,7 +21,7 @@ import sun.reflect.Reflection;
 import sun.reflect.misc.ReflectUtil;
 
 /**
- * This class was copied from {@link FXMLLoader} and the method {@link #link(Object, Object)} was added. For more information see the original class. This is a
+ * This class was copied from {@link FXMLLoader} and the method {@link #linkField(Object, Object)} was added. For more information see the original class. This is a
  * copy because I could not access the original class, but wanted to reuse the reflection mechanisms which were implemented there.
  *
  * @author Lars
@@ -300,7 +300,7 @@ public final class ControllerAccessor {
 	 * @param key
 	 * @param value
 	 */
-	public void link(Object key, Object value) {
+	public void linkField(Object key, Object value) {
 		Field field = getControllerFields().get(key);
 
 		if (field != null) {
