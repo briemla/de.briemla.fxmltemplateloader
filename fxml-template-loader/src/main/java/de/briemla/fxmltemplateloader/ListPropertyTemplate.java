@@ -17,9 +17,10 @@ public class ListPropertyTemplate extends Template implements IProperty {
 	}
 
 	@Override
-	public void apply(Object parent) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			InstantiationException {
 		List<?> list = (List<?>) getter.invoke(parent);
-		list.addAll(create());
+		list.addAll(create(registry));
 	}
 
 	@Override
@@ -29,10 +30,10 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ArrayList<Object> arrayList = new ArrayList<>();
 		for (IProperty child : children) {
-			arrayList.add(child.create());
+			arrayList.add(child.create(registry));
 		}
 		return (T) arrayList;
 	}

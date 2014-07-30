@@ -24,7 +24,7 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 	}
 
 	@Override
-	public void apply(Object newInstance) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void apply(Object newInstance, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		throw new UnsupportedOperationException("You found a bug. Please call 911 to fix it!");
 	}
 
@@ -42,17 +42,19 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Object newInstance = newInstance();
-		applyProperties(newInstance);
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Object newInstance = newInstance(registry);
+		applyProperties(newInstance, registry);
 		return (T) newInstance;
 	}
 
-	protected abstract Object newInstance() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException;
+	protected abstract Object newInstance(TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			InstantiationException;
 
-	private void applyProperties(Object newInstance) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+	private void applyProperties(Object newInstance, TemplateRegistry registry) throws IllegalAccessException, InvocationTargetException,
+	InstantiationException {
 		for (IProperty child : properties) {
-			child.apply(newInstance);
+			child.apply(newInstance, registry);
 		}
 	}
 }

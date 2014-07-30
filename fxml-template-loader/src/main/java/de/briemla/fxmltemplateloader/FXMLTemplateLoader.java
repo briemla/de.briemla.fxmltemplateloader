@@ -21,6 +21,7 @@ import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -39,6 +40,7 @@ public class FXMLTemplateLoader {
 	private ValueResolver valueResolver;
 	private XMLEventReader eventReader;
 	private ITemplate rootTemplate;
+	private Object controller;
 
 	public FXMLTemplateLoader() {
 		super();
@@ -71,10 +73,17 @@ public class FXMLTemplateLoader {
 		imports.clear();
 	}
 
+	public void setController(Object controller) {
+		this.controller = controller;
+	}
+
 	private <T> T doLoad(URL resource) throws IOException {
 		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
 		try (InputStream xmlInput = resource.openStream()) {
 			eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
+			if (controller != null) {
+				return parseXml().create(controller);
+			}
 			return parseXml().create();
 		} catch (XMLStreamException exception) {
 			throw new IOException("Could not parse XML.", exception);
@@ -155,12 +164,21 @@ public class FXMLTemplateLoader {
 		Iterator<Attribute> attributes = element.getAttributes();
 		while (attributes.hasNext()) {
 			Attribute attribute = attributes.next();
-			String propertyName = attribute.getName().getLocalPart();
+			QName attributeName = attribute.getName();
+			String propertyPrefix = attributeName.getPrefix();
+			String propertyName = attributeName.getLocalPart();
 			String value = attribute.getValue();
 			if (ReflectionUtils.hasSetter(clazz, propertyName)) {
 				Method method = findSetter(clazz, propertyName);
 				Class<?> type = extractType(method);
 				IValue convertedValue = resolve(value, to(type));
+
+				if ("fx".equals(propertyPrefix) && "id".equals(propertyName)) {
+					FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, method);
+					property.prepare(new PropertyTemplate(method, convertedValue));
+					properties.add(property);
+					continue;
+				}
 
 				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
 				property.prepare(new PropertyTemplate(method, convertedValue));

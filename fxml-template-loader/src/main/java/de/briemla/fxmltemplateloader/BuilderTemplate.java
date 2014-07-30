@@ -19,10 +19,11 @@ class BuilderTemplate extends InstantiationTemplate {
 		this.instanceType = instanceType;
 	}
 
-	protected Object newInstance() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+	protected Object newInstance(TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			InstantiationException {
 		Builder<?> builder = builderFactory.getBuilder(instanceType);
 		for (IProperty property : builderProperties) {
-			property.apply(builder);
+			property.apply(builder, registry);
 		}
 		return builder.build();
 	}

@@ -13,7 +13,8 @@ class ConstructorTemplate extends InstantiationTemplate {
 		this.constructor = constructor;
 	}
 
-	protected Object newInstance() throws InstantiationException, IllegalAccessException, InvocationTargetException {
+	@Override
+	protected Object newInstance(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		return constructor.newInstance();
 	}
 

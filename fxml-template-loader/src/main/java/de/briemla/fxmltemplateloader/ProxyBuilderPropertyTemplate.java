@@ -18,12 +18,13 @@ class ProxyBuilderPropertyTemplate implements IProperty {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		return (T) value;
 	}
 
 	@Override
-	public void apply(Object parent) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			InstantiationException {
 		method.invoke(parent, propertyName, value);
 	}
 

@@ -171,6 +171,19 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
+	public void loadNestedElementWithFxId() throws Exception {
+		VBox root = load("VBoxRootWithNestedVBoxWithFxId");
+
+		assertThat("Number of children", root.getChildren().size(), is(equalTo(1)));
+		assertThat("Parent id", root.getId(), is(equalTo("parent")));
+
+		Node child = root.getChildren().get(0);
+		assertThat("Child id", child.getId(), is(equalTo("child")));
+
+		// TODO create Controller Class, set controller instance on FXMLLoader and check linked elements.
+	}
+
+	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass");
 
