@@ -12,7 +12,7 @@ public class TemplateRegistry {
 
 	public TemplateRegistry() {
 		super();
-		this.elements = new HashMap<>();
+		elements = new HashMap<>();
 	}
 
 	public void add(Object id, Object object) {
@@ -31,6 +31,7 @@ public class TemplateRegistry {
 	private void link(Object controller, Field field) throws IllegalAccessException, LoadException {
 		if (elements.containsKey(field.getName())) {
 			Object value = elements.get(field.getName());
+			ReflectionUtils.makeAccessible(field);
 			field.set(controller, value);
 			return;
 		}

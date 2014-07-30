@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class ReflectionUtils {
@@ -62,5 +63,11 @@ public class ReflectionUtils {
 			throw new RuntimeException("Incorrect number of arguments for setter found.");
 		}
 		return parameterTypes[0];
+	}
+
+	public static void makeAccessible(Field field) {
+		if (!field.isAccessible()) {
+			field.setAccessible(true);
+		}
 	}
 }

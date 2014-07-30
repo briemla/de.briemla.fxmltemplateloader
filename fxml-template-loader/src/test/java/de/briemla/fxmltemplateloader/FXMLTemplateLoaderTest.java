@@ -2,6 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -172,7 +173,8 @@ public class FXMLTemplateLoaderTest {
 
 	@Test
 	public void loadNestedElementWithFxId() throws Exception {
-		VBox root = load("VBoxRootWithNestedVBoxWithFxId");
+		TestController controller = new TestController();
+		VBox root = loadWithController("VBoxRootWithNestedVBoxWithFxId", controller);
 
 		assertThat("Number of children", root.getChildren().size(), is(equalTo(1)));
 		assertThat("Parent id", root.getId(), is(equalTo("parent")));
@@ -180,7 +182,7 @@ public class FXMLTemplateLoaderTest {
 		Node child = root.getChildren().get(0);
 		assertThat("Child id", child.getId(), is(equalTo("child")));
 
-		// TODO create Controller Class, set controller instance on FXMLLoader and check linked elements.
+		assertThat(controller.getTestId(), is(sameInstance(root)));
 	}
 
 	@Test
@@ -208,5 +210,12 @@ public class FXMLTemplateLoaderTest {
 		ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
 		String fxmlName = fileName + FXML_FILE_EXTENSION;
 		return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fxmlName), bundle);
+	}
+
+	private static <T> T loadWithController(String fileName, Object controller) throws IOException {
+		String fxmlName = fileName + FXML_FILE_EXTENSION;
+		FXMLTemplateLoader fxmlTemplateLoader = new FXMLTemplateLoader();
+		fxmlTemplateLoader.setController(controller);
+		return fxmlTemplateLoader.doLoad(FXMLTemplateLoaderTest.class.getResource(fxmlName));
 	}
 }
