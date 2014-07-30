@@ -21,10 +21,17 @@ class RootTemplate implements ITemplate {
 
 	@Override
 	public <T> T create(Object controller) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			LoadException {
+	        LoadException {
 		TemplateRegistry registry = new TemplateRegistry();
 		T newElement = template.create(registry);
-		registry.link(to(controller));
+		ControllerAccessor accessor = wrap(controller);
+		registry.link(to(accessor));
 		return newElement;
+	}
+
+	private static ControllerAccessor wrap(Object controller) {
+		ControllerAccessor accessor = new ControllerAccessor();
+		accessor.setController(controller);
+		return accessor;
 	}
 }

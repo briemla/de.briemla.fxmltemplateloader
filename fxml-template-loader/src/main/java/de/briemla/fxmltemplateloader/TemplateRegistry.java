@@ -1,10 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
-
-import javafx.fxml.FXML;
-import javafx.fxml.LoadException;
 
 public class TemplateRegistry {
 
@@ -19,22 +15,15 @@ public class TemplateRegistry {
 		elements.put(id, object);
 	}
 
-	public void link(Object controller) throws LoadException, IllegalArgumentException, IllegalAccessException {
-		for (Field field : controller.getClass().getDeclaredFields()) {
-			if (field.getAnnotation(FXML.class) == null) {
-				continue;
-			}
-			link(controller, field);
+	public void link(ControllerAccessor controller) {
+		for (Object key : elements.keySet()) {
+			link(controller, key);
 		}
 	}
 
-	private void link(Object controller, Field field) throws IllegalAccessException, LoadException {
-		if (elements.containsKey(field.getName())) {
-			Object value = elements.get(field.getName());
-			ReflectionUtils.makeAccessible(field);
-			field.set(controller, value);
-			return;
-		}
-		throw new LoadException("Could not link annotated member: " + field.getName());
+	private void link(ControllerAccessor controller, Object key) {
+		Object value = elements.get(key);
+		controller.link(key, value);
 	}
+
 }
