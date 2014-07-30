@@ -173,7 +173,7 @@ public class FXMLTemplateLoaderTest {
 
 	@Test
 	public void loadNestedElementWithFxId() throws Exception {
-		TestController controller = new TestController();
+		FieldController controller = new FieldController();
 		VBox root = loadWithController("VBoxRootWithNestedVBoxWithFxId", controller);
 
 		assertThat("Number of children", root.getChildren().size(), is(equalTo(1)));

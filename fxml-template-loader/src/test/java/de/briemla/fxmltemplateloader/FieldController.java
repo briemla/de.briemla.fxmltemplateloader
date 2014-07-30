@@ -3,7 +3,7 @@ package de.briemla.fxmltemplateloader;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-public class TestController {
+public class FieldController {
 
 	@FXML
 	private VBox testId;
