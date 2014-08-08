@@ -8,9 +8,6 @@ import java.util.AbstractMap;
 import javafx.fxml.LoadException;
 import javafx.util.Builder;
 
-import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
-import com.sun.javafx.fxml.builder.ProxyBuilder;
-
 public class Property {
 
 	private final String name;
@@ -24,7 +21,7 @@ public class Property {
 
 	// FIXME maybe introduce different Properties and throw LoadException in FXMLTemplateLoader with line information
 	public IProperty createTemplate(Builder<?> builder, ValueResolver valueResolver) throws NoSuchMethodException, SecurityException, LoadException {
-		if (builder instanceof ProxyBuilder || builder instanceof JavaFXImageBuilder) {
+		if (builder instanceof AbstractMap) {
 			// FIXME builder method should only be searched once.
 			// FIXME rename
 			Method defaultJavaFxBuilderMethod = AbstractMap.class.getMethod("put", Object.class, Object.class);
