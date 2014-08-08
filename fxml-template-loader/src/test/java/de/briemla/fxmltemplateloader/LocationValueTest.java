@@ -45,4 +45,11 @@ public class LocationValueTest {
 
 		verifyZeroInteractions(registry);
 	}
+
+	@Test(expected = NullPointerException.class)
+	public void newLocationValueWithNullClassLoader() throws Exception {
+		URL location = new URL("file://some.url");
+		String value = "some value";
+		LocationValue locationValue = new LocationValue(null, location, value);
+	}
 }
