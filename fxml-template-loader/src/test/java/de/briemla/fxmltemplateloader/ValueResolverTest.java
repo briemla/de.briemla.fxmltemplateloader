@@ -19,6 +19,17 @@ public class ValueResolverTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
+	public void resolveControllerMethod() throws Exception {
+		String valueWithPrefix = "#methodName";
+		IValue testValue = new ControllerMethodValue("methodName");
+		ValueResolver valueResolver = new ValueResolver();
+
+		IValue resolvedValue = valueResolver.resolve(valueWithPrefix, String.class);
+
+		assertThat(resolvedValue, is(equalTo(testValue)));
+	}
+
+	@Test
 	public void resolveResource() throws Exception {
 		String bundlePath = ValueResolverTest.class.getPackage().getName() + ".ValueResolverTest";
 		ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, Locale.GERMAN);
