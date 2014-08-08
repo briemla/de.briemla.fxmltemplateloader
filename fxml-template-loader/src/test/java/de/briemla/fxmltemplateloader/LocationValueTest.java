@@ -17,9 +17,9 @@ public class LocationValueTest {
 	public void createFromUrl() throws Exception {
 		TemplateRegistry registry = mock(TemplateRegistry.class);
 		ClassLoader classLoader = mock(ClassLoader.class);
-		URL location = new URL("file://test");
+		URL location = new URL("file://testUrl");
 		LocationValue locationValue = new LocationValue(classLoader, location, "Value.url");
-		Object expectedLocation = "file://test/Value.url";
+		Object expectedLocation = "file://testUrl/Value.url";
 
 		Object resolvedLocation = locationValue.create(registry);
 
@@ -33,9 +33,9 @@ public class LocationValueTest {
 	public void createFromClassLoader() throws Exception {
 		TemplateRegistry registry = mock(TemplateRegistry.class);
 		ClassLoader classLoader = mock(ClassLoader.class);
-		URL expectedLocationUrl = new URL("file://test/Value.url");
+		URL expectedLocationUrl = new URL("file://testClassLoader/Value.url");
 		when(classLoader.getResource("Value.url")).thenReturn(expectedLocationUrl);
-		URL location = new URL("file://test");
+		URL location = new URL("file://testUrl");
 		LocationValue locationValue = new LocationValue(classLoader, location, "/Value.url");
 
 		Object resolvedLocation = locationValue.create(registry);
