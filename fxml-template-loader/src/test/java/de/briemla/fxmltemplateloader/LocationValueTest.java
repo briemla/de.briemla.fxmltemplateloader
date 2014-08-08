@@ -52,4 +52,11 @@ public class LocationValueTest {
 		String value = "some value";
 		LocationValue locationValue = new LocationValue(null, location, value);
 	}
+
+	@Test(expected = NullPointerException.class)
+	public void newLocationValueWithNullLocation() throws Exception {
+		ClassLoader classLoader = mock(ClassLoader.class);
+		String value = "some value";
+		LocationValue locationValue = new LocationValue(classLoader, null, value);
+	}
 }

@@ -16,6 +16,9 @@ public class LocationValue implements IValue {
 		if (classLoader == null) {
 			throw new NullPointerException("ClassLoader is not allowed to be null");
 		}
+		if (location == null) {
+			throw new NullPointerException("Location is not allowed to be null");
+		}
 		this.classLoader = classLoader;
 		this.location = location;
 		this.value = value;
