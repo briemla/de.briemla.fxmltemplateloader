@@ -14,16 +14,20 @@ public class ValueResolver {
 	private static final String RESOURCE_PREFIX = "%";
 	private static final String CONTROLLER_METHOD_PREFIX = "#";
 
-	private final ResourceBundle bundle;
+	private ResourceBundle bundle;
 	private URL location;
 	private ClassLoader classLoader;
 
-	public ValueResolver() {
-		this(null);
+	ValueResolver() {
+		super();
 	}
 
 	public ValueResolver(ResourceBundle bundle) {
 		super();
+		this.bundle = bundle;
+	}
+
+	public void setResourceBundle(ResourceBundle bundle) {
 		this.bundle = bundle;
 	}
 
