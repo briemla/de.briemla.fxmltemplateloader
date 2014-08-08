@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.fxml.LoadException;
+
 public class ListPropertyTemplate extends Template implements IProperty {
 
 	private final Method getter;
@@ -18,7 +20,7 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
 	@Override
 	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			InstantiationException {
+	InstantiationException, LoadException {
 		List<?> list = (List<?>) getter.invoke(parent);
 		list.addAll(create(registry));
 	}
@@ -30,7 +32,8 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+	LoadException {
 		ArrayList<Object> arrayList = new ArrayList<>();
 		for (IProperty child : children) {
 			arrayList.add(child.create(registry));

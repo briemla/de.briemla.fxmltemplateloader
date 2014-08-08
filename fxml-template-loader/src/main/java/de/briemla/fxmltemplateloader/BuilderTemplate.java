@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 
@@ -19,8 +20,9 @@ class BuilderTemplate extends InstantiationTemplate {
 		this.instanceType = instanceType;
 	}
 
+	@Override
 	protected Object newInstance(TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			InstantiationException {
+	        InstantiationException, LoadException {
 		Builder<?> builder = builderFactory.getBuilder(instanceType);
 		for (IProperty property : builderProperties) {
 			property.apply(builder, registry);

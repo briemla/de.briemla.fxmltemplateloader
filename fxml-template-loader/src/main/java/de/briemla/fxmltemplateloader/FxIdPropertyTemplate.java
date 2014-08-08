@@ -3,6 +3,8 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javafx.fxml.LoadException;
+
 class FxIdPropertyTemplate extends Template implements IProperty {
 
 	private final Method setter;
@@ -15,7 +17,7 @@ class FxIdPropertyTemplate extends Template implements IProperty {
 
 	@Override
 	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			InstantiationException {
+	InstantiationException, LoadException {
 		Object id = create(registry);
 		setter.invoke(parent, id);
 		registry.add(id, parent);
@@ -28,7 +30,8 @@ class FxIdPropertyTemplate extends Template implements IProperty {
 	}
 
 	@Override
-	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+	LoadException {
 		return property.create(registry);
 	}
 

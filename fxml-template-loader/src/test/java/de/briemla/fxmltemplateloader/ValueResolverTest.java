@@ -3,7 +3,9 @@ package de.briemla.fxmltemplateloader;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
+import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,6 +19,21 @@ public class ValueResolverTest {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
+
+	@Test
+	public void resolveUrl() throws Exception {
+		String valueWithPrefix = "@SomeFileAs.url";
+		ClassLoader classLoader = mock(ClassLoader.class);
+		URL location = new URL("file://blubberTest");
+		IValue testValue = new LocationValue(classLoader, location, "SomeFileAs.url");
+		ValueResolver valueResolver = new ValueResolver();
+		valueResolver.setLocation(location);
+		valueResolver.setClassLoader(classLoader);
+
+		IValue resolvedValue = valueResolver.resolve(valueWithPrefix, String.class);
+
+		assertThat(resolvedValue, is(equalTo(testValue)));
+	}
 
 	@Test
 	public void resolveControllerMethod() throws Exception {

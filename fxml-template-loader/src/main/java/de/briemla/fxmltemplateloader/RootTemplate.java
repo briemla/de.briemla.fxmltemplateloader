@@ -14,14 +14,14 @@ class RootTemplate implements ITemplate {
 	}
 
 	@Override
-	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
 		TemplateRegistry registry = new TemplateRegistry();
 		return template.create(registry);
 	}
 
 	@Override
 	public <T> T create(Object controller) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-	        LoadException {
+	LoadException {
 		TemplateRegistry registry = new TemplateRegistry();
 		T newElement = template.create(registry);
 		ControllerAccessor accessor = wrap(controller);

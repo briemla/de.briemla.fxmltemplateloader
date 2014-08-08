@@ -3,16 +3,20 @@ package de.briemla.fxmltemplateloader;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 import static de.briemla.fxmltemplateloader.util.TypeUtil.convert;
 
+import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.LoadException;
 
 public class ValueResolver {
 
+	private static final String LOCATION_PREFIX = "@";
 	private static final String RESOURCE_PREFIX = "%";
 	private static final String CONTROLLER_METHOD_PREFIX = "#";
 
 	private final ResourceBundle bundle;
+	private URL location;
+	private ClassLoader classLoader;
 
 	public ValueResolver() {
 		this(null);
@@ -21,6 +25,14 @@ public class ValueResolver {
 	public ValueResolver(ResourceBundle bundle) {
 		super();
 		this.bundle = bundle;
+	}
+
+	public void setLocation(URL location) {
+		this.location = location;
+	}
+
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
 	}
 
 	/**
@@ -42,6 +54,9 @@ public class ValueResolver {
 		}
 		if (value.startsWith(CONTROLLER_METHOD_PREFIX)) {
 			return new ControllerMethodValue(unwrap(value));
+		}
+		if (value.startsWith(LOCATION_PREFIX)) {
+			return new LocationValue(classLoader, location, unwrap(value));
 		}
 		return new BasicTypeValue(convert(value, to(type)));
 	}

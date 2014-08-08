@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javafx.fxml.LoadException;
+
 abstract class InstantiationTemplate extends Template implements IInstantiationTemplate {
 
 	private final List<IProperty> properties;
@@ -42,17 +44,18 @@ abstract class InstantiationTemplate extends Template implements IInstantiationT
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+	LoadException {
 		Object newInstance = newInstance(registry);
 		applyProperties(newInstance, registry);
 		return (T) newInstance;
 	}
 
 	protected abstract Object newInstance(TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			InstantiationException;
+	        InstantiationException, LoadException;
 
 	private void applyProperties(Object newInstance, TemplateRegistry registry) throws IllegalAccessException, InvocationTargetException,
-	InstantiationException {
+	        InstantiationException, IllegalArgumentException, LoadException {
 		for (IProperty child : properties) {
 			child.apply(newInstance, registry);
 		}
