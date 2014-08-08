@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+import de.briemla.fxmltemplateloader.util.FXUtils;
 
 public class FXMLTemplateLoaderTest {
 
@@ -200,6 +201,17 @@ public class FXMLTemplateLoaderTest {
 		eventHandler.handle(mouseEvent);
 
 		assertThat(controller.isHandlerInvoked(), is(true));
+	}
+
+	/**
+	 * When there are no exceptions, the image has been successfully loaded and the mechanism works.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void loadElementWithLocation() throws Exception {
+		FXUtils.startFxApplicationThread();
+		load("VBoxWithLocation");
 	}
 
 	@Test

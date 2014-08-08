@@ -21,4 +21,8 @@ class ImportFactory {
 		this.classLoader = classLoader;
 	}
 
+	public boolean hasClassLoader() {
+		return classLoader != null;
+	}
+
 }

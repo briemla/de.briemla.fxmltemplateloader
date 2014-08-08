@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox xmlns:fx="http://javafx.com/fxml">
+	<children>
+		<ImageView >
+			<image>
+				<Image url="@24px-Greek_cross.svg.png" />
+			</image>
+		</ImageView>
+	</children>
+</VBox>
+

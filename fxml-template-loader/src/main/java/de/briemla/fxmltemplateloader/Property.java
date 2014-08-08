@@ -3,10 +3,12 @@ package de.briemla.fxmltemplateloader;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 
 import java.lang.reflect.Method;
+import java.util.AbstractMap;
 
 import javafx.fxml.LoadException;
 import javafx.util.Builder;
 
+import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
 import com.sun.javafx.fxml.builder.ProxyBuilder;
 
 public class Property {
@@ -22,11 +24,12 @@ public class Property {
 
 	// FIXME maybe introduce different Properties and throw LoadException in FXMLTemplateLoader with line information
 	public IProperty createTemplate(Builder<?> builder, ValueResolver valueResolver) throws NoSuchMethodException, SecurityException, LoadException {
-		if (builder instanceof ProxyBuilder) {
+		if (builder instanceof ProxyBuilder || builder instanceof JavaFXImageBuilder) {
 			// FIXME builder method should only be searched once.
 			// FIXME rename
-			Method defaultJavaFxBuilderMethod = ProxyBuilder.class.getMethod("put", String.class, Object.class);
-			return new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, name, value);
+			Method defaultJavaFxBuilderMethod = AbstractMap.class.getMethod("put", Object.class, Object.class);
+			IValue convertedValue = valueResolver.resolve(value, to(String.class));
+			return new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, name, convertedValue);
 		}
 		if (ReflectionUtils.hasBuilderMethod(builder.getClass(), name)) {
 			Method method = ReflectionUtils.findBuilderMethod(builder.getClass(), name);

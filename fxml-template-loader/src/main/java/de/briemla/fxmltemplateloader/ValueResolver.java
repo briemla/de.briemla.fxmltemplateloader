@@ -80,4 +80,8 @@ public class ValueResolver {
 		return value.substring(1);
 	}
 
+	public boolean hasClassLoader() {
+		return classLoader != null;
+	}
+
 }
