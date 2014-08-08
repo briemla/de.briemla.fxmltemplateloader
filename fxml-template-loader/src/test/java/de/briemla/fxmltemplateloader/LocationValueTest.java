@@ -25,5 +25,6 @@ public class LocationValueTest {
 		assertThat(resolvedLocation, is(equalTo(expectedLocation)));
 
 		verifyZeroInteractions(registry);
+		verifyZeroInteractions(classLoader);
 	}
 }
