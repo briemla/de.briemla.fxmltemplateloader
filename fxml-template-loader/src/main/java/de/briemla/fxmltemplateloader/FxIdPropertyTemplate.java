@@ -7,32 +7,31 @@ import javafx.fxml.LoadException;
 
 class FxIdPropertyTemplate extends Template implements IProperty {
 
-	private final Method setter;
-	private IProperty property;
+	private final IValue value;
 
-	public FxIdPropertyTemplate(Template parent, Method setter) {
+	public FxIdPropertyTemplate(Template parent, IValue value) {
 		super(parent);
-		this.setter = setter;
+		this.value = value;
 	}
 
 	@Override
 	public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 	InstantiationException, LoadException {
-		Object id = create(registry);
-		setter.invoke(parent, id);
+		Object id = value.create(registry);
 		registry.register(id, parent);
 	}
 
 	@Override
-	protected void prepare(IProperty value) {
-		property = value;
+	protected void prepare(IProperty property) {
+		// this.property = property;
 		// TODO log warning when called more than once. Check behavior of FXMLLoader
+		throw new RuntimeException("Should never be called. Call 911 to fix this bug.");
 	}
 
 	@Override
 	public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 	LoadException {
-		return property.create(registry);
+		throw new RuntimeException("Should never be called. Call 911 to fix this bug.");
 	}
 
 	@Override

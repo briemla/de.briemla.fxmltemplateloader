@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
@@ -205,13 +206,26 @@ public class FXMLTemplateLoaderTest {
 
 	/**
 	 * When there are no exceptions, the image has been successfully loaded and the mechanism works.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void loadElementWithLocation() throws Exception {
 		FXUtils.startFxApplicationThread();
 		load("VBoxWithLocation");
+	}
+
+	@Test
+	public void loadReferencedElement() throws Exception {
+		VBox root = load("VBoxWithReferencedElement");
+
+		ObservableList<Node> childNodes = root.getChildren();
+		VBox firstChild = (VBox) childNodes.get(0);
+		VBox secondChild = (VBox) childNodes.get(1);
+		Insets firstPadding = firstChild.getPadding();
+		Insets secondPadding = secondChild.getPadding();
+
+		assertThat(firstPadding, is(sameInstance(secondPadding)));
 	}
 
 	@Test

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox id="parent" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <VBox id="child">
+      <padding>
+        <Insets top="1.0" fx:id="x1" />
+      </padding>
+    </VBox>
+    <VBox padding="$x1" prefHeight="200.0" prefWidth="100.0" />
+  </children>
+</VBox>
