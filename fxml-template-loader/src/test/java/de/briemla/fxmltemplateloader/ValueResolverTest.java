@@ -21,6 +21,23 @@ public class ValueResolverTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
+	public void resolveReference() throws Exception {
+		String valueWithPrefix = "$referenceId";
+		ReferenceValue testValue = new ReferenceValue("referenceId");
+		ValueResolver valueResolver = new ValueResolver();
+
+		IValue resolvedValue = valueResolver.resolve(valueWithPrefix, String.class);
+
+		assertThat(resolvedValue, is(equalTo(testValue)));
+	}
+
+	/**
+	 * Long running test, because {@link URL#equals(Object)} will be called
+	 *
+	 * @see URL#equals(Object)
+	 * @throws Exception
+	 */
+	@Test
 	public void resolveUrl() throws Exception {
 		String valueWithPrefix = "@SomeFileAs.url";
 		ClassLoader classLoader = mock(ClassLoader.class);

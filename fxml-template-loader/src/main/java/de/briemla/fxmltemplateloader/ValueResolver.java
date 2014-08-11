@@ -13,6 +13,7 @@ public class ValueResolver {
 	private static final String LOCATION_PREFIX = "@";
 	private static final String RESOURCE_PREFIX = "%";
 	private static final String CONTROLLER_METHOD_PREFIX = "#";
+	private static final String REFERENCE_PREFIX = "$";
 
 	private ResourceBundle bundle;
 	private URL location;
@@ -61,6 +62,9 @@ public class ValueResolver {
 		}
 		if (value.startsWith(LOCATION_PREFIX)) {
 			return new LocationValue(classLoader, location, unwrap(value));
+		}
+		if (value.startsWith(REFERENCE_PREFIX)) {
+			return new ReferenceValue(unwrap(value));
 		}
 		return new BasicTypeValue(convert(value, to(type)));
 	}

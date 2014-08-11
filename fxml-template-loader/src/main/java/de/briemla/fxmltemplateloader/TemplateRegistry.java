@@ -35,4 +35,8 @@ public class TemplateRegistry {
 	public void addMethodStub(String value, MethodHandlerStub<Event> methodHandlerStub) {
 		methods.put(value, methodHandlerStub);
 	}
+
+	public Object getFxElement(String id) {
+		return elements.get(id);
+	}
 }
