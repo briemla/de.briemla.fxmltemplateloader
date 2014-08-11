@@ -13,7 +13,7 @@ public class ControllerMethodValue implements IValue {
 	@Override
 	public Object create(TemplateRegistry registry) {
 		MethodHandlerStub<Event> methodHandlerStub = new MethodHandlerStub<>();
-		registry.addMethodStub(value, methodHandlerStub);
+		registry.registerMethodStub(value, methodHandlerStub);
 		return methodHandlerStub;
 	}
 

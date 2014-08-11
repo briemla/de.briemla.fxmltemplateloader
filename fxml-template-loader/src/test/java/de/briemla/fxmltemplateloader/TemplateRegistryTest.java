@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
+import javafx.event.Event;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,5 +39,19 @@ public class TemplateRegistryTest {
 		thrown.expectMessage(startsWith("ID already registered."));
 
 		registry.register(id, secondObject);
+	}
+
+	@Test
+	public void registerSameMethodTwice() throws Exception {
+		TemplateRegistry registry = new TemplateRegistry();
+		String id = "someId";
+		MethodHandlerStub<Event> firstMethod = new MethodHandlerStub<>();
+		MethodHandlerStub<Event> secondMethod = new MethodHandlerStub<>();
+		registry.registerMethodStub(id, firstMethod);
+
+		thrown.expect(RuntimeException.class);
+		thrown.expectMessage(startsWith("Method already registered."));
+
+		registry.registerMethodStub(id, secondMethod);
 	}
 }

@@ -35,7 +35,10 @@ public class TemplateRegistry {
 		}
 	}
 
-	public void addMethodStub(String value, MethodHandlerStub<Event> methodHandlerStub) {
+	public void registerMethodStub(String value, MethodHandlerStub<Event> methodHandlerStub) {
+		if (methods.containsKey(value)) {
+			throw new RuntimeException("Method already registered. Name must be unique: " + value);
+		}
 		methods.put(value, methodHandlerStub);
 	}
 
