@@ -4,6 +4,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import javafx.event.Event;
 
 import org.junit.Rule;
@@ -53,5 +56,19 @@ public class TemplateRegistryTest {
 		thrown.expectMessage(startsWith("Method already registered."));
 
 		registry.registerMethodStub(id, secondMethod);
+	}
+
+	@Test
+	public void link() throws Exception {
+		TemplateRegistry registry = new TemplateRegistry();
+		String name = "someMethod";
+		MethodHandlerStub<Event> method = mock(MethodHandlerStub.class);
+		ControllerAccessor controller = mock(ControllerAccessor.class);
+		registry.registerMethodStub(name, method);
+
+		registry.link(controller);
+
+		verify(controller).linkMethodHandler("someMethod", method);
+		verifyZeroInteractions(method);
 	}
 }

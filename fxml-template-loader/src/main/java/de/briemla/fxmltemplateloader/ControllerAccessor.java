@@ -28,7 +28,7 @@ import sun.reflect.misc.ReflectUtil;
  *
  */
 @SuppressWarnings("restriction")
-public final class ControllerAccessor {
+public class ControllerAccessor {
 	private static final int PUBLIC = 1;
 	private static final int PROTECTED = 2;
 	private static final int PACKAGE = 4;
@@ -152,7 +152,7 @@ public final class ControllerAccessor {
 			final int memberModifiers = field.getModifiers();
 
 			if (((memberModifiers & (Modifier.STATIC | Modifier.FINAL)) != 0) || ((getAccess(memberModifiers) & allowedMemberAccess) == 0)
-			        || !isAccessibleToController(type, memberModifiers)) {
+					|| !isAccessibleToController(type, memberModifiers)) {
 				continue;
 			}
 
@@ -178,7 +178,7 @@ public final class ControllerAccessor {
 			final int memberModifiers = method.getModifiers();
 
 			if (((memberModifiers & (Modifier.STATIC | Modifier.NATIVE)) != 0) || ((getAccess(memberModifiers) & allowedMemberAccess) == 0)
-			        || !isAccessibleToController(type, memberModifiers)) {
+					|| !isAccessibleToController(type, memberModifiers)) {
 				continue;
 			}
 
@@ -277,7 +277,7 @@ public final class ControllerAccessor {
 			@Override
 			protected boolean methodIsOfType(Method m) {
 				return m.getParameterCount() == 3 && ObservableValue.class.isAssignableFrom(m.getParameterTypes()[0])
-						&& m.getParameterTypes()[1].equals(m.getParameterTypes()[2]);
+				        && m.getParameterTypes()[1].equals(m.getParameterTypes()[2]);
 			}
 
 		};
