@@ -24,6 +24,9 @@ public class LocationValue implements IValue {
 		this.value = value;
 	}
 
+	/**
+	 * Behaviour is same as in FXMLLoader
+	 */
 	@Override
 	public Object create(TemplateRegistry registry) throws LoadException {
 		if (value.charAt(0) == '/') {
