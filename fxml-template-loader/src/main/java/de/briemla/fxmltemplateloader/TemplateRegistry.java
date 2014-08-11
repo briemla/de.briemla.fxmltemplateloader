@@ -16,7 +16,10 @@ public class TemplateRegistry {
 		methods = new HashMap<>();
 	}
 
-	public void add(Object id, Object object) {
+	public void register(Object id, Object object) {
+		if (elements.containsKey(id)) {
+			throw new RuntimeException("ID already registered. fx:id must be unique: " + id);
+		}
 		elements.put(id, object);
 	}
 

@@ -20,7 +20,7 @@ class FxIdPropertyTemplate extends Template implements IProperty {
 	InstantiationException, LoadException {
 		Object id = create(registry);
 		setter.invoke(parent, id);
-		registry.add(id, parent);
+		registry.register(id, parent);
 	}
 
 	@Override
