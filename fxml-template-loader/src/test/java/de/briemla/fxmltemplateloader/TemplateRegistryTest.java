@@ -58,6 +58,7 @@ public class TemplateRegistryTest {
 		registry.registerMethodStub(id, secondMethod);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void link() throws Exception {
 		TemplateRegistry registry = new TemplateRegistry();
