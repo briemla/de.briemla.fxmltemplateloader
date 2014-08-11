@@ -39,7 +39,7 @@ public class TemplateRegistry {
 		methods.put(value, methodHandlerStub);
 	}
 
-	public Object getFxElement(String id) {
+	public Object getFxElement(Object id) {
 		return elements.get(id);
 	}
 }
