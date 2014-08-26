@@ -2,11 +2,13 @@ package de.briemla.fxmltemplateloader;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -226,6 +228,20 @@ public class FXMLTemplateLoaderTest {
 		Insets secondPadding = secondChild.getPadding();
 
 		assertThat(firstPadding, is(sameInstance(secondPadding)));
+	}
+
+	@Test
+	public void loadReferencedElementInstantiateTemplateTwice() throws Exception {
+		URL resource = FXMLTemplateLoaderTest.class.getResource("VBoxWithReferencedElement.fxml");
+		ITemplate template = FXMLTemplateLoader.loadTemplate(resource);
+		VBox firstInstance = template.create();
+		VBox secondInstance = template.create();
+
+		Insets firstPadding = ((VBox) firstInstance.getChildren().get(0)).getPadding();
+		Insets secondPadding = ((VBox) secondInstance.getChildren().get(0)).getPadding();
+
+		assertThat(secondPadding, is(not(sameInstance(firstPadding))));
+		assertThat(secondPadding, is(equalTo(firstPadding)));
 	}
 
 	@Test

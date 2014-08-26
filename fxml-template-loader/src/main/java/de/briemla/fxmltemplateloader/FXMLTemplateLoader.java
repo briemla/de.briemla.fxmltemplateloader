@@ -101,6 +101,26 @@ public class FXMLTemplateLoader {
 		}
 	}
 
+	public static ITemplate loadTemplate(URL resource) throws IOException {
+		return new FXMLTemplateLoader().doLoadTemplate(resource);
+	}
+
+	private ITemplate doLoadTemplate(URL resource) throws IOException {
+		correctClassLoader();
+		setLocation(resource);
+		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
+		try (InputStream xmlInput = resource.openStream()) {
+			eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
+			return parseXml();
+		} catch (XMLStreamException exception) {
+			throw new IOException("Could not parse XML.", exception);
+		} catch (IllegalArgumentException exception) {
+			throw new IOException("Something went wrong with the arguments.", exception);
+		} catch (NoSuchMethodException | SecurityException exception) {
+			throw new IOException("Could not find correct classes.", exception);
+		}
+	}
+
 	private void correctClassLoader() {
 		if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
 			return;
@@ -171,7 +191,7 @@ public class FXMLTemplateLoader {
 	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-	        LoadException {
+	LoadException {
 		Class<?> clazz = imports.findClass(className);
 		List<IProperty> properties = new ArrayList<>();
 		List<Property> unsettableProperties = new ArrayList<>();
