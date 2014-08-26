@@ -83,20 +83,14 @@ public class FXMLTemplateLoader {
 	}
 
 	public <T> T doLoad(URL resource) throws IOException {
-		correctClassLoader();
-		setLocation(resource);
-		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
-		try (InputStream xmlInput = resource.openStream()) {
-			eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
+		try {
 			if (controller != null) {
-				return parseXml().create(controller);
+				return doLoadTemplate(resource).create(controller);
 			}
-			return parseXml().create();
-		} catch (XMLStreamException exception) {
-			throw new IOException("Could not parse XML.", exception);
+			return doLoadTemplate(resource).create();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
 			throw new IOException("Could not instatiate Nodes.", exception);
-		} catch (NoSuchMethodException | SecurityException exception) {
+		} catch (SecurityException exception) {
 			throw new IOException("Could not find correct classes.", exception);
 		}
 	}
