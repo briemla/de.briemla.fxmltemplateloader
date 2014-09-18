@@ -21,7 +21,7 @@ class RootTemplate implements ITemplate {
 
 	@Override
 	public <T> T create(Object controller) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-	LoadException {
+	        LoadException {
 		TemplateRegistry registry = new TemplateRegistry();
 		T newElement = template.create(registry);
 		ControllerAccessor accessor = wrap(controller);
@@ -33,5 +33,14 @@ class RootTemplate implements ITemplate {
 		ControllerAccessor accessor = new ControllerAccessor();
 		accessor.setController(controller);
 		return accessor;
+	}
+
+	@Override
+	public void setRoot(Object fxRoot) {
+		if (template instanceof FxRootTemplate) {
+			((FxRootTemplate) template).setRoot(fxRoot);
+			return;
+		}
+		throw new RuntimeException("Root element of FXML file is not a fx:root element.");
 	}
 }

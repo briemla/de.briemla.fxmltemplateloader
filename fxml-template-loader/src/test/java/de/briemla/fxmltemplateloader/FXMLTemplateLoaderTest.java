@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -245,6 +246,14 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	@Test
+	public void loadFxmlRoot() throws Exception {
+		VBoxAsFxRoot fxRoot = new VBoxAsFxRoot();
+		VBoxAsFxRoot returnedRoot = loadWithRoot("VBoxAsFxRoot", fxRoot);
+
+		assertThat(returnedRoot, is(sameInstance(fxRoot)));
+	}
+
+	@Test
 	public void fullDummyClass() throws Exception {
 		FullDummyClass dummyClass = load("FullDummyClass");
 
@@ -277,4 +286,13 @@ public class FXMLTemplateLoaderTest {
 		fxmlTemplateLoader.setController(controller);
 		return fxmlTemplateLoader.doLoad(FXMLTemplateLoaderTest.class.getResource(fxmlName));
 	}
+
+	private static <T> T loadWithRoot(String fileName, Object fxRoot) throws IOException, InstantiationException, IllegalAccessException,
+	        IllegalArgumentException, InvocationTargetException {
+		String fxmlName = fileName + FXML_FILE_EXTENSION;
+		ITemplate template = FXMLTemplateLoader.loadTemplate(FXMLTemplateLoaderTest.class.getResource(fxmlName));
+		template.setRoot(fxRoot);
+		return template.create();
+	}
+
 }

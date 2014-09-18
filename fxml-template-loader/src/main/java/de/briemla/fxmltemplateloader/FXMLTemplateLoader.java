@@ -33,6 +33,10 @@ import javax.xml.stream.events.XMLEvent;
 
 public class FXMLTemplateLoader {
 
+	private static final String FX_ROOT = "root";
+	private static final String FX_ID_PROPERTY = "id";
+	private static final String FX_NAMESPACE_PREFIX = "fx";
+	private static final String FX_ROOT_TYPE_PROPERTY = "type";
 	private static Template currentTemplate;
 	private final ImportFactory factory;
 	private final ImportCollection imports;
@@ -142,8 +146,19 @@ public class FXMLTemplateLoader {
 		currentTemplate = currentTemplate.getParent();
 	}
 
+	// FIXME too long method. This method could be splitted into several smaller methods.
 	private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException, LoadException {
-		String className = element.getName().getLocalPart();
+		QName name = element.getName();
+		if (FX_NAMESPACE_PREFIX.equals(name.getPrefix()) && FX_ROOT.equals(name.getLocalPart())) {
+			if (rootTemplate != null) {
+				throw new LoadException("fx:root element is not the first element.");
+			}
+			FxRootTemplate fxRootTemplate = createFxRootTemplate(element);
+			currentTemplate = fxRootTemplate;
+			rootTemplate = wrap(fxRootTemplate);
+			return;
+		}
+		String className = name.getLocalPart();
 
 		int index = className.lastIndexOf('.');
 		if (Character.isLowerCase(className.charAt(index + 1))) {
@@ -182,6 +197,56 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
+	private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
+		Class<?> rootType = findTypeOfRoot(element);
+		List<IProperty> properties = new ArrayList<>();
+		Iterator<Attribute> attributes = element.getAttributes();
+		while (attributes.hasNext()) {
+			Attribute attribute = attributes.next();
+			QName attributeName = attribute.getName();
+			String propertyPrefix = attributeName.getPrefix();
+			String propertyName = attributeName.getLocalPart();
+			if (FX_ROOT_TYPE_PROPERTY.equals(propertyName) || FX_ROOT.equals(propertyName)) {
+				continue;
+			}
+			String value = attribute.getValue();
+
+			// FIXME clean up this if statement, because it does not fit to the other properties.
+			if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
+				IValue convertedValue = resolve(value, to(String.class));
+				FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, convertedValue);
+				properties.add(property);
+				continue;
+			}
+
+			if (ReflectionUtils.hasSetter(rootType, propertyName)) {
+				Method method = findSetter(rootType, propertyName);
+				Class<?> type = extractType(method);
+				IValue convertedValue = resolve(value, to(type));
+
+				SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
+				property.prepare(new PropertyTemplate(method, convertedValue));
+				properties.add(property);
+				continue;
+			}
+			throw new LoadException("Property specified on fx:root element which can not be set by setter.");
+		}
+		return new FxRootTemplate(rootType, properties);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Class<?> findTypeOfRoot(StartElement element) throws LoadException {
+		Iterator<Attribute> attributes = element.getAttributes();
+		while (attributes.hasNext()) {
+			Attribute attribute = attributes.next();
+			if (FX_ROOT_TYPE_PROPERTY.equals(attribute.getName().getLocalPart())) {
+				return imports.findClass(attribute.getValue());
+			}
+		}
+		throw new LoadException("Type attribute of fx:root element missing.");
+	}
+
+	@SuppressWarnings("unchecked")
 	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
@@ -198,7 +263,7 @@ public class FXMLTemplateLoader {
 			String value = attribute.getValue();
 
 			// FIXME clean up this if statement, because it does not fit to the other properties.
-			if ("fx".equals(propertyPrefix) && "id".equals(propertyName)) {
+			if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
 				IValue convertedValue = resolve(value, to(String.class));
 				FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, convertedValue);
 				properties.add(property);
