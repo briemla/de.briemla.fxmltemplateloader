@@ -21,6 +21,9 @@ public class Property {
 
 	// FIXME maybe introduce different Properties and throw LoadException in FXMLTemplateLoader with line information
 	public IProperty createTemplate(Builder<?> builder, ValueResolver valueResolver) throws NoSuchMethodException, SecurityException, LoadException {
+		if (builder == null) {
+			throw new LoadException("Builder is not allowed to be null");
+		}
 		if (builder instanceof AbstractMap) {
 			// FIXME builder method should only be searched once.
 			// FIXME rename
@@ -36,6 +39,11 @@ public class Property {
 			return new PropertyTemplate(method, convertedValue);
 		}
 		throw new LoadException("Could not create IProperty");
+	}
+
+	@Override
+	public String toString() {
+		return "Property [name=" + name + ", value=" + value + "]";
 	}
 
 }
