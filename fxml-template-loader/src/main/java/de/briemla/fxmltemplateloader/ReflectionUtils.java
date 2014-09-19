@@ -2,6 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class ReflectionUtils {
 
@@ -59,10 +60,13 @@ public class ReflectionUtils {
 
 	public static Class<?> extractType(Method method) {
 		Class<?>[] parameterTypes = method.getParameterTypes();
-		if (parameterTypes.length != 1) {
-			throw new RuntimeException("Incorrect number of arguments for setter found.");
+		if (Modifier.isStatic(method.getModifiers()) && parameterTypes.length == 2) {
+			return parameterTypes[1];
 		}
-		return parameterTypes[0];
+		if (parameterTypes.length == 1) {
+			return parameterTypes[0];
+		}
+		throw new RuntimeException("Incorrect number of arguments for setter found: " + parameterTypes.length);
 	}
 
 	public static void makeAccessible(Field field) {

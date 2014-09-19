@@ -280,9 +280,21 @@ public class FXMLTemplateLoader {
 				properties.add(property);
 				continue;
 			}
-			// TODO issue #17 use static setters
 			if (propertyName.contains(".")) {
-				continue;
+				int lastIndexOf = propertyName.lastIndexOf(".");
+				String staticPropertyClassName = propertyName.substring(0, lastIndexOf);
+				String staticPropertyName = propertyName.substring(lastIndexOf + 1);
+				Class<?> staticPropertyClass = imports.findClass(staticPropertyClassName);
+				if (ReflectionUtils.hasSetter(staticPropertyClass, staticPropertyName)) {
+					Method method = findSetter(clazz, staticPropertyName);
+					Class<?> type = extractType(method);
+					IValue convertedValue = resolve(value, to(type));
+
+					StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(currentTemplate, method, staticPropertyClass);
+					property.prepare(new StaticPropertyTemplate(staticPropertyClass, method, convertedValue));
+					properties.add(property);
+					continue;
+				}
 			}
 			unsettableProperties.add(new Property(propertyName, value));
 		}
