@@ -19,6 +19,7 @@ import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -251,6 +252,9 @@ public class FXMLTemplateLoaderTest {
 		VBoxAsFxRoot returnedRoot = loadWithRoot("VBoxAsFxRoot", fxRoot);
 
 		assertThat(returnedRoot, is(sameInstance(fxRoot)));
+		assertThat("Child count", fxRoot.getChildren().size(), is(equalTo(1)));
+		Node childBox = fxRoot.getChildren().get(0);
+		assertThat(childBox.getBlendMode(), is(BlendMode.ADD));
 	}
 
 	@Test
@@ -288,7 +292,7 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	private static <T> T loadWithRoot(String fileName, Object fxRoot) throws IOException, InstantiationException, IllegalAccessException,
-	        IllegalArgumentException, InvocationTargetException {
+	IllegalArgumentException, InvocationTargetException {
 		String fxmlName = fileName + FXML_FILE_EXTENSION;
 		ITemplate template = FXMLTemplateLoader.loadTemplate(FXMLTemplateLoaderTest.class.getResource(fxmlName));
 		template.setRoot(fxRoot);
