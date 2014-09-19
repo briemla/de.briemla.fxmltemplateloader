@@ -5,9 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox VBox.vgrow="ALWAYS">
+      <VBox AnchorPane.topAnchor="10.0">
       </VBox>
    </children>
-</VBox>
+</AnchorPane>

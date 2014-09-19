@@ -21,8 +21,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -260,10 +260,10 @@ public class FXMLTemplateLoaderTest {
 
 	@Test
 	public void loadFxmlWithStaticProperty() throws Exception {
-		VBox parent = load("VBoxWithStaticProperty");
+		AnchorPane parent = load("VBoxWithStaticProperty");
 		Node child = parent.getChildren().get(0);
-		Priority childVGrow = VBox.getVgrow(child);
-		assertThat(childVGrow, is(equalTo(Priority.ALWAYS)));
+		Double childTopAnchor = AnchorPane.getTopAnchor(child);
+		assertThat(childTopAnchor, is(equalTo(10.0)));
 	}
 
 	@Test
@@ -301,7 +301,7 @@ public class FXMLTemplateLoaderTest {
 	}
 
 	private static <T> T loadWithRoot(String fileName, Object fxRoot) throws IOException, InstantiationException, IllegalAccessException,
-	        IllegalArgumentException, InvocationTargetException {
+	IllegalArgumentException, InvocationTargetException {
 		String fxmlName = fileName + FXML_FILE_EXTENSION;
 		ITemplate template = FXMLTemplateLoader.loadTemplate(FXMLTemplateLoaderTest.class.getResource(fxmlName));
 		template.setRoot(fxRoot);
