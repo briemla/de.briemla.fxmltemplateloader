@@ -37,7 +37,7 @@ public class FXMLTemplateLoader {
 	private static final String FX_ID_PROPERTY = "id";
 	private static final String FX_NAMESPACE_PREFIX = "fx";
 	private static final String FX_ROOT_TYPE_PROPERTY = "type";
-	private static Template currentTemplate;
+	private Template currentTemplate;
 	private final ImportFactory factory;
 	private final ImportCollection imports;
 	private final BuilderFactory builderFactory;
@@ -192,7 +192,7 @@ public class FXMLTemplateLoader {
 		}
 	}
 
-	private ITemplate wrap(InstantiationTemplate instantiationTemplate) {
+	private static ITemplate wrap(InstantiationTemplate instantiationTemplate) {
 		return new RootTemplate(instantiationTemplate);
 	}
 
@@ -247,7 +247,8 @@ public class FXMLTemplateLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate into special Collection, which collects settable and
+	// FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate
+	// into special Collection, which collects settable and
 	// unsettable properties
 	private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
 	LoadException {
