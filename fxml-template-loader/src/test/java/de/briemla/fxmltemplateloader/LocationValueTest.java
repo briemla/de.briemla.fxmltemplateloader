@@ -50,6 +50,7 @@ public class LocationValueTest {
 	public void newLocationValueWithNullClassLoader() throws Exception {
 		URL location = new URL("file://some.url");
 		String value = "some value";
+		@SuppressWarnings("unused")
 		LocationValue locationValue = new LocationValue(null, location, value);
 	}
 
@@ -57,6 +58,7 @@ public class LocationValueTest {
 	public void newLocationValueWithNullLocation() throws Exception {
 		ClassLoader classLoader = mock(ClassLoader.class);
 		String value = "some value";
+		@SuppressWarnings("unused")
 		LocationValue locationValue = new LocationValue(classLoader, null, value);
 	}
 }

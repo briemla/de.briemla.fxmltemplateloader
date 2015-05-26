@@ -25,7 +25,6 @@ public class MethodHandlerStub<T extends Event> implements EventHandler<T> {
 		}
 	}
 
-	@SuppressWarnings("hiding")
 	public void bindTo(Object controller, Method method) {
 		this.controller = controller;
 		this.method = method;
