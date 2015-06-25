@@ -34,7 +34,7 @@ public class ReflectionUtils {
                 return method;
             }
         }
-        throw new IllegalStateException("Could not find setter for property: " + propertyName);
+        throw new IllegalStateException("Could not find setter in clazz " + clazz.getName() + " for property: " + propertyName);
     }
 
     private static String setter(String propertyName) {
