@@ -219,6 +219,7 @@ public class FXMLTemplateLoader {
                 continue;
             }
 
+            // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(rootType, propertyName)) {
                 Method method = findSetter(rootType, propertyName);
                 Class<?> type = extractType(method);
@@ -283,6 +284,7 @@ public class FXMLTemplateLoader {
                 continue;
             }
 
+            // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(clazz, propertyName)) {
                 Method method = findSetter(clazz, propertyName);
                 Class<?> type = extractType(method);
