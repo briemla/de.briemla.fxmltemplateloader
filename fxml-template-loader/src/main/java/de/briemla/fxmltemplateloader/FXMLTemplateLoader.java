@@ -214,7 +214,11 @@ public class FXMLTemplateLoader {
             // FIXME clean up this if statement, because it does not fit to the other properties.
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
                 IValue convertedValue = resolve(value, to(String.class));
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, convertedValue);
+                Method fxIdSetter = null;
+                if (ReflectionUtils.hasSetter(rootType, propertyName)) {
+                    fxIdSetter = findSetter(rootType, propertyName);
+                }
+                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, fxIdSetter, convertedValue);
                 properties.add(property);
                 continue;
             }
@@ -264,7 +268,7 @@ public class FXMLTemplateLoader {
     // into special Collection, which collects settable and
     // unsettable properties
     private InstantiationTemplate createInstatiationTemplate(StartElement element, String className) throws NoSuchMethodException, SecurityException,
-    LoadException {
+            LoadException {
         Class<?> clazz = imports.findClass(className);
         List<IProperty> properties = new ArrayList<>();
         List<Property> unsettableProperties = new ArrayList<>();
@@ -279,7 +283,12 @@ public class FXMLTemplateLoader {
             // FIXME clean up this if statement, because it does not fit to the other properties.
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
                 IValue convertedValue = resolve(value, to(String.class));
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, convertedValue);
+                // FIXME clean up null pointer
+                Method fxIdSetter = null;
+                if (ReflectionUtils.hasSetter(clazz, propertyName)) {
+                    fxIdSetter = findSetter(clazz, propertyName);
+                }
+                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, fxIdSetter, convertedValue);
                 properties.add(property);
                 continue;
             }
