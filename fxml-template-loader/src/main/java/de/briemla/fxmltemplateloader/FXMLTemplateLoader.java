@@ -34,9 +34,20 @@ import javax.xml.stream.events.XMLEvent;
 import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ImportFactory;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
+import de.briemla.fxmltemplateloader.template.BuilderTemplate;
+import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
+import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.FxRootTemplate;
 import de.briemla.fxmltemplateloader.template.ITemplate;
+import de.briemla.fxmltemplateloader.template.InstantiationTemplate;
+import de.briemla.fxmltemplateloader.template.ListPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.Property;
+import de.briemla.fxmltemplateloader.template.PropertyTemplate;
 import de.briemla.fxmltemplateloader.template.RootTemplate;
+import de.briemla.fxmltemplateloader.template.SingleElementPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public class FXMLTemplateLoader {

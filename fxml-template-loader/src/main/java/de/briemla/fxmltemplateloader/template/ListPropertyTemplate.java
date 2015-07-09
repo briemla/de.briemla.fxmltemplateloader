@@ -1,11 +1,11 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.IProperty;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import javafx.fxml.LoadException;
 

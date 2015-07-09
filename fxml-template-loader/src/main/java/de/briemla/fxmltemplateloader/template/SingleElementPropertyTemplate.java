@@ -1,9 +1,9 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.IProperty;
 import javafx.fxml.LoadException;
 
 public class SingleElementPropertyTemplate extends Template implements IProperty {

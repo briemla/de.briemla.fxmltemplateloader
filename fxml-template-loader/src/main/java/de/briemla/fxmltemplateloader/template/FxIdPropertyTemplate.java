@@ -1,12 +1,13 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.IProperty;
+import de.briemla.fxmltemplateloader.IValue;
 import javafx.fxml.LoadException;
 
-class FxIdPropertyTemplate extends Template implements IProperty {
+public class FxIdPropertyTemplate extends Template implements IProperty {
 
     private final IValue value;
     private Method fxIdSetter;
