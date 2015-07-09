@@ -13,14 +13,14 @@ import de.briemla.fxmltemplateloader.value.ReferenceValue;
 
 public class ReferenceValueTest {
 
-	@Test
-	public void create() throws Exception {
-		TemplateRegistry registry = mock(TemplateRegistry.class);
-		Object fxElement = new Object();
-		when(registry.getFxElement("referenceId")).thenReturn(fxElement);
-		ReferenceValue referenceValue = new ReferenceValue("referenceId");
-		Object createdObject = referenceValue.create(registry);
+    @Test
+    public void create() throws Exception {
+        TemplateRegistry registry = mock(TemplateRegistry.class);
+        Object fxElement = new Object();
+        when(registry.getFxElement("referenceId")).thenReturn(fxElement);
+        ReferenceValue referenceValue = new ReferenceValue("referenceId");
+        Object createdObject = referenceValue.create(registry);
 
-		assertThat(createdObject, is(sameInstance(fxElement)));
-	}
+        assertThat(createdObject, is(sameInstance(fxElement)));
+    }
 }

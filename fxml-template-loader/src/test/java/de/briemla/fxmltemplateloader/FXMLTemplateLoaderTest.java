@@ -309,8 +309,8 @@ public class FXMLTemplateLoaderTest {
         return fxmlTemplateLoader.doLoad(FXMLTemplateLoaderTest.class.getResource(fxmlName));
     }
 
-    private static <T> T loadWithRoot(String fileName, Object fxRoot) throws IOException, InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
+    private static <T> T loadWithRoot(String fileName, Object fxRoot)
+            throws IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
         ITemplate template = FXMLTemplateLoader.loadTemplate(FXMLTemplateLoaderTest.class.getResource(fxmlName));
         template.setRoot(fxRoot);

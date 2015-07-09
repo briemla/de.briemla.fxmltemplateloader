@@ -18,61 +18,61 @@ import de.briemla.fxmltemplateloader.value.MethodHandlerStub;
 
 public class TemplateRegistryTest {
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-	@Test
-	public void register() throws Exception {
-		TemplateRegistry registry = new TemplateRegistry();
-		String id = "someId";
-		Object previouslyAddedElement = new Object();
-		registry.register(id, previouslyAddedElement);
+    @Test
+    public void register() throws Exception {
+        TemplateRegistry registry = new TemplateRegistry();
+        String id = "someId";
+        Object previouslyAddedElement = new Object();
+        registry.register(id, previouslyAddedElement);
 
-		Object returnedElementFromRegistry = registry.getFxElement(id);
+        Object returnedElementFromRegistry = registry.getFxElement(id);
 
-		assertThat(returnedElementFromRegistry, is(equalTo(previouslyAddedElement)));
-	}
+        assertThat(returnedElementFromRegistry, is(equalTo(previouslyAddedElement)));
+    }
 
-	@Test
-	public void registerSameIdTwice() throws Exception {
-		TemplateRegistry registry = new TemplateRegistry();
-		Object id = "someId";
-		Object firstObject = new Object();
-		Object secondObject = new Object();
-		registry.register(id, firstObject);
+    @Test
+    public void registerSameIdTwice() throws Exception {
+        TemplateRegistry registry = new TemplateRegistry();
+        Object id = "someId";
+        Object firstObject = new Object();
+        Object secondObject = new Object();
+        registry.register(id, firstObject);
 
-		thrown.expect(RuntimeException.class);
-		thrown.expectMessage(startsWith("ID already registered."));
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage(startsWith("ID already registered."));
 
-		registry.register(id, secondObject);
-	}
+        registry.register(id, secondObject);
+    }
 
-	@Test
-	public void registerSameMethodTwice() throws Exception {
-		TemplateRegistry registry = new TemplateRegistry();
-		String id = "someId";
-		MethodHandlerStub<Event> firstMethod = new MethodHandlerStub<>();
-		MethodHandlerStub<Event> secondMethod = new MethodHandlerStub<>();
-		registry.registerMethodStub(id, firstMethod);
+    @Test
+    public void registerSameMethodTwice() throws Exception {
+        TemplateRegistry registry = new TemplateRegistry();
+        String id = "someId";
+        MethodHandlerStub<Event> firstMethod = new MethodHandlerStub<>();
+        MethodHandlerStub<Event> secondMethod = new MethodHandlerStub<>();
+        registry.registerMethodStub(id, firstMethod);
 
-		thrown.expect(RuntimeException.class);
-		thrown.expectMessage(startsWith("Method already registered."));
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage(startsWith("Method already registered."));
 
-		registry.registerMethodStub(id, secondMethod);
-	}
+        registry.registerMethodStub(id, secondMethod);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void link() throws Exception {
-		TemplateRegistry registry = new TemplateRegistry();
-		String name = "someMethod";
-		MethodHandlerStub<Event> method = mock(MethodHandlerStub.class);
-		ControllerAccessor controller = mock(ControllerAccessor.class);
-		registry.registerMethodStub(name, method);
+    @SuppressWarnings("unchecked")
+    @Test
+    public void link() throws Exception {
+        TemplateRegistry registry = new TemplateRegistry();
+        String name = "someMethod";
+        MethodHandlerStub<Event> method = mock(MethodHandlerStub.class);
+        ControllerAccessor controller = mock(ControllerAccessor.class);
+        registry.registerMethodStub(name, method);
 
-		registry.link(controller);
+        registry.link(controller);
 
-		verify(controller).linkMethodHandler("someMethod", method);
-		verifyZeroInteractions(method);
-	}
+        verify(controller).linkMethodHandler("someMethod", method);
+        verifyZeroInteractions(method);
+    }
 }

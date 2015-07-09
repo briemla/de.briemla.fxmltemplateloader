@@ -5,16 +5,16 @@ import javafx.scene.layout.VBox;
 
 public class FieldController {
 
-	@FXML
-	private VBox testId;
-	@FXML
-	private VBox childId;
+    @FXML
+    private VBox testId;
+    @FXML
+    private VBox childId;
 
-	public VBox getTestId() {
-		return testId;
-	}
+    public VBox getTestId() {
+        return testId;
+    }
 
-	public VBox getChildId() {
-		return childId;
-	}
+    public VBox getChildId() {
+        return childId;
+    }
 }
