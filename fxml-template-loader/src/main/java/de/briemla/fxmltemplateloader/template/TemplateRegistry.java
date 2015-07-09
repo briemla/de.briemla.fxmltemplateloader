@@ -25,9 +25,8 @@ public class TemplateRegistry {
     }
 
     void link(ControllerAccessor controller) {
-        for (Object key : elements.keySet()) {
-            Object value = elements.get(key);
-            controller.linkField(key, value);
+        for (Entry<Object, Object> entry : elements.entrySet()) {
+            controller.linkField(entry.getKey(), entry.getValue());
         }
         for (Entry<Object, MethodHandlerStub<Event>> entry : methods.entrySet()) {
             Object key = entry.getKey();
