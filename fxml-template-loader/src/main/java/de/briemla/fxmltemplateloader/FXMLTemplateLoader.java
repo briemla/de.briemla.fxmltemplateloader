@@ -16,17 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.fxml.LoadException;
-import javafx.util.Builder;
-import javafx.util.BuilderFactory;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -52,6 +46,10 @@ import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import de.briemla.fxmltemplateloader.value.IValue;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
+import javafx.util.Builder;
+import javafx.util.BuilderFactory;
 
 public class FXMLTemplateLoader {
 
@@ -158,13 +156,13 @@ public class FXMLTemplateLoader {
                 processStartElement(event.asStartElement());
             }
             if (event.isEndElement()) {
-                processEndElement(event.asEndElement());
+                processEndElement();
             }
         }
         return rootTemplate;
     }
 
-    private void processEndElement(EndElement element) {
+    private void processEndElement() {
         currentTemplate = currentTemplate.getParent();
     }
 
