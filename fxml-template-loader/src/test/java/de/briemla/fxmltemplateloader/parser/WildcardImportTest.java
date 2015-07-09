@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.parser;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
+
+import de.briemla.fxmltemplateloader.parser.WildcardImport;
 
 public class WildcardImportTest {
 

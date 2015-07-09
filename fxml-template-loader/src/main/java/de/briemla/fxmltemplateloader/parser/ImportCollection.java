@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.parser;
 
 import java.util.ArrayList;
 

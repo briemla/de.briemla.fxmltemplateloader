@@ -1,10 +1,10 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.parser;
 
-public class WildcardImport extends Import {
+public class FullQualifiedImport extends Import {
 
 	private final String importQualifier;
 
-	public WildcardImport(String importQualifier, ClassLoader classLoader) {
+	public FullQualifiedImport(String importQualifier, ClassLoader classLoader) {
 		super(classLoader);
 		this.importQualifier = importQualifier;
 	}
@@ -14,19 +14,12 @@ public class WildcardImport extends Import {
 		if (className == null) {
 			return false;
 		}
-		try {
-			return load(className) != null;
-		} catch (ClassNotFoundException e) {
-			return false;
-		}
+		return importQualifier.endsWith(className);
 	}
 
 	@Override
 	protected Class<?> load(String className) throws ClassNotFoundException {
-		int indexBeforeWildcard = importQualifier.length() - 1;
-		String removedWildcard = importQualifier.substring(0, indexBeforeWildcard);
-		String fullQualifiedImport = removedWildcard + className;
-		return super.load(fullQualifiedImport);
+		return super.load(importQualifier);
 	}
 
 	@Override
@@ -45,7 +38,7 @@ public class WildcardImport extends Import {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WildcardImport other = (WildcardImport) obj;
+		FullQualifiedImport other = (FullQualifiedImport) obj;
 		if (importQualifier == null) {
 			if (other.importQualifier != null)
 				return false;

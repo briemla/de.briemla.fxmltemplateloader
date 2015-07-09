@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.parser;
 
 abstract class Import {
 
