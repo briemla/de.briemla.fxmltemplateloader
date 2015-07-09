@@ -4,8 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.IProperty;
-
 public class ConstructorTemplate extends InstantiationTemplate {
 
     private final Constructor<?> constructor;

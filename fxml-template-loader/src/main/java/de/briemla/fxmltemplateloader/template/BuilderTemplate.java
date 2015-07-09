@@ -3,7 +3,6 @@ package de.briemla.fxmltemplateloader.template;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.IProperty;
 import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;

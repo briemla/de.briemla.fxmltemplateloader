@@ -38,6 +38,7 @@ import de.briemla.fxmltemplateloader.template.BuilderTemplate;
 import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
 import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.FxRootTemplate;
+import de.briemla.fxmltemplateloader.template.IProperty;
 import de.briemla.fxmltemplateloader.template.ITemplate;
 import de.briemla.fxmltemplateloader.template.InstantiationTemplate;
 import de.briemla.fxmltemplateloader.template.ListPropertyTemplate;
