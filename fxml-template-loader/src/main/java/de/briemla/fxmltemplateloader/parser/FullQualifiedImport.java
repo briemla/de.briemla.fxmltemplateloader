@@ -1,50 +1,55 @@
 package de.briemla.fxmltemplateloader.parser;
 
-public class FullQualifiedImport extends Import {
+class FullQualifiedImport extends Import {
 
-	private final String importQualifier;
+    private final String importQualifier;
 
-	public FullQualifiedImport(String importQualifier, ClassLoader classLoader) {
-		super(classLoader);
-		this.importQualifier = importQualifier;
-	}
+    FullQualifiedImport(String importQualifier, ClassLoader classLoader) {
+        super(classLoader);
+        this.importQualifier = importQualifier;
+    }
 
-	@Override
-	boolean matches(String className) {
-		if (className == null) {
-			return false;
-		}
-		return importQualifier.endsWith(className);
-	}
+    @Override
+    boolean matches(String className) {
+        if (className == null) {
+            return false;
+        }
+        return importQualifier.endsWith(className);
+    }
 
-	@Override
-	protected Class<?> load(String className) throws ClassNotFoundException {
-		return super.load(importQualifier);
-	}
+    @Override
+    protected Class<?> load(String className) throws ClassNotFoundException {
+        return super.load(importQualifier);
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((importQualifier == null) ? 0 : importQualifier.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((importQualifier == null) ? 0 : importQualifier.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FullQualifiedImport other = (FullQualifiedImport) obj;
-		if (importQualifier == null) {
-			if (other.importQualifier != null)
-				return false;
-		} else if (!importQualifier.equals(other.importQualifier))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FullQualifiedImport other = (FullQualifiedImport) obj;
+        if (importQualifier == null) {
+            if (other.importQualifier != null) {
+                return false;
+            }
+        } else if (!importQualifier.equals(other.importQualifier)) {
+            return false;
+        }
+        return true;
+    }
 
 }

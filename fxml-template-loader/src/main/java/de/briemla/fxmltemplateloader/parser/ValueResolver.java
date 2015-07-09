@@ -28,7 +28,7 @@ public class ValueResolver {
         super();
     }
 
-    public ValueResolver(ResourceBundle bundle) {
+    ValueResolver(ResourceBundle bundle) {
         super();
         this.bundle = bundle;
     }

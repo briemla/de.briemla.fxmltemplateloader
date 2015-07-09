@@ -10,7 +10,7 @@ public class ImportFactory {
         this.classLoader = classLoader;
     }
 
-    public Import create(String importClassifier) {
+    Import create(String importClassifier) {
         if (importClassifier.endsWith(WILDCARD_MATCH)) {
             return new WildcardImport(importClassifier, classLoader);
         }

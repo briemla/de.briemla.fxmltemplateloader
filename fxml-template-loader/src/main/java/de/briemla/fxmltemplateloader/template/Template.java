@@ -6,7 +6,7 @@ public abstract class Template {
 
     private final Template parent;
 
-    public Template(Template parent) {
+    Template(Template parent) {
         super();
         this.parent = parent;
     }
