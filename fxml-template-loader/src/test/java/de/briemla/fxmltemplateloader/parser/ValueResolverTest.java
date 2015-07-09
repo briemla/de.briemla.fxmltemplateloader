@@ -47,7 +47,7 @@ public class ValueResolverTest {
         String valueWithPrefix = "@SomeFileAs.url";
         ClassLoader classLoader = mock(ClassLoader.class);
         URL location = new URL("file://blubberTest");
-        IValue testValue = new LocationValue(classLoader, location, "SomeFileAs.url");
+        IValue testValue = new LocationValue(classLoader, location.toURI(), "SomeFileAs.url");
         ValueResolver valueResolver = new ValueResolver();
         valueResolver.setLocation(location);
         valueResolver.setClassLoader(classLoader);

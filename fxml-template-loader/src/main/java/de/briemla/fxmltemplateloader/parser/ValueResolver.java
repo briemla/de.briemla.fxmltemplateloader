@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader.parser;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 import static de.briemla.fxmltemplateloader.util.TypeUtil.convert;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -66,7 +67,11 @@ public class ValueResolver {
             return new ControllerMethodValue(unwrap(value));
         }
         if (value.startsWith(LOCATION_PREFIX)) {
-            return new LocationValue(classLoader, location, unwrap(value));
+            try {
+                return new LocationValue(classLoader, location.toURI(), unwrap(value));
+            } catch (URISyntaxException exception) {
+                throw new LoadException(exception);
+            }
         }
         if (value.startsWith(REFERENCE_PREFIX)) {
             return new ReferenceValue(unwrap(value));

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import java.net.URL;
 
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class LocationValueTest {
     public void createFromUrl() throws Exception {
         TemplateRegistry registry = mock(TemplateRegistry.class);
         ClassLoader classLoader = mock(ClassLoader.class);
-        URL location = new URL("file://testUrl");
+        URI location = URI.create("file://testUrl");
         LocationValue locationValue = new LocationValue(classLoader, location, "Value.url");
         Object expectedLocation = "file://testUrl/Value.url";
 
@@ -37,7 +38,7 @@ public class LocationValueTest {
         ClassLoader classLoader = mock(ClassLoader.class);
         URL expectedLocationUrl = new URL("file://testClassLoader/Value.url");
         when(classLoader.getResource("Value.url")).thenReturn(expectedLocationUrl);
-        URL location = new URL("file://testUrl");
+        URI location = URI.create("file://testUrl");
         LocationValue locationValue = new LocationValue(classLoader, location, "/Value.url");
 
         Object resolvedLocation = locationValue.create(registry);
@@ -50,7 +51,7 @@ public class LocationValueTest {
 
     @Test(expected = NullPointerException.class)
     public void newLocationValueWithNullClassLoader() throws Exception {
-        URL location = new URL("file://some.url");
+        URI location = URI.create("file://some.url");
         String value = "some value";
         new LocationValue(null, location, value);
     }
