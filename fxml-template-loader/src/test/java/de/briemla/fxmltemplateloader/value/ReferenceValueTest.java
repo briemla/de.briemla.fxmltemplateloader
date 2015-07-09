@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.value;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.value.ReferenceValue;
 
 public class ReferenceValueTest {
 

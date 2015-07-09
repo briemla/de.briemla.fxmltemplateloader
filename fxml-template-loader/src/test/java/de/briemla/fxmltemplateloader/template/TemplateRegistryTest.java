@@ -13,8 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.briemla.fxmltemplateloader.MethodHandlerStub;
 import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.value.MethodHandlerStub;
 
 public class TemplateRegistryTest {
 

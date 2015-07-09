@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.value;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,20 +1,21 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.value;
 
 import de.briemla.fxmltemplateloader.template.TemplateRegistry;
-import javafx.fxml.LoadException;
+import javafx.event.Event;
 
-public class ReferenceValue implements IValue {
+public class ControllerMethodValue implements IValue {
 
 	private final String value;
 
-	public ReferenceValue(String value) {
-		super();
+	public ControllerMethodValue(String value) {
 		this.value = value;
 	}
 
 	@Override
-	public Object create(TemplateRegistry registry) throws LoadException {
-		return registry.getFxElement(value);
+	public Object create(TemplateRegistry registry) {
+		MethodHandlerStub<Event> methodHandlerStub = new MethodHandlerStub<>();
+		registry.registerMethodStub(value, methodHandlerStub);
+		return methodHandlerStub;
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class ReferenceValue implements IValue {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ReferenceValue other = (ReferenceValue) obj;
+		ControllerMethodValue other = (ControllerMethodValue) obj;
 		if (value == null) {
 			if (other.value != null)
 				return false;

@@ -13,11 +13,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.briemla.fxmltemplateloader.BasicTypeValue;
-import de.briemla.fxmltemplateloader.ControllerMethodValue;
-import de.briemla.fxmltemplateloader.IValue;
-import de.briemla.fxmltemplateloader.LocationValue;
-import de.briemla.fxmltemplateloader.ReferenceValue;
+import de.briemla.fxmltemplateloader.value.BasicTypeValue;
+import de.briemla.fxmltemplateloader.value.ControllerMethodValue;
+import de.briemla.fxmltemplateloader.value.IValue;
+import de.briemla.fxmltemplateloader.value.LocationValue;
+import de.briemla.fxmltemplateloader.value.ReferenceValue;
 import javafx.fxml.LoadException;
 
 public class ValueResolverTest {

@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.value;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 public class BasicTypeValueTest {

@@ -10,7 +10,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.briemla.fxmltemplateloader.MethodHandlerStub;
+import de.briemla.fxmltemplateloader.value.MethodHandlerStub;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;

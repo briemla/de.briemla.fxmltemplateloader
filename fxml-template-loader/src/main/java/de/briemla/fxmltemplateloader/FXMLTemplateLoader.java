@@ -50,6 +50,8 @@ import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
+import de.briemla.fxmltemplateloader.value.BasicTypeValue;
+import de.briemla.fxmltemplateloader.value.IValue;
 
 public class FXMLTemplateLoader {
 

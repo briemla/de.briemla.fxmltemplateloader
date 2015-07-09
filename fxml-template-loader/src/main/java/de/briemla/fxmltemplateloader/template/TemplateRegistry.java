@@ -3,7 +3,7 @@ package de.briemla.fxmltemplateloader.template;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.briemla.fxmltemplateloader.MethodHandlerStub;
+import de.briemla.fxmltemplateloader.value.MethodHandlerStub;
 import javafx.event.Event;
 
 public class TemplateRegistry {
