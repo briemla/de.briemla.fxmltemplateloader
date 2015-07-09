@@ -38,7 +38,7 @@ public abstract class InstantiationTemplate extends Template implements IInstant
     }
 
     @Override
-    Method findSetter(String propertyName) {
+    public Method findSetter(String propertyName) {
         return ReflectionUtils.findSetter(instanceType(), propertyName);
     }
 

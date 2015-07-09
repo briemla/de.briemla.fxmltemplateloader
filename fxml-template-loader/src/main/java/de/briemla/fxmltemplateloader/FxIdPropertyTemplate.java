@@ -18,8 +18,8 @@ class FxIdPropertyTemplate extends Template implements IProperty {
     }
 
     @Override
-    public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-    InstantiationException, LoadException {
+    public void apply(Object parent, TemplateRegistry registry)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
         Object id = value.create(registry);
         setId(parent, id);
         registry.register(id, parent);
@@ -33,25 +33,25 @@ class FxIdPropertyTemplate extends Template implements IProperty {
     }
 
     @Override
-    protected void prepare(IProperty property) {
+    public void prepare(IProperty property) {
         // this.property = property;
         // TODO log warning when called more than once. Check behavior of FXMLLoader
         throw new RuntimeException("Should never be called. Call 911 to fix this bug.");
     }
 
     @Override
-    public <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-    LoadException {
+    public <T> T create(TemplateRegistry registry)
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
         throw new RuntimeException("Should never be called. Call 911 to fix this bug.");
     }
 
     @Override
-    Method findGetter(String propertyName) {
+    public Method findGetter(String propertyName) {
         throw new UnsupportedOperationException("Setter search not supported here.");
     }
 
     @Override
-    Method findSetter(String propertyName) {
+    public Method findSetter(String propertyName) {
         throw new UnsupportedOperationException("Setter search not supported here.");
     }
 

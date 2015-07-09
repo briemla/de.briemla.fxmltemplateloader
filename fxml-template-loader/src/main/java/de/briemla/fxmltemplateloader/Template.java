@@ -4,21 +4,21 @@ import java.lang.reflect.Method;
 
 public abstract class Template {
 
-	private final Template parent;
+    private final Template parent;
 
-	public Template(Template parent) {
-		super();
-		this.parent = parent;
-	}
+    public Template(Template parent) {
+        super();
+        this.parent = parent;
+    }
 
-	Template getParent() {
-		return parent;
-	}
+    public Template getParent() {
+        return parent;
+    }
 
-	protected abstract void prepare(IProperty property);
+    public abstract void prepare(IProperty property);
 
-	abstract Method findGetter(String propertyName);
+    public abstract Method findGetter(String propertyName);
 
-	abstract Method findSetter(String propertyName);
+    public abstract Method findSetter(String propertyName);
 
 }
