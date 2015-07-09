@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+import de.briemla.fxmltemplateloader.template.ITemplate;
 import de.briemla.fxutils.FXUtils;
 
 public class FXMLTemplateLoaderTest {

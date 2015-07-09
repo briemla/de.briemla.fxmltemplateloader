@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.briemla.fxmltemplateloader.MethodHandlerStub;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;

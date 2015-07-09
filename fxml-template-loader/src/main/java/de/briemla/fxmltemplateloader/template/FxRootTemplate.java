@@ -1,9 +1,10 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+import de.briemla.fxmltemplateloader.IProperty;
+import de.briemla.fxmltemplateloader.InstantiationTemplate;
 import javafx.fxml.LoadException;
 
 public class FxRootTemplate extends InstantiationTemplate implements ExistingRoot {
