@@ -1,9 +1,9 @@
 package de.briemla.fxmltemplateloader;
 
-import static de.briemla.fxmltemplateloader.ReflectionUtils.extractType;
-import static de.briemla.fxmltemplateloader.ReflectionUtils.findSetter;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
 import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
+import static de.briemla.fxmltemplateloader.util.ReflectionUtils.extractType;
+import static de.briemla.fxmltemplateloader.util.ReflectionUtils.findSetter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public class FXMLTemplateLoader {
 

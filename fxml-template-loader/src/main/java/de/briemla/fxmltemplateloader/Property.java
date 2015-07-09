@@ -5,6 +5,7 @@ import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import javafx.fxml.LoadException;
 import javafx.util.Builder;
 

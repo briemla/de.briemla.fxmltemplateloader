@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import javafx.fxml.LoadException;
 
 public class ListPropertyTemplate extends Template implements IProperty {
