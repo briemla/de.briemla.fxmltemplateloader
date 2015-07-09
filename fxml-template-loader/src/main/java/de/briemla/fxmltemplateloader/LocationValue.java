@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 public class LocationValue implements IValue {

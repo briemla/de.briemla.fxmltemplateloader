@@ -1,4 +1,4 @@
-package de.briemla.fxmltemplateloader;
+package de.briemla.fxmltemplateloader.template;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -12,6 +12,10 @@ import javafx.event.Event;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import de.briemla.fxmltemplateloader.ControllerAccessor;
+import de.briemla.fxmltemplateloader.MethodHandlerStub;
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 
 public class TemplateRegistryTest {
 

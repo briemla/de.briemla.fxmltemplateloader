@@ -2,6 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import java.lang.reflect.InvocationTargetException;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 public interface IProperty {

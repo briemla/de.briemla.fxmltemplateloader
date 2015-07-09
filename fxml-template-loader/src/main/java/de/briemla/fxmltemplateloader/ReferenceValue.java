@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 public class ReferenceValue implements IValue {

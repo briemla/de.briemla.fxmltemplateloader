@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+
 public class ReferenceValueTest {
 
 	@Test

@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 public class FxRootTemplate extends InstantiationTemplate implements ExistingRoot {

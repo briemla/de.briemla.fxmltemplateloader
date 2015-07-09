@@ -4,6 +4,7 @@ import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
 
 import java.lang.reflect.InvocationTargetException;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 class RootTemplate implements ITemplate {

@@ -11,6 +11,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+
 public class LocationValueTest {
 
 	@Test

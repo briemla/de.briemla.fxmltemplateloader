@@ -1,5 +1,7 @@
 package de.briemla.fxmltemplateloader;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
+
 public class BasicTypeValue implements IValue {
 
 	private final Object value;

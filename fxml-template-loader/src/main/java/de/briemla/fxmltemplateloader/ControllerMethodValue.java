@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.event.Event;
 
 public class ControllerMethodValue implements IValue {

@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
 
 class PropertyTemplate implements IProperty {
