@@ -3,8 +3,9 @@ package de.briemla.fxmltemplateloader.template;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.briemla.fxmltemplateloader.value.IValue;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.value.IValue;
 
 public class FxIdPropertyTemplate extends Template implements IProperty {
 
@@ -19,13 +20,15 @@ public class FxIdPropertyTemplate extends Template implements IProperty {
 
     @Override
     public void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         Object id = value.create(registry);
         setId(parent, id);
         registry.register(id, parent);
     }
 
-    private void setId(Object parent, Object id) throws IllegalAccessException, InvocationTargetException {
+    private void setId(Object parent, Object id)
+            throws IllegalAccessException, InvocationTargetException {
         if (fxIdSetter == null) {
             return;
         }
@@ -41,7 +44,8 @@ public class FxIdPropertyTemplate extends Template implements IProperty {
 
     @Override
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         throw new RuntimeException("Should never be called. Call 911 to fix this bug.");
     }
 

@@ -3,8 +3,9 @@ package de.briemla.fxmltemplateloader.template;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.briemla.fxmltemplateloader.value.IValue;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.value.IValue;
 
 public class PropertyTemplate implements IProperty {
 
@@ -17,15 +18,16 @@ public class PropertyTemplate implements IProperty {
     }
 
     @Override
-    public void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+    public void apply(Object parent, TemplateRegistry registry) throws IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, LoadException {
         method.invoke(parent, value.create(registry));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         return (T) value.create(registry);
     }
 

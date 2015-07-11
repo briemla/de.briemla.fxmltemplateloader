@@ -7,12 +7,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.fxml.LoadException;
+
 import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import de.briemla.fxmltemplateloader.value.ControllerMethodValue;
 import de.briemla.fxmltemplateloader.value.IValue;
 import de.briemla.fxmltemplateloader.value.LocationValue;
 import de.briemla.fxmltemplateloader.value.ReferenceValue;
-import javafx.fxml.LoadException;
 
 public class ValueResolver {
 
@@ -47,7 +48,8 @@ public class ValueResolver {
     }
 
     /**
-     * Values for attributes in FXML can start with some special characters. This method resolves those strings.
+     * Values for attributes in FXML can start with some special characters. This method resolves
+     * those strings.
      *
      * For more information about all special characters see FXMLLoader#Element#resolvePrefixedValue
      *
@@ -57,7 +59,8 @@ public class ValueResolver {
      *            target type of value
      * @return value in target type or resolved string for resources
      * @throws LoadException
-     *             when resource bundle has not been set or the resource key is not available. FXMLLoader throws same LoadExceptions
+     *             when resource bundle has not been set or the resource key is not available.
+     *             FXMLLoader throws same LoadExceptions
      */
     public IValue resolve(String value, Class<?> type) throws LoadException {
         if (value.startsWith(RESOURCE_PREFIX)) {

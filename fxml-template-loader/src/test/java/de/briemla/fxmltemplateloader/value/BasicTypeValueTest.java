@@ -4,10 +4,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
-import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import nl.jqno.equalsverifier.EqualsVerifier;
+
+import org.junit.Test;
 
 public class BasicTypeValueTest {
 
@@ -21,6 +20,7 @@ public class BasicTypeValueTest {
 
     @Test
     public void equalsAndHashCode() {
-        EqualsVerifier.forClass(BasicTypeValue.class).allFieldsShouldBeUsed().usingGetClass().verify();
+        EqualsVerifier.forClass(BasicTypeValue.class).allFieldsShouldBeUsed().usingGetClass()
+                .verify();
     }
 }

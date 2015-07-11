@@ -5,8 +5,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public class ListPropertyTemplate extends Template implements IProperty {
 
@@ -21,7 +22,8 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
     @Override
     public void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         List<?> list = (List<?>) getter.invoke(parent);
         list.addAll(create(registry));
     }
@@ -34,7 +36,8 @@ public class ListPropertyTemplate extends Template implements IProperty {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         ArrayList<Object> arrayList = new ArrayList<>();
         for (IProperty child : children) {
             arrayList.add(child.create(registry));
@@ -49,7 +52,8 @@ public class ListPropertyTemplate extends Template implements IProperty {
 
     @Override
     public Method findSetter(String propertyName) {
-        throw new UnsupportedOperationException("Setter search in List class not supported for: " + propertyName);
+        throw new UnsupportedOperationException(
+                "Setter search in List class not supported for: " + propertyName);
     }
 
 }

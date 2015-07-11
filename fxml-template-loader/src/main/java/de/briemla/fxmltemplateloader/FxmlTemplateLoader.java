@@ -16,6 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
+import javafx.util.Builder;
+import javafx.util.BuilderFactory;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -46,10 +51,6 @@ import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import de.briemla.fxmltemplateloader.value.IValue;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.fxml.LoadException;
-import javafx.util.Builder;
-import javafx.util.BuilderFactory;
 
 public class FxmlTemplateLoader {
 
@@ -112,7 +113,8 @@ public class FxmlTemplateLoader {
                 return doLoadTemplate(resource).create(controller);
             }
             return doLoadTemplate(resource).create();
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException exception) {
             throw new IOException("Could not instatiate Nodes.", exception);
         } catch (SecurityException exception) {
             throw new IOException("Could not find correct classes.", exception);
@@ -146,7 +148,8 @@ public class FxmlTemplateLoader {
         setClassLoader(FxmlTemplateLoader.class.getClassLoader());
     }
 
-    private ITemplate parseXml() throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
+    private ITemplate parseXml()
+            throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
             if (event.isProcessingInstruction()) {
@@ -167,7 +170,8 @@ public class FxmlTemplateLoader {
     }
 
     // FIXME too long method. This method could be splitted into several smaller methods.
-    private void processStartElement(StartElement element) throws NoSuchMethodException, SecurityException, LoadException {
+    private void processStartElement(StartElement element)
+            throws NoSuchMethodException, SecurityException, LoadException {
         QName name = element.getName();
         if (FX_NAMESPACE_PREFIX.equals(name.getPrefix()) && FX_ROOT.equals(name.getLocalPart())) {
             if (rootTemplate != null) {
@@ -186,22 +190,26 @@ public class FxmlTemplateLoader {
             Method getter = currentTemplate.findGetter(propertyName);
             Class<?> returnType = getter.getReturnType();
             if (returnType == null) {
-                throw new RuntimeException("Found getter without return type for property: " + propertyName);
+                throw new RuntimeException(
+                        "Found getter without return type for property: " + propertyName);
             }
             if (List.class.isAssignableFrom(returnType)) {
-                ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate, getter);
+                ListPropertyTemplate listProperty = new ListPropertyTemplate(currentTemplate,
+                        getter);
                 currentTemplate.prepare(listProperty);
                 currentTemplate = listProperty;
                 return;
             }
             Method setter = currentTemplate.findSetter(propertyName);
-            SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(currentTemplate, setter);
+            SingleElementPropertyTemplate singleElementProperty = new SingleElementPropertyTemplate(
+                    currentTemplate, setter);
             currentTemplate.prepare(singleElementProperty);
             currentTemplate = singleElementProperty;
             return;
         }
 
-        InstantiationTemplate instantiationTemplate = createInstatiationTemplate(element, className);
+        InstantiationTemplate instantiationTemplate = createInstatiationTemplate(element,
+                className);
         if (currentTemplate != null) {
             currentTemplate.prepare(instantiationTemplate);
         }
@@ -238,7 +246,8 @@ public class FxmlTemplateLoader {
                 if (ReflectionUtils.hasSetter(rootType, propertyName)) {
                     fxIdSetter = findSetter(rootType, propertyName);
                 }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, fxIdSetter, convertedValue);
+                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
+                        fxIdSetter, convertedValue);
                 properties.add(property);
                 continue;
             }
@@ -249,7 +258,8 @@ public class FxmlTemplateLoader {
                 Class<?> type = extractType(method);
                 IValue convertedValue = resolve(value, to(type));
 
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
+                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
+                        currentTemplate, method);
                 property.prepare(new PropertyTemplate(method, convertedValue));
                 properties.add(property);
                 continue;
@@ -260,13 +270,16 @@ public class FxmlTemplateLoader {
                 if (List.class.isAssignableFrom(getter.getReturnType())) {
                     IValue convertedValue = new BasicTypeValue(value);
 
-                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate, getter);
+                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate,
+                            getter);
                     property.prepare(new PropertyTemplate(getter, convertedValue));
                     properties.add(property);
                     continue;
                 }
             }
-            throw new LoadException("Property specified on fx:root element which can not be set by setter:" + attributeName);
+            throw new LoadException(
+                    "Property specified on fx:root element which can not be set by setter:"
+                            + attributeName);
         }
         return new FxRootTemplate(rootType, properties);
     }
@@ -308,7 +321,8 @@ public class FxmlTemplateLoader {
                 if (ReflectionUtils.hasSetter(clazz, propertyName)) {
                     fxIdSetter = findSetter(clazz, propertyName);
                 }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate, fxIdSetter, convertedValue);
+                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
+                        fxIdSetter, convertedValue);
                 properties.add(property);
                 continue;
             }
@@ -319,7 +333,8 @@ public class FxmlTemplateLoader {
                 Class<?> type = extractType(method);
                 IValue convertedValue = resolve(value, to(type));
 
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(currentTemplate, method);
+                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
+                        currentTemplate, method);
                 property.prepare(new PropertyTemplate(method, convertedValue));
                 properties.add(property);
                 continue;
@@ -330,7 +345,8 @@ public class FxmlTemplateLoader {
                 if (List.class.isAssignableFrom(getter.getReturnType())) {
                     IValue convertedValue = new BasicTypeValue(value);
 
-                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate, getter);
+                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate,
+                            getter);
                     property.prepare(new PropertyTemplate(getter, convertedValue));
                     properties.add(property);
                     continue;
@@ -346,8 +362,10 @@ public class FxmlTemplateLoader {
                     Class<?> type = extractType(method);
                     IValue convertedValue = resolve(value, to(type));
 
-                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(currentTemplate, method, staticPropertyClass);
-                    property.prepare(new StaticPropertyTemplate(staticPropertyClass, method, convertedValue));
+                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
+                            currentTemplate, method, staticPropertyClass);
+                    property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
+                            convertedValue));
                     properties.add(property);
                     continue;
                 }
@@ -366,7 +384,8 @@ public class FxmlTemplateLoader {
                 unsettableConvertedProperties.add(newPropertyTemplate);
             }
         }
-        return new BuilderTemplate(currentTemplate, properties, builderFactory, unsettableConvertedProperties, clazz);
+        return new BuilderTemplate(currentTemplate, properties, builderFactory,
+                unsettableConvertedProperties, clazz);
     }
 
     private IValue resolve(String value, Class<?> type) throws LoadException {

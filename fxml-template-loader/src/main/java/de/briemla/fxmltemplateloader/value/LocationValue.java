@@ -4,8 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 
 public class LocationValue implements IValue {
 

@@ -1,7 +1,8 @@
 package de.briemla.fxmltemplateloader.value;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 
 public interface IValue {
 

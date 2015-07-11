@@ -4,8 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public abstract class InstantiationTemplate extends Template implements IInstantiationTemplate {
 
@@ -27,7 +28,8 @@ public abstract class InstantiationTemplate extends Template implements IInstant
     }
 
     @Override
-    public void apply(Object newInstance, TemplateRegistry registry) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void apply(Object newInstance, TemplateRegistry registry)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         throw new UnsupportedOperationException("You found a bug. Please call 911 to fix it!");
     }
 
@@ -46,17 +48,20 @@ public abstract class InstantiationTemplate extends Template implements IInstant
     @Override
     @SuppressWarnings("unchecked")
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         Object newInstance = newInstance(registry);
         applyProperties(newInstance, registry);
         return (T) newInstance;
     }
 
     protected abstract Object newInstance(TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException;
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException;
 
     private void applyProperties(Object newInstance, TemplateRegistry registry)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException, IllegalArgumentException, LoadException {
+            throws IllegalAccessException, InvocationTargetException, InstantiationException,
+            IllegalArgumentException, LoadException {
         for (IProperty child : properties) {
             child.apply(newInstance, registry);
         }

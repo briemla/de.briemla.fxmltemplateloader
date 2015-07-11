@@ -7,13 +7,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+
 import javafx.event.Event;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import de.briemla.fxmltemplateloader.value.MethodHandlerStub;
 
 public class TemplateRegistryTest {
