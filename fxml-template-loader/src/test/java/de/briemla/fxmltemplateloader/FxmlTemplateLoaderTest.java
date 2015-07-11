@@ -14,6 +14,13 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+import de.briemla.fxmltemplateloader.template.ITemplate;
+import de.briemla.fxutils.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.LoadException;
@@ -27,15 +34,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
-import de.briemla.fxmltemplateloader.template.ITemplate;
-import de.briemla.fxutils.FXUtils;
-
-public class FXMLTemplateLoaderTest {
+public class FxmlTemplateLoaderTest {
 
     private static final String FXML_FILE_EXTENSION = ".fxml";
     @Rule
@@ -237,8 +236,8 @@ public class FXMLTemplateLoaderTest {
 
     @Test
     public void loadReferencedElementInstantiateTemplateTwice() throws Exception {
-        URL resource = FXMLTemplateLoaderTest.class.getResource("VBoxWithReferencedElement.fxml");
-        ITemplate template = FXMLTemplateLoader.loadTemplate(resource);
+        URL resource = FxmlTemplateLoaderTest.class.getResource("VBoxWithReferencedElement.fxml");
+        ITemplate template = FxmlTemplateLoader.loadTemplate(resource);
         VBox firstInstance = template.create();
         VBox secondInstance = template.create();
 
@@ -292,27 +291,29 @@ public class FXMLTemplateLoaderTest {
 
     private static <T> T load(String fileName) throws IOException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fxmlName));
+        return FxmlTemplateLoader.load(FxmlTemplateLoaderTest.class.getResource(fxmlName));
     }
 
     private static <T> T loadWithResources(String fileName, Locale locale) throws IOException {
-        String bundlePath = FXMLTemplateLoaderTest.class.getPackage().getName() + "." + fileName;
+        String bundlePath = FxmlTemplateLoaderTest.class.getPackage().getName() + "." + fileName;
         ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        return FXMLTemplateLoader.load(FXMLTemplateLoaderTest.class.getResource(fxmlName), bundle);
+        return FxmlTemplateLoader.load(FxmlTemplateLoaderTest.class.getResource(fxmlName), bundle);
     }
 
     private static <T> T loadWithController(String fileName, Object controller) throws IOException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        FXMLTemplateLoader fxmlTemplateLoader = new FXMLTemplateLoader();
+        FxmlTemplateLoader fxmlTemplateLoader = new FxmlTemplateLoader();
         fxmlTemplateLoader.setController(controller);
-        return fxmlTemplateLoader.doLoad(FXMLTemplateLoaderTest.class.getResource(fxmlName));
+        return fxmlTemplateLoader.doLoad(FxmlTemplateLoaderTest.class.getResource(fxmlName));
     }
 
     private static <T> T loadWithRoot(String fileName, Object fxRoot)
-            throws IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            throws IOException, InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        ITemplate template = FXMLTemplateLoader.loadTemplate(FXMLTemplateLoaderTest.class.getResource(fxmlName));
+        ITemplate template = FxmlTemplateLoader
+                .loadTemplate(FxmlTemplateLoaderTest.class.getResource(fxmlName));
         template.setRoot(fxRoot);
         return template.create();
     }

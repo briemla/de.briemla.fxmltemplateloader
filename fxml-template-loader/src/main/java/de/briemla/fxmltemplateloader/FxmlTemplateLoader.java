@@ -51,7 +51,7 @@ import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 
-public class FXMLTemplateLoader {
+public class FxmlTemplateLoader {
 
     private static final String FX_ROOT = "root";
     private static final String FX_ID_PROPERTY = "id";
@@ -66,20 +66,20 @@ public class FXMLTemplateLoader {
     private ITemplate rootTemplate;
     private Object controller;
 
-    public FXMLTemplateLoader() {
+    public FxmlTemplateLoader() {
         super();
-        factory = new ImportFactory(FXMLTemplateLoader.class.getClassLoader());
+        factory = new ImportFactory(FxmlTemplateLoader.class.getClassLoader());
         imports = new ImportCollection(factory);
         builderFactory = new JavaFXBuilderFactory();
         valueResolver = new ValueResolver();
     }
 
     public static <T> T load(URL resource) throws IOException {
-        return new FXMLTemplateLoader().doLoad(resource);
+        return new FxmlTemplateLoader().doLoad(resource);
     }
 
     public static <T> T load(URL resource, ResourceBundle bundle) throws IOException {
-        FXMLTemplateLoader fxmlTemplateLoader = new FXMLTemplateLoader();
+        FxmlTemplateLoader fxmlTemplateLoader = new FxmlTemplateLoader();
         fxmlTemplateLoader.setResourceBundle(bundle);
         return fxmlTemplateLoader.doLoad(resource);
     }
@@ -120,7 +120,7 @@ public class FXMLTemplateLoader {
     }
 
     public static ITemplate loadTemplate(URL resource) throws IOException {
-        return new FXMLTemplateLoader().doLoadTemplate(resource);
+        return new FxmlTemplateLoader().doLoadTemplate(resource);
     }
 
     private ITemplate doLoadTemplate(URL resource) throws IOException {
@@ -143,7 +143,7 @@ public class FXMLTemplateLoader {
         if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
             return;
         }
-        setClassLoader(FXMLTemplateLoader.class.getClassLoader());
+        setClassLoader(FxmlTemplateLoader.class.getClassLoader());
     }
 
     private ITemplate parseXml() throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
