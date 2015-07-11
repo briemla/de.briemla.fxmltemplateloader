@@ -5,12 +5,12 @@
 <?import javafx.scene.image.Image?>
 
 <VBox xmlns:fx="http://javafx.com/fxml">
-	<children>
-		<ImageView >
-			<image>
-				<Image url="@24px-Greek_cross.svg.png" />
-			</image>
-		</ImageView>
-	</children>
+    <children>
+        <ImageView>
+            <image>
+                <Image url="@24px-Greek_cross.svg.png" />
+            </image>
+        </ImageView>
+    </children>
 </VBox>
 
