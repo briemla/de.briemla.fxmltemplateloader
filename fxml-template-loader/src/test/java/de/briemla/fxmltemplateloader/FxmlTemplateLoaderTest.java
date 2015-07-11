@@ -14,13 +14,6 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
-import de.briemla.fxmltemplateloader.template.ITemplate;
-import de.briemla.fxutils.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.LoadException;
@@ -34,6 +27,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+import de.briemla.fxmltemplateloader.template.ITemplate;
+import de.briemla.fxutils.FXUtils;
+
 public class FxmlTemplateLoaderTest {
 
     private static final String FXML_FILE_EXTENSION = ".fxml";
@@ -41,9 +42,10 @@ public class FxmlTemplateLoaderTest {
     public ExpectedException thrown = ExpectedException.none();
 
     /**
-     * Fails if cast to {@link VBox} does not match
+     * Fails if cast to {@link VBox} does not match.
      *
      * @throws Exception
+     *             throw {@link Exception}s thrown by loading an FXML file
      */
     @SuppressWarnings("unused")
     @Test
@@ -52,9 +54,10 @@ public class FxmlTemplateLoaderTest {
     }
 
     /**
-     * Fails if cast to {@link HBox} does not match
+     * Fails if cast to {@link HBox} does not match.
      *
      * @throws Exception
+     *             throw {@link Exception}s thrown by loading an FXML file
      */
     @SuppressWarnings("unused")
     @Test
