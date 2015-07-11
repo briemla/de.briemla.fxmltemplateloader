@@ -6,13 +6,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import javafx.fxml.LoadException;
+
 import javax.xml.stream.events.ProcessingInstruction;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import javafx.fxml.LoadException;
 
 public class ImportCollectionTest {
 
@@ -49,7 +49,6 @@ public class ImportCollectionTest {
     @Test
     public void findClassWithSindleAddedImport() throws LoadException, ClassNotFoundException {
         ImportFactory factory = mock(ImportFactory.class);
-        ImportCollection importCollection = new ImportCollection(factory);
         ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
         Import mockedImport = mock(Import.class);
 
@@ -60,6 +59,7 @@ public class ImportCollectionTest {
         doReturn(toBeReturned).when(mockedImport).load("single.import");
         when(factory.create("single.import")).thenReturn(mockedImport);
 
+        ImportCollection importCollection = new ImportCollection(factory);
         importCollection.add(importInstruction);
         importCollection.findClass("single.import");
 
@@ -73,7 +73,6 @@ public class ImportCollectionTest {
     @Test
     public void findClassAfterClear() throws Exception {
         ImportFactory factory = mock(ImportFactory.class);
-        ImportCollection importCollection = new ImportCollection(factory);
         ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
         Import mockedImport = mock(Import.class);
 
@@ -83,6 +82,7 @@ public class ImportCollectionTest {
         doReturn(toBeReturned).when(mockedImport).load("single.import");
         when(factory.create("single.import")).thenReturn(mockedImport);
 
+        ImportCollection importCollection = new ImportCollection(factory);
         importCollection.add(importInstruction);
 
         verify(factory).create("single.import");
