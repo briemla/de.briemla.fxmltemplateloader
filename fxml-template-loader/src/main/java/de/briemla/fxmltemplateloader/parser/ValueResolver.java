@@ -49,9 +49,8 @@ public class ValueResolver {
 
     /**
      * Values for attributes in FXML can start with some special characters. This method resolves
-     * those strings.
-     *
-     * For more information about all special characters see FXMLLoader#Element#resolvePrefixedValue
+     * those strings. For more information about all special characters see
+     * FXMLLoader#Element#resolvePrefixedValue
      *
      * @param value
      *            value to be resolved
