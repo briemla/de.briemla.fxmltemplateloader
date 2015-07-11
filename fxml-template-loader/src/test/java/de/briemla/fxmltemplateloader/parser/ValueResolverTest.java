@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -38,10 +40,12 @@ public class ValueResolverTest {
     }
 
     /**
-     * Long running test, because {@link URL#equals(Object)} will be called
+     * Long running test, because {@link URL#equals(Object)} will be called.
      *
      * @see URL#equals(Object)
      * @throws Exception
+     *             throws a {@link MalformedURLException} when {@link URL} creation does not work
+     *             and throws a {@link LoadException} when {@link URI} creation does not work.
      */
     @Test
     public void resolveUrl() throws Exception {
