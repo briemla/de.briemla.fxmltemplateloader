@@ -26,18 +26,23 @@ public class BasicTypeValue implements IValue {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object)
+        if (this == object) {
             return true;
-        if (object == null)
+        }
+        if (object == null) {
             return false;
-        if (getClass() != object.getClass())
+        }
+        if (getClass() != object.getClass()) {
             return false;
+        }
         BasicTypeValue other = (BasicTypeValue) object;
         if (value == null) {
-            if (other.value != null)
+            if (other.value != null) {
                 return false;
-        } else if (!value.equals(other.value))
+            }
+        } else if (!value.equals(other.value)) {
             return false;
+        }
         return true;
     }
 

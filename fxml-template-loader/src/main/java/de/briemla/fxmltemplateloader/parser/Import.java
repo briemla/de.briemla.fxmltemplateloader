@@ -25,18 +25,23 @@ abstract class Import {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Import other = (Import) obj;
         if (classLoader == null) {
-            if (other.classLoader != null)
+            if (other.classLoader != null) {
                 return false;
-        } else if (!classLoader.equals(other.classLoader))
+            }
+        } else if (!classLoader.equals(other.classLoader)) {
             return false;
+        }
         return true;
     }
 
