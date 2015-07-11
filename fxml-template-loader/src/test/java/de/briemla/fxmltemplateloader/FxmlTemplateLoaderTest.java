@@ -217,6 +217,8 @@ public class FxmlTemplateLoaderTest {
      * When there are no exceptions, the image has been successfully loaded and the mechanism works.
      *
      * @throws Exception
+     *             throws {@link InterruptedException} when FXApplication thread could not be
+     *             started and an {@link IOException} when FXML file could not be loaded.
      */
     @Test
     public void loadElementWithLocation() throws Exception {
