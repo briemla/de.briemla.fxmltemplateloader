@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fileset-config file-format-version="1.2.0" simple-config="false" sync-formatter="false">
+  <local-check-config name="Google-Checks" location="rules/google_checks.xml" type="project" description="Some of the checks are disabled, because maven fails to read the xml file">
+    <additional-data name="protect-config-file" value="false"/>
+  </local-check-config>
+  <fileset name="all" enabled="true" check-config-name="Google-Checks" local="true">
+    <file-match-pattern match-pattern="." include-pattern="true"/>
+    <file-match-pattern match-pattern="ControllerAccessor.java" include-pattern="false"/>
+  </fileset>
+</fileset-config>
