@@ -11,7 +11,8 @@ public class StaticSingleElementPropertyTemplate extends Template implements IPr
     private IProperty property;
     private final Class<?> staticPropertyClass;
 
-    public StaticSingleElementPropertyTemplate(Template parent, Method setter, Class<?> staticPropertyClass) {
+    public StaticSingleElementPropertyTemplate(Template parent, Method setter,
+            Class<?> staticPropertyClass) {
         super(parent);
         this.staticPropertyClass = staticPropertyClass;
         this.setter = setter;
@@ -19,7 +20,8 @@ public class StaticSingleElementPropertyTemplate extends Template implements IPr
 
     @Override
     public void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         setter.invoke(staticPropertyClass, parent, create(registry));
     }
 
@@ -31,7 +33,8 @@ public class StaticSingleElementPropertyTemplate extends Template implements IPr
 
     @Override
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         return property.create(registry);
     }
 

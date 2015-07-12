@@ -8,13 +8,15 @@ public class ConstructorTemplate extends InstantiationTemplate {
 
     private final Constructor<?> constructor;
 
-    public ConstructorTemplate(Template parent, Constructor<?> constructor, List<IProperty> properties) {
+    public ConstructorTemplate(Template parent, Constructor<?> constructor,
+            List<IProperty> properties) {
         super(parent, properties);
         this.constructor = constructor;
     }
 
     @Override
-    protected Object newInstance(TemplateRegistry registry) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    protected Object newInstance(TemplateRegistry registry)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         return constructor.newInstance();
     }
 

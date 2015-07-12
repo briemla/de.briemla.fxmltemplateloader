@@ -6,10 +6,11 @@ import javafx.fxml.LoadException;
 
 public interface IProperty {
 
-    <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException;
+    <T> T create(TemplateRegistry registry) throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, LoadException;
 
     void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException;
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException;
 
 }

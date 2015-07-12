@@ -8,17 +8,20 @@ import java.lang.reflect.Modifier;
 public class ReflectionUtils {
 
     public static Method findGetter(Class<?> clazz, String propertyName) {
-        String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+        String getterName = "get" + Character.toUpperCase(propertyName.charAt(0))
+                + propertyName.substring(1);
         for (Method method : clazz.getMethods()) {
             if (getterName.equals(method.getName()) && method.getParameterCount() == 0) {
                 return method;
             }
         }
-        throw new IllegalStateException("Could not find getter without parameters for property: " + propertyName);
+        throw new IllegalStateException(
+                "Could not find getter without parameters for property: " + propertyName);
     }
 
     public static boolean hasGetter(Class<?> clazz, String propertyName) {
-        String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+        String getterName = "get" + Character.toUpperCase(propertyName.charAt(0))
+                + propertyName.substring(1);
         for (Method method : clazz.getMethods()) {
             if (getterName.equals(method.getName()) && method.getParameterCount() == 0) {
                 return true;
@@ -34,7 +37,8 @@ public class ReflectionUtils {
                 return method;
             }
         }
-        throw new IllegalStateException("Could not find setter in clazz " + clazz.getName() + " for property: " + propertyName);
+        throw new IllegalStateException("Could not find setter in clazz " + clazz.getName()
+                + " for property: " + propertyName);
     }
 
     private static String setter(String propertyName) {
@@ -57,7 +61,8 @@ public class ReflectionUtils {
                 return method;
             }
         }
-        throw new IllegalStateException("Could not find builder method for property: " + propertyName);
+        throw new IllegalStateException(
+                "Could not find builder method for property: " + propertyName);
     }
 
     public static boolean hasBuilderMethod(Class<?> clazz, String propertyName) {
@@ -77,7 +82,8 @@ public class ReflectionUtils {
         if (parameterTypes.length == 1) {
             return parameterTypes[0];
         }
-        throw new RuntimeException("Incorrect number of arguments for setter found: " + parameterTypes.length);
+        throw new RuntimeException(
+                "Incorrect number of arguments for setter found: " + parameterTypes.length);
     }
 
     public static void makeAccessible(Field field) {

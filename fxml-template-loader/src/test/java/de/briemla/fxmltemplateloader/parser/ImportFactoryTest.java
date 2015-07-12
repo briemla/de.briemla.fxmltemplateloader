@@ -24,7 +24,8 @@ public class ImportFactoryTest {
 
     @Test
     public void createFullQualifiedImport() {
-        FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import", CLASS_LOADER);
+        FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import",
+                CLASS_LOADER);
         ImportFactory factory = new ImportFactory(CLASS_LOADER);
 
         Import actualImport = factory.create("full.qualified.Import");
@@ -35,7 +36,8 @@ public class ImportFactoryTest {
     @Test
     public void setClassLoader() throws Exception {
         ClassLoader classLoaderBeforeChange = mock(ClassLoader.class);
-        FullQualifiedImport expectedImportBeforeChange = new FullQualifiedImport("full.qualified.Import", classLoaderBeforeChange);
+        FullQualifiedImport expectedImportBeforeChange = new FullQualifiedImport(
+                "full.qualified.Import", classLoaderBeforeChange);
 
         ImportFactory importFactory = new ImportFactory(classLoaderBeforeChange);
         Import importBeforeChange = importFactory.create("full.qualified.Import");
@@ -43,7 +45,8 @@ public class ImportFactoryTest {
         assertThat(importBeforeChange, is(equalTo(expectedImportBeforeChange)));
 
         ClassLoader classLoaderAfterChange = mock(ClassLoader.class);
-        FullQualifiedImport expectedImportAfterChange = new FullQualifiedImport("full.qualified.Import", classLoaderAfterChange);
+        FullQualifiedImport expectedImportAfterChange = new FullQualifiedImport(
+                "full.qualified.Import", classLoaderAfterChange);
         importFactory.setClassLoader(classLoaderAfterChange);
 
         Import importAfterChange = importFactory.create("full.qualified.Import");

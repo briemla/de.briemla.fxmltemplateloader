@@ -22,7 +22,8 @@ public class FxRootTemplate extends InstantiationTemplate implements ExistingRoo
 
     @Override
     protected Object newInstance(TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         if (root == null) {
             throw new LoadException("Root element must be set when using fx:root.");
         }

@@ -17,7 +17,8 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 
     @Override
     public void apply(Object parent, TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         Object value = create(registry);
         setter.invoke(parent, value);
     }
@@ -30,7 +31,8 @@ public class SingleElementPropertyTemplate extends Template implements IProperty
 
     @Override
     public <T> T create(TemplateRegistry registry)
-            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, LoadException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, LoadException {
         return property.create(registry);
     }
 

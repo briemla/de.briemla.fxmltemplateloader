@@ -13,7 +13,8 @@ public class BuilderTemplate extends InstantiationTemplate {
     private final List<IProperty> builderProperties;
     private final Class<?> instanceType;
 
-    public BuilderTemplate(Template parent, List<IProperty> properties, BuilderFactory builderFactory, List<IProperty> builderProperties,
+    public BuilderTemplate(Template parent, List<IProperty> properties,
+            BuilderFactory builderFactory, List<IProperty> builderProperties,
             Class<?> instanceType) {
         super(parent, properties);
         this.builderFactory = builderFactory;
@@ -23,7 +24,8 @@ public class BuilderTemplate extends InstantiationTemplate {
 
     @Override
     protected Object newInstance(TemplateRegistry registry)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, LoadException {
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, LoadException {
         Builder<?> builder = builderFactory.getBuilder(instanceType);
         for (IProperty property : builderProperties) {
             property.apply(builder, registry);

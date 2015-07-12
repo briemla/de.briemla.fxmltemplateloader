@@ -19,14 +19,17 @@ public class TypeUtilTest {
     public void bigIntegerType() {
         assertThat(convert(null, BigInteger.class), is(nullValue()));
         assertThat(convert("2423424", BigInteger.class), is(equalTo(new BigInteger("2423424"))));
-        assertThat(convert("40981418340912", BigInteger.class), is(equalTo(new BigInteger("40981418340912"))));
+        assertThat(convert("40981418340912", BigInteger.class),
+                is(equalTo(new BigInteger("40981418340912"))));
     }
 
     @Test
     public void bigDecimalType() {
         assertThat(convert(null, BigDecimal.class), is(nullValue()));
-        assertThat(convert("23479249.234798324", BigDecimal.class), is(equalTo(new BigDecimal("23479249.234798324"))));
-        assertThat(convert("798109843179.6587164313876132", BigDecimal.class), is(equalTo(new BigDecimal("798109843179.6587164313876132"))));
+        assertThat(convert("23479249.234798324", BigDecimal.class),
+                is(equalTo(new BigDecimal("23479249.234798324"))));
+        assertThat(convert("798109843179.6587164313876132", BigDecimal.class),
+                is(equalTo(new BigDecimal("798109843179.6587164313876132"))));
     }
 
     @Test
@@ -85,8 +88,10 @@ public class TypeUtilTest {
         assertThat(convert(null, Number.class), is(nullValue()));
         assertThat(convert("13141230", Number.class), is(equalTo(new Integer(13141230))));
         assertThat(convert("743911239", Number.class), is(equalTo(new Integer(743911239))));
-        assertThat(convert("13141230.37129313", Number.class), is(equalTo(new Double(13141230.37129313d))));
-        assertThat(convert("743911239.571987123", Number.class), is(equalTo(new Double(743911239.571987123d))));
+        assertThat(convert("13141230.37129313", Number.class),
+                is(equalTo(new Double(13141230.37129313d))));
+        assertThat(convert("743911239.571987123", Number.class),
+                is(equalTo(new Double(743911239.571987123d))));
     }
 
     @Test

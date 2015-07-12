@@ -24,7 +24,8 @@ public class TypeUtil {
         }
         if (Character.class.equals(attributeType) || char.class.equals(attributeType)) {
             if (value.length() != 1) {
-                throw new IllegalArgumentException("Attribute must be a character, but contains more than one character.");
+                throw new IllegalArgumentException(
+                        "Attribute must be a character, but contains more than one character.");
             }
             return value.charAt(0);
         }
