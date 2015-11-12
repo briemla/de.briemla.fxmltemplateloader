@@ -47,7 +47,7 @@ public class ImportCollectionTest {
     }
 
     @Test
-    public void findClassWithSindleAddedImport() throws LoadException, ClassNotFoundException {
+    public void findClassWithSingleAddedImport() throws LoadException, ClassNotFoundException {
         ImportFactory factory = mock(ImportFactory.class);
         ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
         Import mockedImport = mock(Import.class);
