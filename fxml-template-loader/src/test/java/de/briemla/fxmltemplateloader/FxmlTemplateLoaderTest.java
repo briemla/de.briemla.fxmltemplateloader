@@ -318,31 +318,34 @@ public class FxmlTemplateLoaderTest {
 
     private static <T> T load(String fileName) throws IOException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        return FxmlTemplateLoader.load(FxmlTemplateLoaderTest.class.getResource(fxmlName));
+        return FxmlTemplateLoader.load(fromResource(fxmlName));
     }
 
     private static <T> T loadWithResources(String fileName, Locale locale) throws IOException {
         String bundlePath = FxmlTemplateLoaderTest.class.getPackage().getName() + "." + fileName;
         ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        return FxmlTemplateLoader.load(FxmlTemplateLoaderTest.class.getResource(fxmlName), bundle);
+        return FxmlTemplateLoader.load(fromResource(fxmlName), bundle);
     }
 
     private static <T> T loadWithController(String fileName, Object controller) throws IOException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
         FxmlTemplateLoader fxmlTemplateLoader = new FxmlTemplateLoader();
         fxmlTemplateLoader.setController(controller);
-        return fxmlTemplateLoader.doLoad(FxmlTemplateLoaderTest.class.getResource(fxmlName));
+        return fxmlTemplateLoader.doLoad(fromResource(fxmlName));
     }
 
     private static <T> T loadWithRoot(String fileName, Object fxRoot)
             throws IOException, InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
         String fxmlName = fileName + FXML_FILE_EXTENSION;
-        ITemplate template = FxmlTemplateLoader
-                .loadTemplate(FxmlTemplateLoaderTest.class.getResource(fxmlName));
+        ITemplate template = FxmlTemplateLoader.loadTemplate(fromResource(fxmlName));
         template.setRoot(fxRoot);
         return template.create();
+    }
+
+    private static URL fromResource(String fxmlName) {
+        return FxmlTemplateLoaderTest.class.getResource(fxmlName);
     }
 
 }
