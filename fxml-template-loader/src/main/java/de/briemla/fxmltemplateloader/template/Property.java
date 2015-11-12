@@ -17,6 +17,9 @@ public class Property {
     private final String name;
     private final String value;
 
+    /**
+     * Property of FXML elements.
+     */
     public Property(String name, String value) {
         super();
         this.name = name;
@@ -25,16 +28,33 @@ public class Property {
 
     // FIXME maybe introduce different Properties and throw LoadException in FXMLTemplateLoader with
     // line information
+    /**
+     * Convert the value to a matching type and return an {@link IProperty} object containing the
+     * information.
+     *
+     * @param builder
+     *            to build more complex objects without a matching constructor
+     * @param valueResolver
+     *            to convert the {@link String} value into the correct type
+     * @return converted value as {@link IProperty}
+     * @throws LoadException
+     *             if value can not be converted correctly
+     */
     public IProperty createTemplate(Builder<?> builder, ValueResolver valueResolver)
-            throws NoSuchMethodException, SecurityException, LoadException {
+            throws LoadException {
         if (builder == null) {
             throw new LoadException("Builder is not allowed to be null");
         }
         if (builder instanceof AbstractMap) {
             // FIXME builder method should only be searched once.
             // FIXME rename
-            Method defaultJavaFxBuilderMethod = AbstractMap.class.getMethod("put", Object.class,
-                    Object.class);
+            Method defaultJavaFxBuilderMethod;
+            try {
+                defaultJavaFxBuilderMethod = AbstractMap.class.getMethod("put", Object.class,
+                        Object.class);
+            } catch (NoSuchMethodException exception) {
+                throw new LoadException(exception);
+            }
             IValue convertedValue = valueResolver.resolve(value, to(String.class));
             return new ProxyBuilderPropertyTemplate(defaultJavaFxBuilderMethod, name,
                     convertedValue);
