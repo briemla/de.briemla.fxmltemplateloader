@@ -2,9 +2,9 @@ package de.briemla.fxmltemplateloader.parser;
 
 import java.util.ArrayList;
 
-import javafx.fxml.LoadException;
-
 import javax.xml.stream.events.ProcessingInstruction;
+
+import javafx.fxml.LoadException;
 
 public class ImportCollection {
 

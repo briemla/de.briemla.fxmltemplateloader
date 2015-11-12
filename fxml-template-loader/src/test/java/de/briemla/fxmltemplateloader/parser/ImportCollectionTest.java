@@ -6,9 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import javafx.fxml.LoadException;
-
 import javax.xml.stream.events.ProcessingInstruction;
+
+import javafx.fxml.LoadException;
 
 import org.junit.Rule;
 import org.junit.Test;

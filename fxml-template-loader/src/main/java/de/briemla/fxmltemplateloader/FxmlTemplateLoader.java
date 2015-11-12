@@ -16,11 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.fxml.LoadException;
-import javafx.util.Builder;
-import javafx.util.BuilderFactory;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -29,6 +24,11 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
+import javafx.util.Builder;
+import javafx.util.BuilderFactory;
 
 import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ImportFactory;
@@ -362,7 +362,8 @@ public class FxmlTemplateLoader {
                     Class<?> type = extractType(method);
                     IValue convertedValue = resolve(value, to(type));
 
-                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
+                    StaticSingleElementPropertyTemplate property = 
+                            new StaticSingleElementPropertyTemplate(
                             currentTemplate, method, staticPropertyClass);
                     property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
                             convertedValue));

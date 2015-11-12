@@ -28,7 +28,7 @@ public class LocationValue implements IValue {
     }
 
     /**
-     * Behaviour is same as in FXMLLoader
+     * Behaviour is same as in FXMLLoader.
      */
     @Override
     public Object create(TemplateRegistry registry) throws LoadException {
