@@ -20,6 +20,7 @@ import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -277,6 +278,15 @@ public class FxmlTemplateLoaderTest {
         Node child = parent.getChildren().get(0);
         Double childTopAnchor = AnchorPane.getTopAnchor(child);
         assertThat(childTopAnchor, is(equalTo(10.0)));
+    }
+
+    @Test
+    public void loadButtonWithHashCharInText() throws Exception {
+        VBox root = load("VBoxRootWithNestedButton");
+        ObservableList<Node> children = root.getChildren();
+        assertThat(children.size(), is(equalTo(1)));
+        Button button = (Button) children.get(0);
+        assertThat(button.getText(), is(equalTo("#SomeName")));
     }
 
     @Test

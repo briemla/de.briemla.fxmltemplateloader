@@ -47,6 +47,10 @@ public class ValueResolver {
         this.classLoader = classLoader;
     }
 
+    public IValue resolve(String value, Class<?> type) throws LoadException {
+        return resolve(value, type, false);
+    }
+
     /**
      * Values for attributes in FXML can start with some special characters. This method resolves
      * those strings. For more information about all special characters see
@@ -61,11 +65,13 @@ public class ValueResolver {
      *             when resource bundle has not been set or the resource key is not available.
      *             FXMLLoader throws same LoadExceptions
      */
-    public IValue resolve(String value, Class<?> type) throws LoadException {
+    // FIXME find better solution for boolean flag
+    public IValue resolve(String value, Class<?> type, boolean isTextProperty)
+            throws LoadException {
         if (value.startsWith(RESOURCE_PREFIX)) {
             return new BasicTypeValue(resolveResource(value));
         }
-        if (value.startsWith(CONTROLLER_METHOD_PREFIX)) {
+        if (value.startsWith(CONTROLLER_METHOD_PREFIX) && !isTextProperty) {
             return new ControllerMethodValue(unwrap(value));
         }
         if (value.startsWith(LOCATION_PREFIX)) {

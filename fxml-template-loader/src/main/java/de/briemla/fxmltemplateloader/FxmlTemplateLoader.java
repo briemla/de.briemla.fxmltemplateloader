@@ -362,7 +362,7 @@ public class FxmlTemplateLoader {
             if (ReflectionUtils.hasSetter(clazz, propertyName)) {
                 Method method = findSetter(clazz, propertyName);
                 Class<?> type = extractType(method);
-                IValue convertedValue = resolve(value, to(type));
+                IValue convertedValue = resolve(value, to(type), "text".equals(propertyName));
 
                 SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
                         currentTemplate, method);
@@ -393,8 +393,7 @@ public class FxmlTemplateLoader {
                     Class<?> type = extractType(method);
                     IValue convertedValue = resolve(value, to(type));
 
-                    StaticSingleElementPropertyTemplate property = 
-                            new StaticSingleElementPropertyTemplate(
+                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
                             currentTemplate, method, staticPropertyClass);
                     property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
                             convertedValue));
@@ -421,7 +420,13 @@ public class FxmlTemplateLoader {
     }
 
     private IValue resolve(String value, Class<?> type) throws LoadException {
-        return valueResolver.resolve(value, type);
+        return resolve(value, type, false);
+    }
+
+    // FIXME find better solution than boolean flag
+    private IValue resolve(String value, Class<?> type, boolean isTextProperty)
+            throws LoadException {
+        return valueResolver.resolve(value, type, isTextProperty);
     }
 
     private void processProcessingInstruction(ProcessingInstruction instruction) {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<VBox id="parent" xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <Button text="#SomeName" />
+    </children>
+</VBox>
+
