@@ -14,6 +14,12 @@ public class ListPropertyTemplate extends Template implements IProperty {
     private final Method getter;
     private final List<IProperty> children;
 
+    /**
+     * Template for list properties.
+     * 
+     * @param getter
+     *            to retrieve the list to which the child elements should be added
+     */
     public ListPropertyTemplate(Template parent, Method getter) {
         super(parent);
         children = new ArrayList<>();

@@ -13,6 +13,9 @@ public class BuilderTemplate extends InstantiationTemplate {
     private final List<IProperty> builderProperties;
     private final Class<?> instanceType;
 
+    /**
+     * Create new elements using a given builder.
+     */
     public BuilderTemplate(Template parent, List<IProperty> properties,
             BuilderFactory builderFactory, List<IProperty> builderProperties,
             Class<?> instanceType) {

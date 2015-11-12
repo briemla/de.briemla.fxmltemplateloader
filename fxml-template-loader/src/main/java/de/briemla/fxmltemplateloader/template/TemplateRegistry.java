@@ -12,6 +12,9 @@ public class TemplateRegistry {
     private final HashMap<Object, Object> elements;
     private final HashMap<Object, MethodHandlerStub<Event>> methods;
 
+    /**
+     * Registry to find elements created from {@link Template}s. Elements can be found using fx:id.
+     */
     public TemplateRegistry() {
         super();
         elements = new HashMap<>();
@@ -36,6 +39,9 @@ public class TemplateRegistry {
         }
     }
 
+    /**
+     * Register method stubs for event handlers.
+     */
     public void registerMethodStub(String value, MethodHandlerStub<Event> methodHandlerStub) {
         if (methods.containsKey(value)) {
             throw new RuntimeException("Method already registered. Name must be unique: " + value);

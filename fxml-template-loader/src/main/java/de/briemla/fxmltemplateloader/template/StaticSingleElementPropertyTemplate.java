@@ -11,6 +11,9 @@ public class StaticSingleElementPropertyTemplate extends Template implements IPr
     private IProperty property;
     private final Class<?> staticPropertyClass;
 
+    /**
+     * Template to handle static properties of classes loaded from FXML.
+     */
     public StaticSingleElementPropertyTemplate(Template parent, Method setter,
             Class<?> staticPropertyClass) {
         super(parent);

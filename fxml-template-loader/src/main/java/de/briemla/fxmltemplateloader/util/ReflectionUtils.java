@@ -7,6 +7,9 @@ import java.lang.reflect.Modifier;
 // TODO clean up
 public class ReflectionUtils {
 
+    /**
+     * Convenience method to find getter for a given {@link Class} and property name.
+     */
     public static Method findGetter(Class<?> clazz, String propertyName) {
         String getterName = "get" + Character.toUpperCase(propertyName.charAt(0))
                 + propertyName.substring(1);
@@ -19,6 +22,10 @@ public class ReflectionUtils {
                 "Could not find getter without parameters for property: " + propertyName);
     }
 
+    /**
+     * Convenience method to check whether there is a getter for a given {@link Class} and property
+     * name.
+     */
     public static boolean hasGetter(Class<?> clazz, String propertyName) {
         String getterName = "get" + Character.toUpperCase(propertyName.charAt(0))
                 + propertyName.substring(1);
@@ -30,6 +37,9 @@ public class ReflectionUtils {
         return false;
     }
 
+    /**
+     * Convenience method to find setter for a given {@link Class} and property name.
+     */
     public static Method findSetter(Class<?> clazz, String propertyName) {
         String setterName = setter(propertyName);
         for (Method method : clazz.getMethods()) {
@@ -45,6 +55,10 @@ public class ReflectionUtils {
         return "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
     }
 
+    /**
+     * Convenience method to check whether there is a getter for a given {@link Class} and property
+     * name.
+     */
     public static boolean hasSetter(Class<?> clazz, String propertyName) {
         String setterName = setter(propertyName);
         for (Method method : clazz.getMethods()) {
@@ -55,6 +69,9 @@ public class ReflectionUtils {
         return false;
     }
 
+    /**
+     * Convenience method to find builder method for a given {@link Class} and property name.
+     */
     public static Method findBuilderMethod(Class<?> clazz, String propertyName) {
         for (Method method : clazz.getMethods()) {
             if (propertyName.equals(method.getName())) {
@@ -65,6 +82,10 @@ public class ReflectionUtils {
                 "Could not find builder method for property: " + propertyName);
     }
 
+    /**
+     * Convenience method to check whether there is a getter for a given {@link Class} and property
+     * name.
+     */
     public static boolean hasBuilderMethod(Class<?> clazz, String propertyName) {
         for (Method method : clazz.getMethods()) {
             if (propertyName.equals(method.getName())) {
@@ -74,6 +95,9 @@ public class ReflectionUtils {
         return false;
     }
 
+    /**
+     * Convenience method to extract the type of the value object for setter methods.
+     */
     public static Class<?> extractType(Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (Modifier.isStatic(method.getModifiers()) && parameterTypes.length == 2) {
@@ -86,6 +110,9 @@ public class ReflectionUtils {
                 "Incorrect number of arguments for setter found: " + parameterTypes.length);
     }
 
+    /**
+     * Convenience method to make a field accessible.
+     */
     public static void makeAccessible(Field field) {
         if (!field.isAccessible()) {
             field.setAccessible(true);

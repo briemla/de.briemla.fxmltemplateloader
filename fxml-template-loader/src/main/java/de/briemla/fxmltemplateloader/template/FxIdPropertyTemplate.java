@@ -12,6 +12,9 @@ public class FxIdPropertyTemplate extends Template implements IProperty {
     private final IValue value;
     private Method fxIdSetter;
 
+    /**
+     * Template to handle fx:id property during object creation.
+     */
     public FxIdPropertyTemplate(Template parent, Method fxIdSetter, IValue value) {
         super(parent);
         this.fxIdSetter = fxIdSetter;

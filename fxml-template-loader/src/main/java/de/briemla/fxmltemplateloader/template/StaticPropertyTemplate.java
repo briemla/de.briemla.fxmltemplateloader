@@ -13,6 +13,9 @@ public class StaticPropertyTemplate implements IProperty {
     private final Method method;
     private final IValue value;
 
+    /**
+     * Property to handle static properties of classes loaded from FXML.
+     */
     public StaticPropertyTemplate(Class<?> staticPropertyClass, Method method, IValue value) {
         super();
         this.staticPropertyClass = staticPropertyClass;

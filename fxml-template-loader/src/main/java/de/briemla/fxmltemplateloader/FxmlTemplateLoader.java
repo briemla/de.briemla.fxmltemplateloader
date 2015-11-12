@@ -67,6 +67,11 @@ public class FxmlTemplateLoader {
     private ITemplate rootTemplate;
     private Object controller;
 
+    /**
+     * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
+     * generation of several objects from the same FXML file without reading it several times from
+     * the file system.
+     */
     public FxmlTemplateLoader() {
         super();
         factory = new ImportFactory(FxmlTemplateLoader.class.getClassLoader());
@@ -79,6 +84,17 @@ public class FxmlTemplateLoader {
         return new FxmlTemplateLoader().doLoad(resource);
     }
 
+    /**
+     * Load the given resource as FXML and return the root element.
+     *
+     * @param resource
+     *            {@link URL} to FXML file
+     * @param bundle
+     *            {@link ResourceBundle} to retrieve language specific texts from
+     * @return root element created from FXML file
+     * @throws IOException
+     *             in case the file can not be loaded or can not be parsed
+     */
     public static <T> T load(URL resource, ResourceBundle bundle) throws IOException {
         FxmlTemplateLoader fxmlTemplateLoader = new FxmlTemplateLoader();
         fxmlTemplateLoader.setResourceBundle(bundle);
@@ -89,6 +105,12 @@ public class FxmlTemplateLoader {
         valueResolver.setResourceBundle(bundle);
     }
 
+    /**
+     * This method changes the classLoader on an necessary objects.
+     *
+     * @param classLoader
+     *            new {@link ClassLoader} instance. Not allowed to be <code>null</code>
+     */
     public void setClassLoader(ClassLoader classLoader) {
         if (classLoader == null) {
             throw new IllegalArgumentException();
@@ -107,6 +129,15 @@ public class FxmlTemplateLoader {
         valueResolver.setLocation(location);
     }
 
+    /**
+     * Load the given resource as FXML and return the root element.
+     *
+     * @param resource
+     *            {@link URL} to FXML file
+     * @return root element created from FXML file
+     * @throws IOException
+     *             in case the file can not be loaded or can not be parsed
+     */
     public <T> T doLoad(URL resource) throws IOException {
         try {
             if (controller != null) {

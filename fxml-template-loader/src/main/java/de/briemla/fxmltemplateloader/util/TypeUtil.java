@@ -5,6 +5,15 @@ import java.math.BigInteger;
 
 public class TypeUtil {
 
+    /**
+     * Convert value to type of given {@link Class}.
+     *
+     * @param value
+     *            to convert
+     * @param attributeType
+     *            to convert value into
+     * @return converted value
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static Object convert(String value, Class<?> attributeType) {
         if (value == null) {

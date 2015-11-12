@@ -14,6 +14,9 @@ public class LocationValue implements IValue {
     private final URI location;
     private final String value;
 
+    /**
+     * Value object for FXML locations.
+     */
     public LocationValue(ClassLoader classLoader, URI location, String value) {
         super();
         if (classLoader == null) {
