@@ -11,10 +11,11 @@ public class ImportFactory {
     }
 
     Import create(String importClassifier) {
-        if (importClassifier.endsWith(WILDCARD_MATCH)) {
-            return new WildcardImport(importClassifier, classLoader);
+        String trimmedClassifier = importClassifier.trim();
+        if (trimmedClassifier.endsWith(WILDCARD_MATCH)) {
+            return new WildcardImport(trimmedClassifier, classLoader);
         }
-        return new FullQualifiedImport(importClassifier, classLoader);
+        return new FullQualifiedImport(trimmedClassifier, classLoader);
     }
 
     public void setClassLoader(ClassLoader classLoader) {

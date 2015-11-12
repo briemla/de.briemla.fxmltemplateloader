@@ -23,12 +23,33 @@ public class ImportFactoryTest {
     }
 
     @Test
+    public void createWildcardWithTrailingWhitespace() {
+        Import expectedImport = new WildcardImport("wildcard.import.classifier.*", CLASS_LOADER);
+        ImportFactory factory = new ImportFactory(CLASS_LOADER);
+
+        Import actualImport = factory.create("wildcard.import.classifier.* ");
+
+        assertThat(actualImport, is(equalTo(expectedImport)));
+    }
+
+    @Test
     public void createFullQualifiedImport() {
         FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import",
                 CLASS_LOADER);
         ImportFactory factory = new ImportFactory(CLASS_LOADER);
 
         Import actualImport = factory.create("full.qualified.Import");
+
+        assertThat(actualImport, is(equalTo(expectedImport)));
+    }
+
+    @Test
+    public void createFullQualifiedImportWithTrailingWhitespace() {
+        FullQualifiedImport expectedImport = new FullQualifiedImport("full.qualified.Import",
+                CLASS_LOADER);
+        ImportFactory factory = new ImportFactory(CLASS_LOADER);
+
+        Import actualImport = factory.create("full.qualified.Import ");
 
         assertThat(actualImport, is(equalTo(expectedImport)));
     }

@@ -66,6 +66,18 @@ public class FxmlTemplateLoaderTest {
         HBox hbox = load("SimpleHBoxRootWithSingleFullQualifiedImport");
     }
 
+    /**
+     * Fails if cast to {@link HBox} does not match.
+     *
+     * @throws Exception
+     *             throw {@link Exception}s thrown by loading an FXML file
+     */
+    @SuppressWarnings("unused")
+    @Test
+    public void loadSimpleHBoxRootWithSingleFullQualifiedImportWithWhitespace() throws Exception {
+        HBox hbox = load("SimpleHBoxRootWithSingleFullQualifiedImportWithWhitespace");
+    }
+
     @Test
     public void loadVBoxRootWithPropertiesAndSingleFullQualifiedImport() throws Exception {
         VBox vbox = load("VBoxRootWithPropertiesAndSingleFullQualifiedImport");
