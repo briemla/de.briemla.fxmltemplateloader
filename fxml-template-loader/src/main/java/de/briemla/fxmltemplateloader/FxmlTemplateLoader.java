@@ -32,6 +32,8 @@ import javafx.util.BuilderFactory;
 
 import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ImportFactory;
+import de.briemla.fxmltemplateloader.parser.ParsedProperties;
+import de.briemla.fxmltemplateloader.parser.PropertiesParser;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
 import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
@@ -70,6 +72,7 @@ public class FxmlTemplateLoader {
     private ITemplate rootTemplate;
     private Controller controller;
     private boolean isRootElementProcessed;
+    private PropertiesParser propertiesParser;
 
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
@@ -185,6 +188,7 @@ public class FxmlTemplateLoader {
 
     private ITemplate parseXml()
             throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
+        propertiesParser = new PropertiesParser(valueResolver, imports);
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
             if (event.isProcessingInstruction()) {
@@ -268,71 +272,16 @@ public class FxmlTemplateLoader {
 
     @SuppressWarnings("unchecked")
     private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
-        Class<?> rootType = findTypeOfRoot(element);
-        PropertyCollection properties = new PropertyCollection();
-        Iterator<Attribute> attributes = element.getAttributes();
-        while (attributes.hasNext()) {
-            Attribute attribute = attributes.next();
-            QName attributeName = attribute.getName();
-            String propertyPrefix = attributeName.getPrefix();
-            String propertyName = attributeName.getLocalPart();
-            if (FX_ROOT_TYPE_PROPERTY.equals(propertyName) || FX_ROOT.equals(propertyName)) {
-                continue;
-            }
-            String value = attribute.getValue();
-
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                IValue convertedValue = resolve(value, to(String.class));
-                Method fxIdSetter = null;
-                if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-                    fxIdSetter = findSetter(rootType, propertyName);
-                }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
-                        fxIdSetter, convertedValue);
-                properties.add(property);
-                continue;
-            }
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
-                if (controller != null) {
-                    // TODO add file path and line number
-                    throw new LoadException("Controller value already specified.");
-                }
-                checkRootElementProcessed();
-                Class<?> controllerClass = imports.findClass(value);
-                controller = new FxControllerTemplate(controllerClass);
-                continue;
-            }
-            // FIXME clean up duplication
-            if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-                Method method = findSetter(rootType, propertyName);
-                Class<?> type = extractType(method);
-                IValue convertedValue = resolve(value, to(type));
-
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
-                        currentTemplate, method);
-                property.prepare(new PropertyTemplate(method, convertedValue));
-                properties.add(property);
-                continue;
-            }
-
-            if (ReflectionUtils.hasGetter(rootType, propertyName)) {
-                Method getter = ReflectionUtils.findGetter(rootType, propertyName);
-                if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    IValue convertedValue = new BasicTypeValue(value);
-
-                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate,
-                            getter);
-                    property.prepare(new PropertyTemplate(getter, convertedValue));
-                    properties.add(property);
-                    continue;
-                }
-            }
-            throw new LoadException(
-                    "Property specified on fx:root element which can not be set by setter:"
-                            + attributeName);
+        ParsedProperties parse = propertiesParser.parse(element, currentTemplate);
+        if (controller != null && parse.controller() != null) {
+            // TODO add file path and line number
+            throw new LoadException("Controller value already specified.");
         }
-        return new FxRootTemplate(rootType, properties);
+        if (isRootElementProcessed && parse.controller() != null) {
+            // TODO introduce file name and line number of fxml file.
+            throw new LoadException("fx:controller can only be applied to root element.");
+        }
+        return new FxRootTemplate(parse.rootType(), parse.properties());
     }
 
     private void checkRootElementProcessed() throws LoadException {
@@ -340,18 +289,6 @@ public class FxmlTemplateLoader {
             // TODO introduce file name and line number of fxml file.
             throw new LoadException("fx:controller can only be applied to root element.");
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private Class<?> findTypeOfRoot(StartElement element) throws LoadException {
-        Iterator<Attribute> attributes = element.getAttributes();
-        while (attributes.hasNext()) {
-            Attribute attribute = attributes.next();
-            if (FX_ROOT_TYPE_PROPERTY.equals(attribute.getName().getLocalPart())) {
-                return imports.findClass(attribute.getValue());
-            }
-        }
-        throw new LoadException("Type attribute of fx:root element missing.");
     }
 
     @SuppressWarnings("unchecked")
