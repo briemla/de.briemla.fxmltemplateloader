@@ -7,4 +7,8 @@ public class ControllerClass {
 
     @FXML
     private VBox vbox;
+
+    public VBox getVbox() {
+        return vbox;
+    }
 }

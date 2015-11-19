@@ -327,11 +327,13 @@ public class FxmlTemplateLoaderTest {
         ITemplate template = FxmlTemplateLoader
                 .loadTemplate(fromResource("VBoxWithFxController" + FXML_FILE_EXTENSION));
         ControllerClass myController = new ControllerClass();
-        template.create(myController);
-        Object controller = template.getController();
+        VBox asLoadedVBox = template.create(myController);
+        ControllerClass controller = template.getController();
 
         assertThat(controller, is(instanceOf(ControllerClass.class)));
         assertThat(controller, is(sameInstance(myController)));
+
+        assertThat(controller.getVbox(), is(sameInstance(asLoadedVBox)));
     }
 
     @Test
