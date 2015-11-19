@@ -7,6 +7,8 @@ import javafx.fxml.LoadException;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 
+import de.briemla.fxmltemplateloader.PropertyCollection;
+
 public class BuilderTemplate extends InstantiationTemplate {
 
     private final BuilderFactory builderFactory;
@@ -16,7 +18,7 @@ public class BuilderTemplate extends InstantiationTemplate {
     /**
      * Create new elements using a given builder.
      */
-    public BuilderTemplate(Template parent, List<IProperty> properties,
+    public BuilderTemplate(Template parent, PropertyCollection properties,
             BuilderFactory builderFactory, List<IProperty> builderProperties,
             Class<?> instanceType) {
         super(parent, properties);

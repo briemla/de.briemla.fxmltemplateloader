@@ -1,16 +1,17 @@
 package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import javafx.fxml.LoadException;
+
+import de.briemla.fxmltemplateloader.PropertyCollection;
 
 public class FxRootTemplate extends InstantiationTemplate {
 
     private final Class<?> rootType;
     private Object root;
 
-    public FxRootTemplate(Class<?> rootType, List<IProperty> properties) {
+    public FxRootTemplate(Class<?> rootType, PropertyCollection properties) {
         super(null, properties);
         this.rootType = rootType;
     }

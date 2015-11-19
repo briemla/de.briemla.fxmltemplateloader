@@ -269,7 +269,7 @@ public class FxmlTemplateLoader {
     @SuppressWarnings("unchecked")
     private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
         Class<?> rootType = findTypeOfRoot(element);
-        List<IProperty> properties = new ArrayList<>();
+        PropertyCollection properties = new PropertyCollection();
         Iterator<Attribute> attributes = element.getAttributes();
         while (attributes.hasNext()) {
             Attribute attribute = attributes.next();
@@ -361,7 +361,7 @@ public class FxmlTemplateLoader {
     private InstantiationTemplate createInstatiationTemplate(StartElement element, String className)
             throws NoSuchMethodException, SecurityException, LoadException {
         Class<?> clazz = imports.findClass(className);
-        List<IProperty> properties = new ArrayList<>();
+        PropertyCollection properties = new PropertyCollection();
         List<Property> unsettableProperties = new ArrayList<>();
         Iterator<Attribute> attributes = element.getAttributes();
         while (attributes.hasNext()) {

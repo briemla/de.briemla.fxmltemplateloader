@@ -2,17 +2,17 @@ package de.briemla.fxmltemplateloader.template;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import javafx.fxml.LoadException;
 
+import de.briemla.fxmltemplateloader.PropertyCollection;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public abstract class InstantiationTemplate extends Template implements IInstantiationTemplate {
 
-    private final List<IProperty> properties;
+    private final PropertyCollection properties;
 
-    protected InstantiationTemplate(Template parent, List<IProperty> properties) {
+    protected InstantiationTemplate(Template parent, PropertyCollection properties) {
         super(parent);
         this.properties = properties;
     }
@@ -62,8 +62,6 @@ public abstract class InstantiationTemplate extends Template implements IInstant
     private void applyProperties(Object newInstance, TemplateRegistry registry)
             throws IllegalAccessException, InvocationTargetException, InstantiationException,
             IllegalArgumentException, LoadException {
-        for (IProperty child : properties) {
-            child.apply(newInstance, registry);
-        }
+        properties.apply(newInstance, registry);
     }
 }
