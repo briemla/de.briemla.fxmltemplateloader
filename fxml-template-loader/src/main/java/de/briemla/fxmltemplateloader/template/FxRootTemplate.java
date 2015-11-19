@@ -5,11 +5,10 @@ import java.util.List;
 
 import javafx.fxml.LoadException;
 
-public class FxRootTemplate extends InstantiationTemplate implements ExistingRoot {
+public class FxRootTemplate extends InstantiationTemplate {
 
     private final Class<?> rootType;
     private Object root;
-    private Object controller;
 
     public FxRootTemplate(Class<?> rootType, List<IProperty> properties) {
         super(null, properties);
@@ -31,15 +30,8 @@ public class FxRootTemplate extends InstantiationTemplate implements ExistingRoo
         return root;
     }
 
-    @Override
     public void setRoot(Object fxRoot) {
         root = fxRoot;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getController() {
-        return (T) controller;
     }
 
 }
