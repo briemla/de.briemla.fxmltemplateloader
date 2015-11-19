@@ -35,6 +35,8 @@ import de.briemla.fxmltemplateloader.parser.ImportFactory;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
 import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
+import de.briemla.fxmltemplateloader.template.Controller;
+import de.briemla.fxmltemplateloader.template.FxControllerTemplate;
 import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.FxRootTemplate;
 import de.briemla.fxmltemplateloader.template.IProperty;
@@ -58,6 +60,7 @@ public class FxmlTemplateLoader {
     private static final String FX_ID_PROPERTY = "id";
     private static final String FX_NAMESPACE_PREFIX = "fx";
     private static final String FX_ROOT_TYPE_PROPERTY = "type";
+    private static final String FX_CONTROLLER = "controller";
     private Template currentTemplate;
     private final ImportFactory factory;
     private final ImportCollection imports;
@@ -65,7 +68,7 @@ public class FxmlTemplateLoader {
     private final ValueResolver valueResolver;
     private XMLEventReader eventReader;
     private ITemplate rootTemplate;
-    private Object controller;
+    private Controller controller;
 
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
@@ -122,7 +125,7 @@ public class FxmlTemplateLoader {
     }
 
     public void setController(Object controller) {
-        this.controller = controller;
+        this.controller = new InstatiatedController(controller);
     }
 
     public void setLocation(URL location) {
@@ -210,7 +213,7 @@ public class FxmlTemplateLoader {
             }
             FxRootTemplate fxRootTemplate = createFxRootTemplate(element);
             currentTemplate = fxRootTemplate;
-            rootTemplate = wrap(fxRootTemplate);
+            rootTemplate = wrap(fxRootTemplate, controller);
             return;
         }
         String className = name.getLocalPart();
@@ -247,12 +250,13 @@ public class FxmlTemplateLoader {
         currentTemplate = instantiationTemplate;
 
         if (rootTemplate == null) {
-            rootTemplate = wrap(instantiationTemplate);
+            rootTemplate = wrap(instantiationTemplate, controller);
         }
     }
 
-    private static ITemplate wrap(InstantiationTemplate instantiationTemplate) {
-        return new RootTemplate(instantiationTemplate);
+    private static ITemplate wrap(InstantiationTemplate instantiationTemplate,
+            Controller controller) {
+        return new RootTemplate(instantiationTemplate, controller);
     }
 
     @SuppressWarnings("unchecked")
@@ -282,7 +286,14 @@ public class FxmlTemplateLoader {
                 properties.add(property);
                 continue;
             }
-
+            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
+                if (controller != null) {
+                    // TODO add file path and line number
+                    throw new LoadException("Controller value already specified.");
+                }
+                Class<?> controllerClass = imports.findClass(value);
+                controller = new FxControllerTemplate(controllerClass);
+            }
             // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(rootType, propertyName)) {
                 Method method = findSetter(rootType, propertyName);
@@ -355,6 +366,16 @@ public class FxmlTemplateLoader {
                 FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
                         fxIdSetter, convertedValue);
                 properties.add(property);
+                continue;
+            }
+
+            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
+                if (controller != null) {
+                    // TODO add file path and line number
+                    throw new LoadException("Controller value already specified.");
+                }
+                Class<?> controllerClass = imports.findClass(value);
+                controller = new FxControllerTemplate(controllerClass);
                 continue;
             }
 

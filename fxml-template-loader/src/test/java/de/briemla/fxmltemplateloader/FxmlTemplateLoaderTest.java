@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -299,6 +300,26 @@ public class FxmlTemplateLoaderTest {
         assertThat(children.size(), is(equalTo(1)));
         Button button = (Button) children.get(0);
         assertThat(button.getText(), is(equalTo("#SomeName")));
+    }
+
+    @Test
+    public void loadVBoxWithFxControllerButAlreadySetControllerOnLoader() throws Exception {
+        FxmlTemplateLoader loader = new FxmlTemplateLoader();
+        ControllerClass myController = new ControllerClass();
+        loader.setController(myController);
+        thrown.expect(LoadException.class);
+        thrown.expectMessage(is(equalTo("Controller value already specified.")));
+        loader.doLoad(fromResource("VBoxWithFxController" + FXML_FILE_EXTENSION));
+    }
+
+    @Test
+    public void loadVBoxWithFxController() throws Exception {
+        ITemplate template = FxmlTemplateLoader
+                .loadTemplate(fromResource("VBoxWithFxController" + FXML_FILE_EXTENSION));
+        template.create();
+        Object controller = template.getController();
+
+        assertThat(controller, is(instanceOf(ControllerClass.class)));
     }
 
     @Test
