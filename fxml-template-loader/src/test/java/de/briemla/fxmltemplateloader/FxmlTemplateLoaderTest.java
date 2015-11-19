@@ -323,6 +323,18 @@ public class FxmlTemplateLoaderTest {
     }
 
     @Test
+    public void loadVBoxWithFxControllerAndDifferentControllerOnCreate() throws Exception {
+        ITemplate template = FxmlTemplateLoader
+                .loadTemplate(fromResource("VBoxWithFxController" + FXML_FILE_EXTENSION));
+        ControllerClass myController = new ControllerClass();
+        template.create(myController);
+        Object controller = template.getController();
+
+        assertThat(controller, is(instanceOf(ControllerClass.class)));
+        assertThat(controller, is(sameInstance(myController)));
+    }
+
+    @Test
     public void fullDummyClass() throws Exception {
         FullDummyClass dummyClass = load("FullDummyClass");
 

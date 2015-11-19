@@ -293,6 +293,7 @@ public class FxmlTemplateLoader {
                 }
                 Class<?> controllerClass = imports.findClass(value);
                 controller = new FxControllerTemplate(controllerClass);
+                continue;
             }
             // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(rootType, propertyName)) {
