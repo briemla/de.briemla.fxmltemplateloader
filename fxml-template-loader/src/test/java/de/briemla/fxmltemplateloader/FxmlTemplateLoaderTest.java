@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -334,6 +335,14 @@ public class FxmlTemplateLoaderTest {
         assertThat(controller, is(sameInstance(myController)));
 
         assertThat(controller.getVbox(), is(sameInstance(asLoadedVBox)));
+    }
+
+    @Test
+    public void loadVBoxWithNestedFxController() throws Exception {
+        FxmlTemplateLoader loader = new FxmlTemplateLoader();
+        thrown.expect(LoadException.class);
+        thrown.expectMessage(startsWith("fx:controller can only be applied to root element."));
+        loader.doLoad(fromResource("VBoxWithNestedFxController" + FXML_FILE_EXTENSION));
     }
 
     @Test

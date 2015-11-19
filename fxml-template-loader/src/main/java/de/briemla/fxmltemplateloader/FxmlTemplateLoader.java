@@ -69,6 +69,7 @@ public class FxmlTemplateLoader {
     private XMLEventReader eventReader;
     private ITemplate rootTemplate;
     private Controller controller;
+    private boolean isRootElementProcessed;
 
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
@@ -214,6 +215,7 @@ public class FxmlTemplateLoader {
             FxRootTemplate fxRootTemplate = createFxRootTemplate(element);
             currentTemplate = fxRootTemplate;
             rootTemplate = wrap(fxRootTemplate, controller);
+            rootElementProcessed();
             return;
         }
         String className = name.getLocalPart();
@@ -251,7 +253,12 @@ public class FxmlTemplateLoader {
 
         if (rootTemplate == null) {
             rootTemplate = wrap(instantiationTemplate, controller);
+            rootElementProcessed();
         }
+    }
+
+    private void rootElementProcessed() {
+        isRootElementProcessed = true;
     }
 
     private static ITemplate wrap(InstantiationTemplate instantiationTemplate,
@@ -291,6 +298,7 @@ public class FxmlTemplateLoader {
                     // TODO add file path and line number
                     throw new LoadException("Controller value already specified.");
                 }
+                checkRootElementProcessed();
                 Class<?> controllerClass = imports.findClass(value);
                 controller = new FxControllerTemplate(controllerClass);
                 continue;
@@ -325,6 +333,13 @@ public class FxmlTemplateLoader {
                             + attributeName);
         }
         return new FxRootTemplate(rootType, properties);
+    }
+
+    private void checkRootElementProcessed() throws LoadException {
+        if (isRootElementProcessed) {
+            // TODO introduce file name and line number of fxml file.
+            throw new LoadException("fx:controller can only be applied to root element.");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -375,6 +390,7 @@ public class FxmlTemplateLoader {
                     // TODO add file path and line number
                     throw new LoadException("Controller value already specified.");
                 }
+                checkRootElementProcessed();
                 Class<?> controllerClass = imports.findClass(value);
                 controller = new FxControllerTemplate(controllerClass);
                 continue;
