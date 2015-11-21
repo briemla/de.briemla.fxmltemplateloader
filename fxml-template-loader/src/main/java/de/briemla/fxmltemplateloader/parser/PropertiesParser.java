@@ -73,14 +73,14 @@ public class PropertiesParser {
             }
             String value = attribute.getValue();
 
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                properties.add(fxIdProperty(parent, rootType, propertyName, value));
-                continue;
-            }
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
                 Class<?> controllerClass = imports.findClass(value);
                 controller = new FxControllerTemplate(controllerClass);
+                continue;
+            }
+            // FIXME clean up this if statement, because it does not fit to the other properties.
+            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
+                properties.add(fxIdProperty(parent, rootType, propertyName, value));
                 continue;
             }
             // FIXME clean up duplication
@@ -160,15 +160,14 @@ public class PropertiesParser {
             String propertyName = attributeName.getLocalPart();
             String value = attribute.getValue();
 
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                properties.add(fxIdProperty(parent, clazz, propertyName, value));
-                continue;
-            }
-
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
                 Class<?> controllerClass = imports.findClass(value);
                 controller = new FxControllerTemplate(controllerClass);
+                continue;
+            }
+            // FIXME clean up this if statement, because it does not fit to the other properties.
+            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
+                properties.add(fxIdProperty(parent, clazz, propertyName, value));
                 continue;
             }
 
