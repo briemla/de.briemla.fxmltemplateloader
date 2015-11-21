@@ -11,6 +11,7 @@ import java.util.List;
 
 import javafx.fxml.LoadException;
 
+import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.IProperty;
@@ -18,6 +19,8 @@ import de.briemla.fxmltemplateloader.template.ListPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Property;
 import de.briemla.fxmltemplateloader.template.PropertyTemplate;
 import de.briemla.fxmltemplateloader.template.SingleElementPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
+import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
@@ -32,10 +35,12 @@ public class PropertyCollection {
     private final List<IProperty> properties;
     private final List<Property> unsettable;
     private final ValueResolver valueResolver;
+    private final ImportCollection imports;
 
-    public PropertyCollection(ValueResolver valueResolver) {
+    public PropertyCollection(ValueResolver valueResolver, ImportCollection imports) {
         super();
         this.valueResolver = valueResolver;
+        this.imports = imports;
         properties = new ArrayList<>();
         unsettable = new ArrayList<>();
     }
@@ -99,6 +104,26 @@ public class PropertyCollection {
                 return true;
             }
         }
+
+        if (propertyName.contains(".")) {
+            int lastIndexOf = propertyName.lastIndexOf(".");
+            String staticPropertyClassName = propertyName.substring(0, lastIndexOf);
+            String staticPropertyName = propertyName.substring(lastIndexOf + 1);
+            Class<?> staticPropertyClass = imports.findClass(staticPropertyClassName);
+            if (ReflectionUtils.hasSetter(staticPropertyClass, staticPropertyName)) {
+                Method method = findSetter(staticPropertyClass, staticPropertyName);
+                Class<?> type = extractType(method);
+                IValue convertedValue = resolve(value, to(type));
+
+                StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
+                        parent, method, staticPropertyClass);
+                property.prepare(
+                        new StaticPropertyTemplate(staticPropertyClass, method, convertedValue));
+                properties.add(property);
+                return true;
+            }
+        }
+        addUnsettable(new Property(propertyName, value));
         return false;
     }
 

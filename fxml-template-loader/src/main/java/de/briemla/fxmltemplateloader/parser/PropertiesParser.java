@@ -1,10 +1,5 @@
 package de.briemla.fxmltemplateloader.parser;
 
-import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
-import static de.briemla.fxmltemplateloader.util.ReflectionUtils.extractType;
-import static de.briemla.fxmltemplateloader.util.ReflectionUtils.findSetter;
-
-import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -16,17 +11,11 @@ import javafx.fxml.LoadException;
 import de.briemla.fxmltemplateloader.PropertyCollection;
 import de.briemla.fxmltemplateloader.template.Controller;
 import de.briemla.fxmltemplateloader.template.FxControllerTemplate;
-import de.briemla.fxmltemplateloader.template.Property;
-import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
-import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
-import de.briemla.fxmltemplateloader.util.ReflectionUtils;
-import de.briemla.fxmltemplateloader.value.IValue;
 
 public class PropertiesParser {
 
     private static final String FX_ROOT = "root";
-    private static final String FX_ID_PROPERTY = "id";
     private static final String FX_NAMESPACE_PREFIX = "fx";
     private static final String FX_ROOT_TYPE_PROPERTY = "type";
     private static final String FX_CONTROLLER = "controller";
@@ -52,7 +41,7 @@ public class PropertiesParser {
      *             if the properties could not be parsed, a {@link LoadException} will be thrown
      */
     public ParsedProperties parse(StartElement element, Template parent) throws LoadException {
-        PropertyCollection properties = new PropertyCollection(valueResolver);
+        PropertyCollection properties = new PropertyCollection(valueResolver, imports);
         Class<?> rootType = findTypeOfRoot(element);
         @SuppressWarnings("unchecked")
         Iterator<Attribute> attributes = element.getAttributes();
@@ -76,6 +65,7 @@ public class PropertiesParser {
             if (properties.add(propertyPrefix, propertyName, value, parent, rootType)) {
                 continue;
             }
+            // TODO check whether Builder is possible on fx:root or not.
             throw new LoadException(
                     "Property specified on fx:root element which can not be set by setter:"
                             + attributeName);
@@ -96,20 +86,10 @@ public class PropertiesParser {
         throw new LoadException("Type attribute of fx:root element missing.");
     }
 
-    private IValue resolve(String value, Class<?> type) throws LoadException {
-        return resolve(value, type, false);
-    }
-
-    // FIXME find better solution than boolean flag
-    private IValue resolve(String value, Class<?> type, boolean isTextProperty)
-            throws LoadException {
-        return valueResolver.resolve(value, type, isTextProperty);
-    }
-
     public ParsedProperties parseClass(StartElement element, String className, Template parent)
             throws LoadException {
         Class<?> clazz = imports.findClass(className);
-        PropertyCollection properties = new PropertyCollection(valueResolver);
+        PropertyCollection properties = new PropertyCollection(valueResolver, imports);
         @SuppressWarnings("unchecked")
         Iterator<Attribute> attributes = element.getAttributes();
         Controller controller = null;
@@ -126,29 +106,7 @@ public class PropertiesParser {
                 continue;
             }
 
-            if (properties.add(propertyPrefix, propertyName, value, parent, clazz)) {
-                continue;
-            }
-
-            if (propertyName.contains(".")) {
-                int lastIndexOf = propertyName.lastIndexOf(".");
-                String staticPropertyClassName = propertyName.substring(0, lastIndexOf);
-                String staticPropertyName = propertyName.substring(lastIndexOf + 1);
-                Class<?> staticPropertyClass = imports.findClass(staticPropertyClassName);
-                if (ReflectionUtils.hasSetter(staticPropertyClass, staticPropertyName)) {
-                    Method method = findSetter(staticPropertyClass, staticPropertyName);
-                    Class<?> type = extractType(method);
-                    IValue convertedValue = resolve(value, to(type));
-
-                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
-                            parent, method, staticPropertyClass);
-                    property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
-                            convertedValue));
-                    properties.add(property);
-                    continue;
-                }
-            }
-            properties.addUnsettable(new Property(propertyName, value));
+            properties.add(propertyPrefix, propertyName, value, parent, clazz);
         }
         return new ParsedProperties(properties, controller, clazz);
     }
