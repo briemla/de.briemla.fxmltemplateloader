@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
-<?import de.briemla.fxmltemplateloader.AnotherControllerClass?>
+<?import de.briemla.fxmltemplateloader.ControllerClass?>
 
 
 <VBox fx:id="vbox" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <VBox fx:controller="de.briemla.fxmltemplateloader.AnotherControllerClass" />
+        <VBox fx:controller="de.briemla.fxmltemplateloader.ControllerClass" />
     </children>
 </VBox>
