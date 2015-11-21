@@ -52,4 +52,9 @@ class FullQualifiedImport extends Import {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "FullQualifiedImport [importQualifier=" + importQualifier + "]";
+    }
+
 }

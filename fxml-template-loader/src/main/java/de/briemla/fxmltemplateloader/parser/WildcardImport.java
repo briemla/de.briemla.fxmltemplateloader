@@ -59,4 +59,9 @@ class WildcardImport extends Import {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "WildcardImport [importQualifier=" + importQualifier + "]";
+    }
+
 }
