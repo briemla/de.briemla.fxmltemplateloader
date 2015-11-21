@@ -75,14 +75,7 @@ public class PropertiesParser {
 
             // FIXME clean up this if statement, because it does not fit to the other properties.
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                IValue convertedValue = resolve(value, to(String.class));
-                Method fxIdSetter = null;
-                if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-                    fxIdSetter = findSetter(rootType, propertyName);
-                }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(parent, fxIdSetter,
-                        convertedValue);
-                properties.add(property);
+                properties.add(fxIdProperty(parent, rootType, propertyName, value));
                 continue;
             }
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
@@ -120,6 +113,18 @@ public class PropertiesParser {
         }
         // return properties;
         return new ParsedProperties(properties, controller, rootType);
+    }
+
+    private FxIdPropertyTemplate fxIdProperty(Template parent, Class<?> rootType,
+            String propertyName, String value) throws LoadException {
+        IValue convertedValue = resolve(value, to(String.class));
+        Method fxIdSetter = null;
+        if (ReflectionUtils.hasSetter(rootType, propertyName)) {
+            fxIdSetter = findSetter(rootType, propertyName);
+        }
+        FxIdPropertyTemplate property = new FxIdPropertyTemplate(parent, fxIdSetter,
+                convertedValue);
+        return property;
     }
 
     @SuppressWarnings("unchecked")
@@ -160,15 +165,7 @@ public class PropertiesParser {
 
             // FIXME clean up this if statement, because it does not fit to the other properties.
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                IValue convertedValue = resolve(value, to(String.class));
-                // FIXME clean up null pointer
-                Method fxIdSetter = null;
-                if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-                    fxIdSetter = findSetter(clazz, propertyName);
-                }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
-                        fxIdSetter, convertedValue);
-                properties.add(property);
+                properties.add(fxIdProperty(currentTemplate, clazz, propertyName, value));
                 continue;
             }
 
