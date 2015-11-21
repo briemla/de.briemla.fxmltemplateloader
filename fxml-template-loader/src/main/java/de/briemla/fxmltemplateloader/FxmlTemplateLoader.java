@@ -1,9 +1,6 @@
 package de.briemla.fxmltemplateloader;
 
 import static de.briemla.fxmltemplateloader.util.CodeSugar.from;
-import static de.briemla.fxmltemplateloader.util.CodeSugar.to;
-import static de.briemla.fxmltemplateloader.util.ReflectionUtils.extractType;
-import static de.briemla.fxmltemplateloader.util.ReflectionUtils.findSetter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,7 +16,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -38,31 +33,20 @@ import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
 import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
 import de.briemla.fxmltemplateloader.template.Controller;
-import de.briemla.fxmltemplateloader.template.FxControllerTemplate;
-import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.FxRootTemplate;
 import de.briemla.fxmltemplateloader.template.IProperty;
 import de.briemla.fxmltemplateloader.template.ITemplate;
 import de.briemla.fxmltemplateloader.template.InstantiationTemplate;
 import de.briemla.fxmltemplateloader.template.ListPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Property;
-import de.briemla.fxmltemplateloader.template.PropertyTemplate;
 import de.briemla.fxmltemplateloader.template.RootTemplate;
 import de.briemla.fxmltemplateloader.template.SingleElementPropertyTemplate;
-import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
-import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
-import de.briemla.fxmltemplateloader.util.ReflectionUtils;
-import de.briemla.fxmltemplateloader.value.BasicTypeValue;
-import de.briemla.fxmltemplateloader.value.IValue;
 
 public class FxmlTemplateLoader {
 
     private static final String FX_ROOT = "root";
-    private static final String FX_ID_PROPERTY = "id";
     private static final String FX_NAMESPACE_PREFIX = "fx";
-    private static final String FX_ROOT_TYPE_PROPERTY = "type";
-    private static final String FX_CONTROLLER = "controller";
     private Template currentTemplate;
     private final ImportFactory factory;
     private final ImportCollection imports;
@@ -270,7 +254,6 @@ public class FxmlTemplateLoader {
         return new RootTemplate(instantiationTemplate, controller);
     }
 
-    @SuppressWarnings("unchecked")
     private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
         ParsedProperties parse = propertiesParser.parse(element, currentTemplate);
         if (controller != null && parse.controller() != null) {
@@ -281,127 +264,47 @@ public class FxmlTemplateLoader {
             // TODO introduce file name and line number of fxml file.
             throw new LoadException("fx:controller can only be applied to root element.");
         }
+        if (parse.controller() != null) {
+            controller = parse.controller();
+        }
         return new FxRootTemplate(parse.rootType(), parse.properties());
     }
 
-    private void checkRootElementProcessed() throws LoadException {
-        if (isRootElementProcessed) {
-            // TODO introduce file name and line number of fxml file.
-            throw new LoadException("fx:controller can only be applied to root element.");
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     // FIXME too long method. Can be simplified. Maybe move creation of Contructor/BuilderTemplate
     // into special Collection, which collects settable and
     // unsettable properties
     private InstantiationTemplate createInstatiationTemplate(StartElement element, String className)
             throws NoSuchMethodException, SecurityException, LoadException {
-        Class<?> clazz = imports.findClass(className);
-        PropertyCollection properties = new PropertyCollection();
-        List<Property> unsettableProperties = new ArrayList<>();
-        Iterator<Attribute> attributes = element.getAttributes();
-        while (attributes.hasNext()) {
-            Attribute attribute = attributes.next();
-            QName attributeName = attribute.getName();
-            String propertyPrefix = attributeName.getPrefix();
-            String propertyName = attributeName.getLocalPart();
-            String value = attribute.getValue();
-
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                IValue convertedValue = resolve(value, to(String.class));
-                // FIXME clean up null pointer
-                Method fxIdSetter = null;
-                if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-                    fxIdSetter = findSetter(clazz, propertyName);
-                }
-                FxIdPropertyTemplate property = new FxIdPropertyTemplate(currentTemplate,
-                        fxIdSetter, convertedValue);
-                properties.add(property);
-                continue;
-            }
-
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
-                if (controller != null) {
-                    // TODO add file path and line number
-                    throw new LoadException("Controller value already specified.");
-                }
-                checkRootElementProcessed();
-                Class<?> controllerClass = imports.findClass(value);
-                controller = new FxControllerTemplate(controllerClass);
-                continue;
-            }
-
-            // FIXME clean up duplication
-            if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-                Method method = findSetter(clazz, propertyName);
-                Class<?> type = extractType(method);
-                IValue convertedValue = resolve(value, to(type), "text".equals(propertyName));
-
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
-                        currentTemplate, method);
-                property.prepare(new PropertyTemplate(method, convertedValue));
-                properties.add(property);
-                continue;
-            }
-
-            if (ReflectionUtils.hasGetter(clazz, propertyName)) {
-                Method getter = ReflectionUtils.findGetter(clazz, propertyName);
-                if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    IValue convertedValue = new BasicTypeValue(value);
-
-                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate,
-                            getter);
-                    property.prepare(new PropertyTemplate(getter, convertedValue));
-                    properties.add(property);
-                    continue;
-                }
-            }
-            if (propertyName.contains(".")) {
-                int lastIndexOf = propertyName.lastIndexOf(".");
-                String staticPropertyClassName = propertyName.substring(0, lastIndexOf);
-                String staticPropertyName = propertyName.substring(lastIndexOf + 1);
-                Class<?> staticPropertyClass = imports.findClass(staticPropertyClassName);
-                if (ReflectionUtils.hasSetter(staticPropertyClass, staticPropertyName)) {
-                    Method method = findSetter(staticPropertyClass, staticPropertyName);
-                    Class<?> type = extractType(method);
-                    IValue convertedValue = resolve(value, to(type));
-
-                    StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
-                            currentTemplate, method, staticPropertyClass);
-                    property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
-                            convertedValue));
-                    properties.add(property);
-                    continue;
-                }
-            }
-            unsettableProperties.add(new Property(propertyName, value));
+        ParsedProperties parse = propertiesParser.parseClass(element, className, currentTemplate);
+        if (controller != null && parse.controller() != null) {
+            // TODO add file path and line number
+            throw new LoadException("Controller value already specified.");
         }
-        if (unsettableProperties.isEmpty() && clazz.getConstructor() != null) {
-            Constructor<?> constructor = clazz.getConstructor();
+        if (isRootElementProcessed && parse.controller() != null) {
+            // TODO introduce file name and line number of fxml file.
+            throw new LoadException("fx:controller can only be applied to root element.");
+        }
+        if (parse.controller() != null) {
+            controller = parse.controller();
+        }
+
+        PropertyCollection properties = parse.properties();
+        Class<?> rootType = parse.rootType();
+
+        if (!properties.hasUnsettable() && rootType.getConstructor() != null) {
+            Constructor<?> constructor = rootType.getConstructor();
             return new ConstructorTemplate(currentTemplate, constructor, properties);
         }
         List<IProperty> unsettableConvertedProperties = new ArrayList<>();
-        Builder<?> builder = builderFactory.getBuilder(clazz);
-        for (Property property : unsettableProperties) {
+        Builder<?> builder = builderFactory.getBuilder(rootType);
+        for (Property property : properties.unsettable()) {
             IProperty newPropertyTemplate = property.createTemplate(builder, valueResolver);
             if (newPropertyTemplate != null) {
                 unsettableConvertedProperties.add(newPropertyTemplate);
             }
         }
         return new BuilderTemplate(currentTemplate, properties, builderFactory,
-                unsettableConvertedProperties, clazz);
-    }
-
-    private IValue resolve(String value, Class<?> type) throws LoadException {
-        return resolve(value, type, false);
-    }
-
-    // FIXME find better solution than boolean flag
-    private IValue resolve(String value, Class<?> type, boolean isTextProperty)
-            throws LoadException {
-        return valueResolver.resolve(value, type, isTextProperty);
+                unsettableConvertedProperties, rootType);
     }
 
     private void processProcessingInstruction(ProcessingInstruction instruction) {

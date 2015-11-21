@@ -7,19 +7,34 @@ import java.util.List;
 import javafx.fxml.LoadException;
 
 import de.briemla.fxmltemplateloader.template.IProperty;
+import de.briemla.fxmltemplateloader.template.Property;
 import de.briemla.fxmltemplateloader.template.TemplateRegistry;
 
 public class PropertyCollection {
 
-    private List<IProperty> properties;
+    private final List<IProperty> properties;
+    private final List<Property> unsettable;
 
     public PropertyCollection() {
         super();
         properties = new ArrayList<>();
+        unsettable = new ArrayList<>();
     }
 
     public void add(IProperty property) {
         properties.add(property);
+    }
+
+    public void addUnsettable(Property property) {
+        unsettable.add(property);
+    }
+
+    public boolean hasUnsettable() {
+        return !unsettable.isEmpty();
+    }
+
+    public Iterable<Property> unsettable() {
+        return unsettable;
     }
 
     /**
