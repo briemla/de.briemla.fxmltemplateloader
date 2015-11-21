@@ -6,7 +6,6 @@ import static de.briemla.fxmltemplateloader.util.ReflectionUtils.findSetter;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.Attribute;
@@ -17,16 +16,11 @@ import javafx.fxml.LoadException;
 import de.briemla.fxmltemplateloader.PropertyCollection;
 import de.briemla.fxmltemplateloader.template.Controller;
 import de.briemla.fxmltemplateloader.template.FxControllerTemplate;
-import de.briemla.fxmltemplateloader.template.FxIdPropertyTemplate;
-import de.briemla.fxmltemplateloader.template.ListPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Property;
-import de.briemla.fxmltemplateloader.template.PropertyTemplate;
-import de.briemla.fxmltemplateloader.template.SingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.StaticPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.StaticSingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
 import de.briemla.fxmltemplateloader.util.ReflectionUtils;
-import de.briemla.fxmltemplateloader.value.BasicTypeValue;
 import de.briemla.fxmltemplateloader.value.IValue;
 
 public class PropertiesParser {
@@ -58,7 +52,7 @@ public class PropertiesParser {
      *             if the properties could not be parsed, a {@link LoadException} will be thrown
      */
     public ParsedProperties parse(StartElement element, Template parent) throws LoadException {
-        PropertyCollection properties = new PropertyCollection();
+        PropertyCollection properties = new PropertyCollection(valueResolver);
         Class<?> rootType = findTypeOfRoot(element);
         @SuppressWarnings("unchecked")
         Iterator<Attribute> attributes = element.getAttributes();
@@ -78,23 +72,9 @@ public class PropertiesParser {
                 controller = new FxControllerTemplate(controllerClass);
                 continue;
             }
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                properties.add(fxIdProperty(parent, rootType, propertyName, value));
-                continue;
-            }
-            // FIXME clean up duplication
-            if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-                properties.add(singleElement(parent, rootType, propertyName, value));
-                continue;
-            }
 
-            if (ReflectionUtils.hasGetter(rootType, propertyName)) {
-                Method getter = ReflectionUtils.findGetter(rootType, propertyName);
-                if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    properties.add(listProperty(parent, value, getter));
-                    continue;
-                }
+            if (properties.add(propertyPrefix, propertyName, value, parent, rootType)) {
+                continue;
             }
             throw new LoadException(
                     "Property specified on fx:root element which can not be set by setter:"
@@ -102,26 +82,6 @@ public class PropertiesParser {
         }
         // return properties;
         return new ParsedProperties(properties, controller, rootType);
-    }
-
-    private ListPropertyTemplate listProperty(Template parent, String value, Method getter) {
-        IValue convertedValue = new BasicTypeValue(value);
-
-        ListPropertyTemplate property = new ListPropertyTemplate(parent, getter);
-        property.prepare(new PropertyTemplate(getter, convertedValue));
-        return property;
-    }
-
-    private FxIdPropertyTemplate fxIdProperty(Template parent, Class<?> rootType,
-            String propertyName, String value) throws LoadException {
-        IValue convertedValue = resolve(value, to(String.class));
-        Method fxIdSetter = null;
-        if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-            fxIdSetter = findSetter(rootType, propertyName);
-        }
-        FxIdPropertyTemplate property = new FxIdPropertyTemplate(parent, fxIdSetter,
-                convertedValue);
-        return property;
     }
 
     @SuppressWarnings("unchecked")
@@ -149,7 +109,7 @@ public class PropertiesParser {
     public ParsedProperties parseClass(StartElement element, String className, Template parent)
             throws LoadException {
         Class<?> clazz = imports.findClass(className);
-        PropertyCollection properties = new PropertyCollection();
+        PropertyCollection properties = new PropertyCollection(valueResolver);
         @SuppressWarnings("unchecked")
         Iterator<Attribute> attributes = element.getAttributes();
         Controller controller = null;
@@ -165,25 +125,11 @@ public class PropertiesParser {
                 controller = new FxControllerTemplate(controllerClass);
                 continue;
             }
-            // FIXME clean up this if statement, because it does not fit to the other properties.
-            if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                properties.add(fxIdProperty(parent, clazz, propertyName, value));
+
+            if (properties.add(propertyPrefix, propertyName, value, parent, clazz)) {
                 continue;
             }
 
-            // FIXME clean up duplication
-            if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-                properties.add(singleElement(parent, clazz, propertyName, value));
-                continue;
-            }
-
-            if (ReflectionUtils.hasGetter(clazz, propertyName)) {
-                Method getter = ReflectionUtils.findGetter(clazz, propertyName);
-                if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    properties.add(listProperty(parent, value, getter));
-                    continue;
-                }
-            }
             if (propertyName.contains(".")) {
                 int lastIndexOf = propertyName.lastIndexOf(".");
                 String staticPropertyClassName = propertyName.substring(0, lastIndexOf);
@@ -205,16 +151,5 @@ public class PropertiesParser {
             properties.addUnsettable(new Property(propertyName, value));
         }
         return new ParsedProperties(properties, controller, clazz);
-    }
-
-    private SingleElementPropertyTemplate singleElement(Template parent, Class<?> clazz,
-            String propertyName, String value) throws LoadException {
-        Method method = findSetter(clazz, propertyName);
-        Class<?> type = extractType(method);
-        IValue convertedValue = resolve(value, to(type), "text".equals(propertyName));
-
-        SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(parent, method);
-        property.prepare(new PropertyTemplate(method, convertedValue));
-        return property;
     }
 }
