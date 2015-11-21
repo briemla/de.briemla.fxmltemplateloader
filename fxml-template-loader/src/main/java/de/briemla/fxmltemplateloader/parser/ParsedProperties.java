@@ -1,12 +1,13 @@
 package de.briemla.fxmltemplateloader.parser;
 
 import de.briemla.fxmltemplateloader.PropertyCollection;
+import de.briemla.fxmltemplateloader.template.Controller;
 
 public class ParsedProperties {
 
-    private PropertyCollection properties;
-    private Object controller;
-    private Class<?> clazz;
+    private final PropertyCollection properties;
+    private final Controller controller;
+    private final Class<?> clazz;
 
     /**
      * Contains the result of properties parsed by {@link PropertiesParser}.
@@ -18,7 +19,7 @@ public class ParsedProperties {
      * @param clazz
      *            type of parent element
      */
-    public ParsedProperties(PropertyCollection properties, Object controller, Class<?> clazz) {
+    public ParsedProperties(PropertyCollection properties, Controller controller, Class<?> clazz) {
         this.properties = properties;
         this.controller = controller;
         this.clazz = clazz;
@@ -32,7 +33,7 @@ public class ParsedProperties {
         return clazz;
     }
 
-    public Object controller() {
+    public Controller controller() {
         return controller;
     }
 
