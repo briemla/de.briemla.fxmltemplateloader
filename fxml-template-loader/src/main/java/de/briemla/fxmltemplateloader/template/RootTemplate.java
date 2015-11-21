@@ -9,7 +9,7 @@ import javafx.fxml.LoadException;
 public class RootTemplate implements ITemplate {
     private final InstantiationTemplate template;
     private Object lastUsedController;
-    private Controller controller;
+    private final Controller controller;
 
     public RootTemplate(InstantiationTemplate template, Controller controller) {
         this.template = template;
