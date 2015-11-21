@@ -92,11 +92,7 @@ public class PropertiesParser {
             if (ReflectionUtils.hasGetter(rootType, propertyName)) {
                 Method getter = ReflectionUtils.findGetter(rootType, propertyName);
                 if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    IValue convertedValue = new BasicTypeValue(value);
-
-                    ListPropertyTemplate property = new ListPropertyTemplate(parent, getter);
-                    property.prepare(new PropertyTemplate(getter, convertedValue));
-                    properties.add(property);
+                    properties.add(listProperty(parent, value, getter));
                     continue;
                 }
             }
@@ -106,6 +102,14 @@ public class PropertiesParser {
         }
         // return properties;
         return new ParsedProperties(properties, controller, rootType);
+    }
+
+    private ListPropertyTemplate listProperty(Template parent, String value, Method getter) {
+        IValue convertedValue = new BasicTypeValue(value);
+
+        ListPropertyTemplate property = new ListPropertyTemplate(parent, getter);
+        property.prepare(new PropertyTemplate(getter, convertedValue));
+        return property;
     }
 
     private FxIdPropertyTemplate fxIdProperty(Template parent, Class<?> rootType,
@@ -177,11 +181,7 @@ public class PropertiesParser {
             if (ReflectionUtils.hasGetter(clazz, propertyName)) {
                 Method getter = ReflectionUtils.findGetter(clazz, propertyName);
                 if (List.class.isAssignableFrom(getter.getReturnType())) {
-                    IValue convertedValue = new BasicTypeValue(value);
-
-                    ListPropertyTemplate property = new ListPropertyTemplate(parent, getter);
-                    property.prepare(new PropertyTemplate(getter, convertedValue));
-                    properties.add(property);
+                    properties.add(listProperty(parent, value, getter));
                     continue;
                 }
             }
