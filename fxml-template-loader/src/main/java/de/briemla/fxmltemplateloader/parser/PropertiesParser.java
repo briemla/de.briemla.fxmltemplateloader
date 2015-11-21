@@ -85,14 +85,7 @@ public class PropertiesParser {
             }
             // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(rootType, propertyName)) {
-                Method method = findSetter(rootType, propertyName);
-                Class<?> type = extractType(method);
-                IValue convertedValue = resolve(value, to(type));
-
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(parent,
-                        method);
-                property.prepare(new PropertyTemplate(method, convertedValue));
-                properties.add(property);
+                properties.add(singleElement(parent, rootType, propertyName, value));
                 continue;
             }
 
@@ -149,8 +142,8 @@ public class PropertiesParser {
         return valueResolver.resolve(value, type, isTextProperty);
     }
 
-    public ParsedProperties parseClass(StartElement element, String className,
-            Template currentTemplate) throws LoadException {
+    public ParsedProperties parseClass(StartElement element, String className, Template parent)
+            throws LoadException {
         Class<?> clazz = imports.findClass(className);
         PropertyCollection properties = new PropertyCollection();
         @SuppressWarnings("unchecked")
@@ -165,7 +158,7 @@ public class PropertiesParser {
 
             // FIXME clean up this if statement, because it does not fit to the other properties.
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_ID_PROPERTY.equals(propertyName)) {
-                properties.add(fxIdProperty(currentTemplate, clazz, propertyName, value));
+                properties.add(fxIdProperty(parent, clazz, propertyName, value));
                 continue;
             }
 
@@ -177,14 +170,7 @@ public class PropertiesParser {
 
             // FIXME clean up duplication
             if (ReflectionUtils.hasSetter(clazz, propertyName)) {
-                Method method = findSetter(clazz, propertyName);
-                Class<?> type = extractType(method);
-                IValue convertedValue = resolve(value, to(type), "text".equals(propertyName));
-
-                SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(
-                        currentTemplate, method);
-                property.prepare(new PropertyTemplate(method, convertedValue));
-                properties.add(property);
+                properties.add(singleElement(parent, clazz, propertyName, value));
                 continue;
             }
 
@@ -193,8 +179,7 @@ public class PropertiesParser {
                 if (List.class.isAssignableFrom(getter.getReturnType())) {
                     IValue convertedValue = new BasicTypeValue(value);
 
-                    ListPropertyTemplate property = new ListPropertyTemplate(currentTemplate,
-                            getter);
+                    ListPropertyTemplate property = new ListPropertyTemplate(parent, getter);
                     property.prepare(new PropertyTemplate(getter, convertedValue));
                     properties.add(property);
                     continue;
@@ -211,7 +196,7 @@ public class PropertiesParser {
                     IValue convertedValue = resolve(value, to(type));
 
                     StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
-                            currentTemplate, method, staticPropertyClass);
+                            parent, method, staticPropertyClass);
                     property.prepare(new StaticPropertyTemplate(staticPropertyClass, method,
                             convertedValue));
                     properties.add(property);
@@ -221,5 +206,16 @@ public class PropertiesParser {
             properties.addUnsettable(new Property(propertyName, value));
         }
         return new ParsedProperties(properties, controller, clazz);
+    }
+
+    private SingleElementPropertyTemplate singleElement(Template parent, Class<?> clazz,
+            String propertyName, String value) throws LoadException {
+        Method method = findSetter(clazz, propertyName);
+        Class<?> type = extractType(method);
+        IValue convertedValue = resolve(value, to(type), "text".equals(propertyName));
+
+        SingleElementPropertyTemplate property = new SingleElementPropertyTemplate(parent, method);
+        property.prepare(new PropertyTemplate(method, convertedValue));
+        return property;
     }
 }
