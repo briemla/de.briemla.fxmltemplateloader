@@ -86,6 +86,9 @@ public class PropertiesParser {
         throw new LoadException("Type attribute of fx:root element missing.");
     }
 
+    /**
+     * TODO: refactor.
+     */
     public ParsedProperties parseClass(StartElement element, String className, Template parent)
             throws LoadException {
         Class<?> clazz = imports.findClass(className);

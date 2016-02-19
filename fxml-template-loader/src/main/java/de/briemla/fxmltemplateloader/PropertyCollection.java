@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.fxml.FXML;
 import javafx.fxml.LoadException;
 
 import de.briemla.fxmltemplateloader.parser.ImportCollection;
@@ -37,16 +38,20 @@ public class PropertyCollection {
     private final ValueResolver valueResolver;
     private final ImportCollection imports;
 
+    /**
+     * Contains a bunch of properties.
+     *
+     * @param valueResolver
+     *            used to resolve {@link String}s from {@link FXML}
+     * @param imports
+     *            used to resolve {@link Class}es for properties
+     */
     public PropertyCollection(ValueResolver valueResolver, ImportCollection imports) {
         super();
         this.valueResolver = valueResolver;
         this.imports = imports;
         properties = new ArrayList<>();
         unsettable = new ArrayList<>();
-    }
-
-    public void add(IProperty property) {
-        properties.add(property);
     }
 
     public void addUnsettable(Property property) {
@@ -68,11 +73,6 @@ public class PropertyCollection {
      *            to set properties on
      * @param registry
      *            to find other elements via fx:id
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
-     * @throws LoadException
      */
     public void apply(Object object, TemplateRegistry registry)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
@@ -82,6 +82,13 @@ public class PropertyCollection {
         }
     }
 
+    public void add(IProperty property) {
+        properties.add(property);
+    }
+
+    /**
+     * TODO: needs refactoring.
+     */
     public boolean add(String propertyPrefix, String propertyName, String value, Template parent,
             Class<?> clazz) throws LoadException {
 
@@ -115,7 +122,8 @@ public class PropertyCollection {
                 Class<?> type = extractType(method);
                 IValue convertedValue = resolve(value, to(type));
 
-                StaticSingleElementPropertyTemplate property = new StaticSingleElementPropertyTemplate(
+                StaticSingleElementPropertyTemplate property = 
+                        new StaticSingleElementPropertyTemplate(
                         parent, method, staticPropertyClass);
                 property.prepare(
                         new StaticPropertyTemplate(staticPropertyClass, method, convertedValue));
