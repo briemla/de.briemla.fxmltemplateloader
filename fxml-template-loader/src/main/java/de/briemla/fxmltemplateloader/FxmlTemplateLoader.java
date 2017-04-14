@@ -25,7 +25,6 @@ import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ImportFactory;
 import de.briemla.fxmltemplateloader.parser.ParsedProperties;
 import de.briemla.fxmltemplateloader.parser.Parser;
-import de.briemla.fxmltemplateloader.parser.PropertiesParser;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
 import de.briemla.fxmltemplateloader.template.ConstructorTemplate;
@@ -50,9 +49,7 @@ public class FxmlTemplateLoader {
     private Template currentTemplate;
     private XMLEventReader eventReader;
     private ITemplate rootTemplate;
-    private Controller controller;
     private boolean isRootElementProcessed;
-    private PropertiesParser propertiesParser;
     private Object root;
 	private final Parser parser;
 
@@ -110,7 +107,7 @@ public class FxmlTemplateLoader {
     }
 
     public void setController(Object controller) {
-        this.controller = new InstatiatedController(controller);
+        parser.setController(controller);
     }
 
     public void setLocation(URL location) {
@@ -132,8 +129,8 @@ public class FxmlTemplateLoader {
      */
     public <T> T doLoad(URL resource) throws IOException {
         try {
-            if (controller != null) {
-                return doLoadTemplate(resource).create(controller);
+            if (parser.controller() != null) {
+                return doLoadTemplate(resource).create(parser.controller());
             }
             return doLoadTemplate(resource).create();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
@@ -191,7 +188,7 @@ public class FxmlTemplateLoader {
 
     private ITemplate parseXml()
             throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
-        propertiesParser = new PropertiesParser(parser.valueResolver(), parser.imports());
+        parser.newPropertiesParser();
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
             if (event.isProcessingInstruction()) {
@@ -221,7 +218,7 @@ public class FxmlTemplateLoader {
             }
             FxRootTemplate fxRootTemplate = createFxRootTemplate(element);
             currentTemplate = fxRootTemplate;
-            rootTemplate = wrap(fxRootTemplate, controller);
+            rootTemplate = wrap(fxRootTemplate, parser.controller());
             rootElementProcessed();
             return;
         }
@@ -259,7 +256,7 @@ public class FxmlTemplateLoader {
         currentTemplate = instantiationTemplate;
 
         if (rootTemplate == null) {
-            rootTemplate = wrap(instantiationTemplate, controller);
+            rootTemplate = wrap(instantiationTemplate, parser.controller());
             rootElementProcessed();
         }
     }
@@ -274,8 +271,8 @@ public class FxmlTemplateLoader {
     }
 
     private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
-        ParsedProperties parse = propertiesParser.parse(element, currentTemplate);
-        if (controller != null && parse.controller() != null) {
+        ParsedProperties parse = parser.propertiesParser().parse(element, currentTemplate);
+        if (parser.controller() != null && parse.controller() != null) {
             // TODO add file path and line number
             throw new LoadException("Controller value already specified.");
         }
@@ -284,7 +281,7 @@ public class FxmlTemplateLoader {
             throw new LoadException("fx:controller can only be applied to root element.");
         }
         if (parse.controller() != null) {
-            controller = parse.controller();
+            parser.setFxController(parse.controller());
         }
         return new FxRootTemplate(parse.rootType(), parse.properties());
     }
@@ -294,8 +291,8 @@ public class FxmlTemplateLoader {
     // unsettable properties
     private InstantiationTemplate createInstatiationTemplate(StartElement element, String className)
             throws NoSuchMethodException, SecurityException, LoadException {
-        ParsedProperties parse = propertiesParser.parseClass(element, className, currentTemplate);
-        if (controller != null && parse.controller() != null) {
+        ParsedProperties parse = parser.propertiesParser().parseClass(element, className, currentTemplate);
+        if (parser.controller() != null && parse.controller() != null) {
             // TODO add file path and line number
             throw new LoadException("Controller value already specified.");
         }
@@ -304,7 +301,7 @@ public class FxmlTemplateLoader {
             throw new LoadException("fx:controller can only be applied to root element.");
         }
         if (parse.controller() != null) {
-            controller = parse.controller();
+            parser.setFxController(parse.controller());
         }
 
         PropertyCollection properties = parse.properties();
