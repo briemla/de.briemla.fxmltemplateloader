@@ -3,6 +3,9 @@ package de.briemla.fxmltemplateloader.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 public class TypeUtil {
 
     /**
@@ -37,6 +40,9 @@ public class TypeUtil {
                         "Attribute must be a character, but contains more than one character.");
             }
             return value.charAt(0);
+        }
+        if (Paint.class.equals(attributeType)) {
+        	return Color.valueOf(value);
         }
         if (Double.class.equals(attributeType) || double.class.equals(attributeType)) {
             return Double.parseDouble(value);
