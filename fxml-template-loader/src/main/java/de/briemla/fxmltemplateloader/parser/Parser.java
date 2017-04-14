@@ -64,29 +64,10 @@ public class Parser {
 		this.valueResolver = valueResolver;
 	}
 
-	public ImportCollection imports() {
-		return imports;
-	}
-
-	public BuilderFactory builderFactory() {
-		return builderFactory;
-	}
-
-	public ValueResolver valueResolver() {
-		return valueResolver;
-	}
-
 	public void setClassLoader(ClassLoader classLoader) {
 		factory.setClassLoader(classLoader);
 		imports.clear();
 		valueResolver.setClassLoader(classLoader);
-	}
-
-	public void correctClassLoader() {
-		if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
-			return;
-		}
-		setClassLoader(FxmlTemplateLoader.class.getClassLoader());
 	}
 
 	public void setResourceBundle(ResourceBundle bundle) {
@@ -97,11 +78,11 @@ public class Parser {
 		valueResolver.setLocation(location);
 	}
 
-	public PropertiesParser propertiesParser() {
+	private PropertiesParser propertiesParser() {
 		return propertiesParser;
 	}
 
-	public void newPropertiesParser() {
+	private void newPropertiesParser() {
 		propertiesParser = new PropertiesParser(valueResolver, imports);
 	}
 
@@ -113,16 +94,19 @@ public class Parser {
 		return controller;
 	}
 
-	public void setFxController(Controller controller) {
-		this.controller = controller;
-	}
-	
 	public ITemplate doLoadTemplate(InputStream xmlInput)
 			throws FactoryConfigurationError, XMLStreamException, NoSuchMethodException, LoadException {
 		correctClassLoader();
 		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
 		eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
 		return parseXml();
+	}
+
+	private void correctClassLoader() {
+		if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
+			return;
+		}
+		setClassLoader(FxmlTemplateLoader.class.getClassLoader());
 	}
 
     private ITemplate parseXml()
@@ -204,14 +188,13 @@ public class Parser {
         isRootElementProcessed = true;
     }
 
-    private static ITemplate wrap(InstantiationTemplate instantiationTemplate,
-            Controller controller) {
+	private static ITemplate wrap(InstantiationTemplate instantiationTemplate, Controller controller) {
         return new RootTemplate(instantiationTemplate, controller);
     }
 
     private FxRootTemplate createFxRootTemplate(StartElement element) throws LoadException {
         ParsedProperties parse = propertiesParser().parse(element, currentTemplate);
-        if (controller() != null && parse.controller() != null) {
+        if (controller != null && parse.controller() != null) {
             // TODO add file path and line number
             throw new LoadException("Controller value already specified.");
         }
@@ -231,7 +214,7 @@ public class Parser {
     private InstantiationTemplate createInstatiationTemplate(StartElement element, String className)
             throws NoSuchMethodException, SecurityException, LoadException {
         ParsedProperties parse = propertiesParser().parseClass(element, className, currentTemplate);
-        if (controller() != null && parse.controller() != null) {
+        if (controller != null && parse.controller() != null) {
             // TODO add file path and line number
             throw new LoadException("Controller value already specified.");
         }
@@ -251,19 +234,19 @@ public class Parser {
             return new ConstructorTemplate(currentTemplate, constructor, properties);
         }
         List<IProperty> unsettableConvertedProperties = new ArrayList<>();
-        Builder<?> builder = builderFactory().getBuilder(rootType);
+        Builder<?> builder = builderFactory.getBuilder(rootType);
         for (Property property : properties.unsettable()) {
-            IProperty newPropertyTemplate = property.createTemplate(builder, valueResolver());
+            IProperty newPropertyTemplate = property.createTemplate(builder, valueResolver);
             if (newPropertyTemplate != null) {
                 unsettableConvertedProperties.add(newPropertyTemplate);
             }
         }
-        return new BuilderTemplate(currentTemplate, properties, builderFactory(),
+        return new BuilderTemplate(currentTemplate, properties, builderFactory,
                 unsettableConvertedProperties, rootType);
     }
 
     private void processProcessingInstruction(ProcessingInstruction instruction) {
-        imports().add(instruction);
+        imports.add(instruction);
     }
 
 }
