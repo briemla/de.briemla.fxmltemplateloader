@@ -21,14 +21,10 @@ import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.fxml.LoadException;
-import javafx.util.Builder;
-import javafx.util.BuilderFactory;
-
 import de.briemla.fxmltemplateloader.parser.ImportCollection;
 import de.briemla.fxmltemplateloader.parser.ImportFactory;
 import de.briemla.fxmltemplateloader.parser.ParsedProperties;
+import de.briemla.fxmltemplateloader.parser.Parser;
 import de.briemla.fxmltemplateloader.parser.PropertiesParser;
 import de.briemla.fxmltemplateloader.parser.ValueResolver;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
@@ -43,22 +39,22 @@ import de.briemla.fxmltemplateloader.template.Property;
 import de.briemla.fxmltemplateloader.template.RootTemplate;
 import de.briemla.fxmltemplateloader.template.SingleElementPropertyTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
+import javafx.util.Builder;
 
 public class FxmlTemplateLoader {
 
     private static final String FX_ROOT = "root";
     private static final String FX_NAMESPACE_PREFIX = "fx";
     private Template currentTemplate;
-    private final ImportFactory factory;
-    private final ImportCollection imports;
-    private final BuilderFactory builderFactory;
-    private final ValueResolver valueResolver;
     private XMLEventReader eventReader;
     private ITemplate rootTemplate;
     private Controller controller;
     private boolean isRootElementProcessed;
     private PropertiesParser propertiesParser;
     private Object root;
+	private final Parser parser;
 
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
@@ -67,10 +63,11 @@ public class FxmlTemplateLoader {
      */
     public FxmlTemplateLoader() {
         super();
-        factory = new ImportFactory(FxmlTemplateLoader.class.getClassLoader());
-        imports = new ImportCollection(factory);
-        builderFactory = new JavaFXBuilderFactory();
-        valueResolver = new ValueResolver();
+        ImportFactory factory = new ImportFactory(FxmlTemplateLoader.class.getClassLoader());
+        ImportCollection imports = new ImportCollection(factory);
+        JavaFXBuilderFactory builderFactory = new JavaFXBuilderFactory();
+        ValueResolver valueResolver = new ValueResolver();
+        parser = new Parser(factory, imports, builderFactory, valueResolver);
     }
 
     public static <T> T load(URL resource) throws IOException {
@@ -95,7 +92,7 @@ public class FxmlTemplateLoader {
     }
 
     private void setResourceBundle(ResourceBundle bundle) {
-        valueResolver.setResourceBundle(bundle);
+    	parser.setResourceBundle(bundle);
     }
 
     /**
@@ -109,9 +106,7 @@ public class FxmlTemplateLoader {
             throw new IllegalArgumentException();
         }
         // FIXME maybe move this into ImportCollection
-        factory.setClassLoader(classLoader);
-        imports.clear();
-        valueResolver.setClassLoader(classLoader);
+        parser.setClassLoader(classLoader);
     }
 
     public void setController(Object controller) {
@@ -119,7 +114,7 @@ public class FxmlTemplateLoader {
     }
 
     public void setLocation(URL location) {
-        valueResolver.setLocation(location);
+    	parser.setLocation(location);
     }
     
     public void setRoot(Object root) {
@@ -191,15 +186,12 @@ public class FxmlTemplateLoader {
 	}
 
     private void correctClassLoader() {
-        if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
-            return;
-        }
-        setClassLoader(FxmlTemplateLoader.class.getClassLoader());
+    	parser.correctClassLoader();
     }
 
     private ITemplate parseXml()
             throws XMLStreamException, NoSuchMethodException, SecurityException, LoadException {
-        propertiesParser = new PropertiesParser(valueResolver, imports);
+        propertiesParser = new PropertiesParser(parser.valueResolver(), parser.imports());
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
             if (event.isProcessingInstruction()) {
@@ -323,18 +315,18 @@ public class FxmlTemplateLoader {
             return new ConstructorTemplate(currentTemplate, constructor, properties);
         }
         List<IProperty> unsettableConvertedProperties = new ArrayList<>();
-        Builder<?> builder = builderFactory.getBuilder(rootType);
+        Builder<?> builder = parser.builderFactory().getBuilder(rootType);
         for (Property property : properties.unsettable()) {
-            IProperty newPropertyTemplate = property.createTemplate(builder, valueResolver);
+            IProperty newPropertyTemplate = property.createTemplate(builder, parser.valueResolver());
             if (newPropertyTemplate != null) {
                 unsettableConvertedProperties.add(newPropertyTemplate);
             }
         }
-        return new BuilderTemplate(currentTemplate, properties, builderFactory,
+        return new BuilderTemplate(currentTemplate, properties, parser.builderFactory(),
                 unsettableConvertedProperties, rootType);
     }
 
     private void processProcessingInstruction(ProcessingInstruction instruction) {
-        imports.add(instruction);
+        parser.imports().add(instruction);
     }
 }
