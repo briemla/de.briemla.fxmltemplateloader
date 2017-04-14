@@ -69,10 +69,6 @@ public class FxmlTemplateLoader {
      *            new {@link ClassLoader} instance. Not allowed to be <code>null</code>
      */
     public void setClassLoader(ClassLoader classLoader) {
-        if (classLoader == null) {
-            throw new IllegalArgumentException();
-        }
-        // FIXME maybe move this into ImportCollection
         parser.setClassLoader(classLoader);
     }
 

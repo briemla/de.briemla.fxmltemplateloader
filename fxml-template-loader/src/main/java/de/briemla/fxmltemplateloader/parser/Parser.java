@@ -65,6 +65,10 @@ public class Parser {
 	}
 
 	public void setClassLoader(ClassLoader classLoader) {
+        if (classLoader == null) {
+            throw new IllegalArgumentException();
+        }
+        // FIXME maybe move this into ImportCollection
 		factory.setClassLoader(classLoader);
 		imports.clear();
 		valueResolver.setClassLoader(classLoader);
