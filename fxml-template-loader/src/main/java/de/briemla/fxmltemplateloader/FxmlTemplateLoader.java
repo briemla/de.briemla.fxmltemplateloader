@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -57,6 +58,7 @@ public class FxmlTemplateLoader {
     private Controller controller;
     private boolean isRootElementProcessed;
     private PropertiesParser propertiesParser;
+    private Object root;
 
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
@@ -119,6 +121,10 @@ public class FxmlTemplateLoader {
     public void setLocation(URL location) {
         valueResolver.setLocation(location);
     }
+    
+    public void setRoot(Object root) {
+    	this.root = root;
+    }
 
     /**
      * Load the given resource as FXML and return the root element.
@@ -135,33 +141,54 @@ public class FxmlTemplateLoader {
                 return doLoadTemplate(resource).create(controller);
             }
             return doLoadTemplate(resource).create();
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException exception) {
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
             throw new IOException("Could not instatiate Nodes.", exception);
-        } catch (SecurityException exception) {
-            throw new IOException("Could not find correct classes.", exception);
         }
     }
-
+    
     public static ITemplate loadTemplate(URL resource) throws IOException {
-        return new FxmlTemplateLoader().doLoadTemplate(resource);
+    	return new FxmlTemplateLoader().doLoadTemplate(resource);
+    }
+    
+    private ITemplate doLoadTemplate(URL resource) throws IOException {
+    	setLocation(resource);
+    	try (InputStream xmlInput = resource.openStream()) {
+    		return loadTemplate(xmlInput);
+    	}
     }
 
-    private ITemplate doLoadTemplate(URL resource) throws IOException {
-        correctClassLoader();
-        setLocation(resource);
-        XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
-        try (InputStream xmlInput = resource.openStream()) {
-            eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
-            return parseXml();
-        } catch (XMLStreamException exception) {
-            throw new IOException("Could not parse XML.", exception);
-        } catch (IllegalArgumentException exception) {
-            throw new IOException("Something went wrong with the arguments.", exception);
-        } catch (NoSuchMethodException | SecurityException exception) {
-            throw new IOException("Could not find correct classes.", exception);
-        }
-    }
+	public <T> T load(InputStream inputStream) throws IOException {
+		try {
+			return loadTemplate(inputStream).create();
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+			throw new IOException("Could not instatiate Nodes.", exception);
+		}
+	}
+
+	public ITemplate loadTemplate(InputStream xmlInput)
+			throws IOException {
+		try {
+			return doLoadTemplate(xmlInput);
+		} catch (NoSuchMethodException | SecurityException exception) {
+			throw new IOException("Could not find correct classes.", exception);
+		} catch (XMLStreamException exception) {
+			throw new IOException("Could not parse XML.", exception);
+		} catch (IllegalArgumentException exception) {
+    		throw new IOException("Something went wrong with the arguments.", exception);
+    	}
+	}
+
+	private ITemplate doLoadTemplate(InputStream xmlInput)
+			throws FactoryConfigurationError, XMLStreamException, NoSuchMethodException, LoadException {
+		correctClassLoader();
+		XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
+		eventReader = xmlFactory.createXMLEventReader(from(xmlInput));
+		ITemplate template = parseXml();
+		if (null != root) {
+			template.setRoot(root);
+		}
+		return template;
+	}
 
     private void correctClassLoader() {
         if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
