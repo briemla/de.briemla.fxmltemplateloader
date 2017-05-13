@@ -18,6 +18,10 @@ public class ImportFactory {
         return new FullQualifiedImport(trimmedClassifier, classLoader);
     }
 
+    public DeclaredClass createClass(String className) {
+    	return new DeclaredClass(className, classLoader);
+    }
+    
     public void setClassLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
