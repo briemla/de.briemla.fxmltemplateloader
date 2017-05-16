@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -16,6 +17,13 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
+import de.briemla.fxmltemplateloader.template.ITemplate;
+import de.briemla.fxmltemplateloader.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.LoadException;
@@ -29,14 +37,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import de.briemla.fxmltemplateloader.processinginstruction.correct.ProcessingInstructionTestClass;
-import de.briemla.fxmltemplateloader.template.ITemplate;
-import de.briemla.fxmltemplateloader.util.FXUtils;
 
 public class FxmlTemplateLoaderTest {
 
@@ -322,6 +322,16 @@ public class FxmlTemplateLoaderTest {
 
         assertThat(controller, is(instanceOf(ControllerClass.class)));
     }
+    
+    @Test
+	public void initilizeController() throws Exception {
+        ITemplate template = FxmlTemplateLoader
+                .loadTemplate(fromResource("VBoxWithInitializableFxController" + FXML_FILE_EXTENSION));
+        template.create();
+        InitializableControllerClass controller = template.getController();
+
+        assertTrue(controller.isInitialized());
+	}
 
     @Test
     public void loadVBoxWithFxControllerAndDifferentControllerOnCreate() throws Exception {

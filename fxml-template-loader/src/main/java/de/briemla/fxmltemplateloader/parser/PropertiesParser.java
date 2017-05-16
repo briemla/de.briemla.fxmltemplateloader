@@ -1,5 +1,6 @@
 package de.briemla.fxmltemplateloader.parser;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -11,7 +12,9 @@ import javafx.fxml.LoadException;
 import de.briemla.fxmltemplateloader.PropertyCollection;
 import de.briemla.fxmltemplateloader.template.Controller;
 import de.briemla.fxmltemplateloader.template.FxControllerTemplate;
+import de.briemla.fxmltemplateloader.template.FxInitializableControllerTemplate;
 import de.briemla.fxmltemplateloader.template.Template;
+import de.briemla.fxmltemplateloader.util.ReflectionUtils;
 
 public class PropertiesParser {
 
@@ -58,7 +61,7 @@ public class PropertiesParser {
 
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
                 Class<?> controllerClass = imports.findClass(value);
-                controller = new FxControllerTemplate(controllerClass);
+                controller = newFxController(controllerClass);
                 continue;
             }
 
@@ -73,6 +76,14 @@ public class PropertiesParser {
         // return properties;
         return new ParsedProperties(properties, controller, rootType);
     }
+
+	private Controller newFxController(Class<?> controllerClass) {
+		if (ReflectionUtils.isInitializable(controllerClass)) {
+			Method initializeMethod = ReflectionUtils.findInitializeMethod(controllerClass);
+			return new FxInitializableControllerTemplate(controllerClass, initializeMethod);
+		}
+		return new FxControllerTemplate(controllerClass);
+	}
 
     @SuppressWarnings("unchecked")
     private Class<?> findTypeOfRoot(StartElement element) throws LoadException {
@@ -105,7 +116,7 @@ public class PropertiesParser {
 
             if (FX_NAMESPACE_PREFIX.equals(propertyPrefix) && FX_CONTROLLER.equals(propertyName)) {
                 Class<?> controllerClass = imports.findClass(value);
-                controller = new FxControllerTemplate(controllerClass);
+                controller = newFxController(controllerClass);
                 continue;
             }
 

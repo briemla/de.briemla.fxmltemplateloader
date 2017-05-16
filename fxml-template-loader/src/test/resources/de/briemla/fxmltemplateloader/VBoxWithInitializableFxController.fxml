@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import de.briemla.fxmltemplateloader.ControllerClass?>
+
+
+<VBox fx:id="vbox" fx:controller="de.briemla.fxmltemplateloader.InitializableControllerClass" xmlns:fx="http://javafx.com/fxml" />

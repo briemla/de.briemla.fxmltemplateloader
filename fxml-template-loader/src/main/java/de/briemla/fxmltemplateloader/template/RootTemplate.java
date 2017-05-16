@@ -38,7 +38,7 @@ public class RootTemplate implements ITemplate {
     }
 
     private Object instanceOf(Object controller)
-            throws InstantiationException, IllegalAccessException {
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (controller instanceof Controller) {
             return ((Controller) controller).instance();
         }

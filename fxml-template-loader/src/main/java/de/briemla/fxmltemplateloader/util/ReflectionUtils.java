@@ -7,7 +7,9 @@ import java.lang.reflect.Modifier;
 // TODO clean up
 public class ReflectionUtils {
 
-    /**
+    private static final String initialize = "initialize";
+
+	/**
      * Convenience method to find getter for a given {@link Class} and property name.
      */
     public static Method findGetter(Class<?> clazz, String propertyName) {
@@ -118,4 +120,27 @@ public class ReflectionUtils {
             field.setAccessible(true);
         }
     }
+
+    public static boolean isInitializable(Class<?> clazz) {
+		for (Method method : clazz.getMethods()) {
+            if (isAnInitializable(method)) {
+                return true;
+            }
+        }
+        return false;
+	}
+    
+    public static Method findInitializeMethod(Class<?> clazz) {
+        for (Method method : clazz.getMethods()) {
+            if (isAnInitializable(method)) {
+                return method;
+            }
+        }
+        throw new IllegalStateException(
+                "Class is not initializable. Could not find initiliaze method in class: ");
+    }
+
+	private static boolean isAnInitializable(Method method) {
+		return initialize.equals(method.getName()) && 0 == method.getParameterTypes().length;
+	}
 }
