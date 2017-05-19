@@ -3,6 +3,8 @@ package de.briemla.fxmltemplateloader.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 // TODO clean up
 public class ReflectionUtils {
@@ -142,5 +144,40 @@ public class ReflectionUtils {
 
 	private static boolean isAnInitializable(Method method) {
 		return initialize.equals(method.getName()) && 0 == method.getParameterTypes().length;
+	}
+
+	public static boolean isInitializableWithResources(Class<?> clazz) {
+		for (Method method : clazz.getMethods()) {
+            if (isAnInitializableWithResources(method)) {
+                return true;
+            }
+        }
+        return false;
+	}
+
+	private static boolean isAnInitializableWithResources(Method method) {
+		return initialize.equals(method.getName()) && parametersAreResources(method);
+	}
+
+	private static boolean parametersAreResources(Method method) {
+		return firstParameterIsURL(method.getParameterTypes()) && secondParameterIsResourceBundle(method.getParameterTypes());
+	}
+
+	private static boolean firstParameterIsURL(Class<?>[] classes) {
+		return URL.class.equals(classes[0]);
+	}
+
+	private static boolean secondParameterIsResourceBundle(Class<?>[] classes) {
+		return ResourceBundle.class.equals(classes[1]);
+	}
+
+	public static Method findInitializeMethodWithResources(Class<?> clazz) {
+		for (Method method : clazz.getMethods()) {
+            if (isAnInitializableWithResources(method)) {
+                return method;
+            }
+        }
+        throw new IllegalStateException(
+                "Class is not initializable. Could not find initiliaze method in class: " + clazz);
 	}
 }

@@ -1,7 +1,9 @@
 package de.briemla.fxmltemplateloader.parser;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.Attribute;
@@ -24,10 +26,14 @@ public class PropertiesParser {
     private static final String FX_CONTROLLER = "controller";
     private final ValueResolver valueResolver;
     private final ImportCollection imports;
+	private final URL location;
+	private final ResourceBundle resourceBundle;
 
-    public PropertiesParser(ValueResolver valueResolver, ImportCollection imports) {
+    public PropertiesParser(ValueResolver valueResolver, ImportCollection imports, URL location, ResourceBundle resourceBundle) {
         this.valueResolver = valueResolver;
         this.imports = imports;
+		this.location = location;
+		this.resourceBundle = resourceBundle;
     }
 
     /**
@@ -81,6 +87,10 @@ public class PropertiesParser {
 		if (ReflectionUtils.isInitializable(controllerClass)) {
 			Method initializeMethod = ReflectionUtils.findInitializeMethod(controllerClass);
 			return new FxInitializableControllerTemplate(controllerClass, initializeMethod);
+		}
+		if (ReflectionUtils.isInitializableWithResources(controllerClass)) {
+			Method initializeMethod = ReflectionUtils.findInitializeMethodWithResources(controllerClass);
+			return new FxResourceTakingControllerTemplate(controllerClass, initializeMethod , location, resourceBundle);
 		}
 		return new FxControllerTemplate(controllerClass);
 	}

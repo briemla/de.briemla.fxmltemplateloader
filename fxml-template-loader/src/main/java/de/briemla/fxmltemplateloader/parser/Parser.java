@@ -49,6 +49,8 @@ public class Parser {
 	private final ValueResolver valueResolver;
 	private PropertiesParser propertiesParser;
 	private Controller controller;
+	private URL location;
+	private ResourceBundle resourceBundle;
 	
     private Template currentTemplate;
     private XMLEventReader eventReader;
@@ -75,10 +77,12 @@ public class Parser {
 	}
 
 	public void setResourceBundle(ResourceBundle bundle) {
+		resourceBundle = bundle;
 		valueResolver.setResourceBundle(bundle);
 	}
 
 	public void setLocation(URL location) {
+		this.location = location;
 		valueResolver.setLocation(location);
 	}
 
@@ -87,7 +91,7 @@ public class Parser {
 	}
 
 	private void newPropertiesParser() {
-		propertiesParser = new PropertiesParser(valueResolver, imports);
+		propertiesParser = new PropertiesParser(valueResolver, imports, location, resourceBundle);
 	}
 
 	public void setController(Object controller) {

@@ -7,8 +7,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -331,6 +330,15 @@ public class FxmlTemplateLoaderTest {
         InitializableControllerClass controller = template.getController();
 
         assertTrue(controller.isInitialized());
+	}
+    
+    @Test
+	public void initializeControllerWithResources() throws Exception {
+		ITemplate template = FxmlTemplateLoader.loadTemplate(fromResource("VBoxWithResourceTakingFxController" + FXML_FILE_EXTENSION));
+		template.create();
+		ResourceTakingControllerClass controller = template.getController();
+		
+		assertTrue(controller.isInitialized());
 	}
 
     @Test
