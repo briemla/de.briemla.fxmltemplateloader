@@ -14,6 +14,7 @@ public class CachedLoader implements TemplateLoader {
 	private final TemplateLoader loader;
 	private final Map<URL, ITemplate> cache;
 	private Object controller;
+	private Object root;
 
 	public CachedLoader(TemplateLoader loader) {
 		super();
@@ -28,8 +29,7 @@ public class CachedLoader implements TemplateLoader {
 
 	@Override
 	public void setRoot(Object root) {
-		// TODO Auto-generated method stub
-
+		this.root = root;
 	}
 
 	@Override
@@ -43,10 +43,11 @@ public class CachedLoader implements TemplateLoader {
 
 	private <T> T loadViaTemplate(URL resource)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
+		ITemplate template = rootify(doLoadTemplate(resource));
 		if (null == controller) {
-			return doLoadTemplate(resource).create();
+			return template.create();
 		}
-		return doLoadTemplate(resource).create(controller);
+		return template.create(controller);
 	}
 
 	@Override
@@ -83,6 +84,13 @@ public class CachedLoader implements TemplateLoader {
 	@Override
 	public ITemplate loadTemplate(InputStream xmlInput) throws IOException {
 		return loader.loadTemplate(xmlInput);
+	}
+
+	private ITemplate rootify(ITemplate template) {
+		if (null != root) {
+			template.setRoot(root);
+		}
+		return template;
 	}
 
 }

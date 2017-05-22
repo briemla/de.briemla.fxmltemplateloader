@@ -49,6 +49,16 @@ public class CachedLoaderTest {
 	}
 	
 	@Test
+	public void loadsElementWithRoot() throws Exception {
+		Object root = mock(Object.class);
+		
+		cache.setRoot(root);
+		cache.doLoad(resource);
+		
+		verify(template).setRoot(root);
+	}
+	
+	@Test
 	public void loadsTemplateViaOtherLoader() throws IOException {
 		cache.doLoadTemplate(resource);
 

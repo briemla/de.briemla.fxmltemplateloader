@@ -20,9 +20,7 @@ import javafx.fxml.LoadException;
 class ResourceLoader implements TemplateLoader {
 
 	private final Parser parser;
-	
 	private Object root;
-
 	private final ResourceBundle bundle;
 
     /**
@@ -68,7 +66,7 @@ class ResourceLoader implements TemplateLoader {
 	public <T> T doLoad(URL resource) throws IOException {
         try {
             if (parser.controller() != null) {
-                return doLoadTemplate(resource).create(parser.controller());
+                return rootify(doLoadTemplate(resource)).create(parser.controller());
             }
             return doLoadTemplate(resource).create();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
@@ -91,7 +89,7 @@ class ResourceLoader implements TemplateLoader {
     @Override
 	public <T> T load(InputStream inputStream) throws IOException {
 		try {
-			return loadTemplate(inputStream).create();
+			return rootify(loadTemplate(inputStream)).create();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
 			throw new IOException("Could not instatiate Nodes.", exception);
 		}
@@ -113,7 +111,10 @@ class ResourceLoader implements TemplateLoader {
 
 	private ITemplate doLoadTemplate(InputStream xmlInput)
 			throws FactoryConfigurationError, XMLStreamException, NoSuchMethodException, LoadException {
-		ITemplate template = parser.doLoadTemplate(xmlInput);
+		return parser.doLoadTemplate(xmlInput);
+	}
+
+	private ITemplate rootify(ITemplate template) {
 		if (null != root) {
 			template.setRoot(root);
 		}
