@@ -30,4 +30,19 @@ public class ImportFactory {
         return classLoader != null;
     }
 
+	public boolean canLoad(String fullQualifiedClass) {
+		if (hasClassLoader()) {
+			return classLoaderKnows(fullQualifiedClass);
+		}
+		return false;
+	}
+
+	private boolean classLoaderKnows(String fullQualifiedClass) {
+		try {
+			return null != classLoader.loadClass(fullQualifiedClass);
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+
 }

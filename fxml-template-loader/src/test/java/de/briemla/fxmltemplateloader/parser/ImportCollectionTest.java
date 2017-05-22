@@ -8,11 +8,11 @@ import static org.mockito.Mockito.when;
 
 import javax.xml.stream.events.ProcessingInstruction;
 
-import javafx.fxml.LoadException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import javafx.fxml.LoadException;
 
 public class ImportCollectionTest {
 
@@ -96,4 +96,23 @@ public class ImportCollectionTest {
 
         importCollection.findClass("TestClass");
     }
+    
+    @Test
+	public void loadsClassWithMissingImport() throws Exception {
+    	String fullQualifiedClass = "full.qualified.Import";
+        ImportFactory factory = mock(ImportFactory.class);
+        DeclaredClass declaredClass = mock(DeclaredClass.class);
+
+        Class<?> toBeReturned = Object.class;
+        when(factory.canLoad(fullQualifiedClass)).thenReturn(true);
+        doReturn(toBeReturned).when(declaredClass).load();
+		when(factory.createClass(fullQualifiedClass)).thenReturn(declaredClass);
+
+        ImportCollection importCollection = new ImportCollection(factory);
+
+		importCollection.findClass(fullQualifiedClass);
+        
+        verify(factory).canLoad(fullQualifiedClass);
+	}    
+    
 }

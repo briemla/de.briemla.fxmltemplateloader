@@ -42,10 +42,13 @@ public class ImportCollection {
                     return importQualifier.load(className);
                 }
             }
-            return factory.createClass(className).load();
+            if (factory.canLoad(className)) {
+            	return factory.createClass(className).load();
+            }
         } catch (ClassNotFoundException e) {
             throw new LoadException(e);
         }
+        throw new LoadException("No matching import available for class with name: " + className);
     }
 
     /**
