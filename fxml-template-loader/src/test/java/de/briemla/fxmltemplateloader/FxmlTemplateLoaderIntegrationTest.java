@@ -37,7 +37,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class FxmlTemplateLoaderTest {
+public class FxmlTemplateLoaderIntegrationTest {
 
 	private static final String FXML_FILE_EXTENSION = ".fxml";
 	@Rule
@@ -381,7 +381,7 @@ public class FxmlTemplateLoaderTest {
 	}
 
 	private static <T> T loadWithResources(String fileName, Locale locale) throws IOException {
-		String bundlePath = FxmlTemplateLoaderTest.class.getPackage().getName() + "." + fileName;
+		String bundlePath = FxmlTemplateLoaderIntegrationTest.class.getPackage().getName() + "." + fileName;
 		ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
 		return FxmlTemplateLoader.load(fromResource(fileName), bundle);
 	}
@@ -404,7 +404,7 @@ public class FxmlTemplateLoaderTest {
 	}
 
 	private static URL fromResource(String fxmlName) {
-		return FxmlTemplateLoaderTest.class.getResource(fxmlName + FXML_FILE_EXTENSION);
+		return FxmlTemplateLoaderIntegrationTest.class.getResource(fxmlName + FXML_FILE_EXTENSION);
 	}
 
 }
