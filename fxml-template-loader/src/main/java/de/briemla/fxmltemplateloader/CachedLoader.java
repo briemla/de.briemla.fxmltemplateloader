@@ -22,12 +22,6 @@ public class CachedLoader implements TemplateLoader {
 	}
 
 	@Override
-	public void setClassLoader(ClassLoader classLoader) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setController(Object controller) {
 		this.controller = controller;
 	}

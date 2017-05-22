@@ -8,14 +8,6 @@ import de.briemla.fxmltemplateloader.template.ITemplate;
 
 interface TemplateLoader {
 
-	/**
-	 * This method changes the classLoader on an necessary objects.
-	 *
-	 * @param classLoader
-	 *            new {@link ClassLoader} instance. Not allowed to be <code>null</code>
-	 */
-	void setClassLoader(ClassLoader classLoader);
-
 	void setController(Object controller);
 
 	void setRoot(Object root);

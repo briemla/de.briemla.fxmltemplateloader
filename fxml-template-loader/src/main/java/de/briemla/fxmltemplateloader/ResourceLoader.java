@@ -45,17 +45,6 @@ class ResourceLoader implements TemplateLoader {
     	this(null);
     }
 
-    /**
-     * This method changes the classLoader on an necessary objects.
-     *
-     * @param classLoader
-     *            new {@link ClassLoader} instance. Not allowed to be <code>null</code>
-     */
-    @Override
-	public void setClassLoader(ClassLoader classLoader) {
-        parser.setClassLoader(classLoader);
-    }
-
     @Override
 	public void setController(Object controller) {
         parser.setController(controller);
