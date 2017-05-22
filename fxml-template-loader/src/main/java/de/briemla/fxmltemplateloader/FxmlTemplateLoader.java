@@ -75,8 +75,7 @@ public class FxmlTemplateLoader {
 		loader.setRoot(root);
 	}
 	
-	ITemplate doLoadTemplate(URL resource) throws IOException {
-		loader.setLocation(resource);
+	private ITemplate doLoadTemplate(URL resource) throws IOException {
 		return loader.doLoadTemplate(resource);
 	}
 
