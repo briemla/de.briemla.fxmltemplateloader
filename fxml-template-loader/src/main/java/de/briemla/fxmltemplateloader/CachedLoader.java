@@ -83,14 +83,12 @@ public class CachedLoader implements TemplateLoader {
 
 	@Override
 	public <T> T load(InputStream inputStream) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return loader.load(inputStream);
 	}
 
 	@Override
 	public ITemplate loadTemplate(InputStream xmlInput) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return loader.loadTemplate(xmlInput);
 	}
 
 }
