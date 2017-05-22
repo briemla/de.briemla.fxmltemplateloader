@@ -1,5 +1,8 @@
 package de.briemla.fxmltemplateloader.parser;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -8,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import javax.xml.stream.events.ProcessingInstruction;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,13 +20,25 @@ import javafx.fxml.LoadException;
 
 public class ImportCollectionTest {
 
-    @Rule
+    private static final String className = "single.import";
+	private static final Class<?> loadedClass = Object.class;
+	
+	@Rule
     public ExpectedException thrown = ExpectedException.none();
+	
+	private ImportFactory factory;
+	private ImportCollection importCollection;
+	private ProcessingInstruction importInstruction;
+    
+    @Before
+    public void initialize() {
+    	factory = mock(ImportFactory.class);
+    	importCollection = new ImportCollection(factory);
+    	importInstruction = mock(ProcessingInstruction.class);
+    }
 
     @Test
     public void findClassWithoutAddedImports() throws LoadException {
-        ImportFactory factory = mock(ImportFactory.class);
-        ImportCollection importCollection = new ImportCollection(factory);
         verifyZeroInteractions(factory);
 
         thrown.expect(LoadException.class);
@@ -33,11 +49,7 @@ public class ImportCollectionTest {
 
     @Test
     public void findClassWithIncorrectProcessingInstruction() throws LoadException {
-        ImportFactory factory = mock(ImportFactory.class);
-        ImportCollection importCollection = new ImportCollection(factory);
-        ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
-        when(importInstruction.getTarget()).thenReturn("someOtherThanImport");
-        importCollection.add(importInstruction);
+        configureIncorrectImportInstruction();
         verify(importInstruction).getTarget();
         verifyZeroInteractions(factory);
 
@@ -46,48 +58,49 @@ public class ImportCollectionTest {
         importCollection.findClass("TestClass");
     }
 
+	private void configureIncorrectImportInstruction() {
+		configure("someOtherThanImport", "withIncorrectData");
+	}
+
+	private void configure(String instruction, String data) {
+		when(importInstruction.getTarget()).thenReturn(instruction);
+		when(importInstruction.getData()).thenReturn(data);
+        importCollection.add(importInstruction);
+	}
+
     @Test
     public void findClassWithSingleAddedImport() throws LoadException, ClassNotFoundException {
-        ImportFactory factory = mock(ImportFactory.class);
-        ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
-        Import mockedImport = mock(Import.class);
+        Import mockedImport = createValidClass();
+        configureValidImport();
 
-        when(importInstruction.getTarget()).thenReturn("import");
-        when(importInstruction.getData()).thenReturn("single.import");
-        when(mockedImport.matches("single.import")).thenReturn(true);
-        Class<?> toBeReturned = Object.class;
-        doReturn(toBeReturned).when(mockedImport).load("single.import");
-        when(factory.create("single.import")).thenReturn(mockedImport);
+        Class<?> foundClass = importCollection.findClass(className);
+        
+        assertThat(foundClass, is(equalTo(loadedClass)));
 
-        ImportCollection importCollection = new ImportCollection(factory);
-        importCollection.add(importInstruction);
-        importCollection.findClass("single.import");
-
-        verify(factory).create("single.import");
-        verify(mockedImport).matches("single.import");
-        verify(mockedImport).load("single.import");
+        verify(factory).create(className);
+        verify(mockedImport).matches(className);
+        verify(mockedImport).load(className);
         verify(importInstruction).getTarget();
         verify(importInstruction).getData();
     }
 
+	private Import createValidClass() throws ClassNotFoundException {
+		Import mockedImport = mock(Import.class);
+        when(mockedImport.matches(className)).thenReturn(true);
+        doReturn(loadedClass).when(mockedImport).load(className);
+        when(factory.create(className)).thenReturn(mockedImport);
+		return mockedImport;
+	}
+
+	private void configureValidImport() {
+		configure("import", className);
+	}
+
     @Test
     public void findClassAfterClear() throws Exception {
-        ImportFactory factory = mock(ImportFactory.class);
-        ProcessingInstruction importInstruction = mock(ProcessingInstruction.class);
-        Import mockedImport = mock(Import.class);
+        Import mockedImport = createValidClass();
+        configureValidImport();
 
-        when(importInstruction.getTarget()).thenReturn("import");
-        when(importInstruction.getData()).thenReturn("single.import");
-        Class<?> toBeReturned = Object.class;
-        doReturn(toBeReturned).when(mockedImport).load("single.import");
-        when(factory.create("single.import")).thenReturn(mockedImport);
-
-        ImportCollection importCollection = new ImportCollection(factory);
-        importCollection.add(importInstruction);
-
-        verify(factory).create("single.import");
-        verify(importInstruction).getTarget();
-        verify(importInstruction).getData();
         verifyZeroInteractions(mockedImport);
         importCollection.clear();
 
@@ -100,15 +113,11 @@ public class ImportCollectionTest {
     @Test
 	public void loadsClassWithMissingImport() throws Exception {
     	String fullQualifiedClass = "full.qualified.Import";
-        ImportFactory factory = mock(ImportFactory.class);
         DeclaredClass declaredClass = mock(DeclaredClass.class);
 
-        Class<?> toBeReturned = Object.class;
         when(factory.canLoad(fullQualifiedClass)).thenReturn(true);
-        doReturn(toBeReturned).when(declaredClass).load();
+        doReturn(loadedClass).when(declaredClass).load();
 		when(factory.createClass(fullQualifiedClass)).thenReturn(declaredClass);
-
-        ImportCollection importCollection = new ImportCollection(factory);
 
 		importCollection.findClass(fullQualifiedClass);
         
