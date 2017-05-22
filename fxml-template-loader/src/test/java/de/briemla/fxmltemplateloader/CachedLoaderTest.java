@@ -31,7 +31,7 @@ public class CachedLoaderTest {
 	}
 
 	@Test
-	public void loadsViaOtherLoader() throws IOException {
+	public void loadsTemplateViaOtherLoader() throws IOException {
 		cache.doLoadTemplate(resource);
 
 		verify(loader).doLoadTemplate(resource);
