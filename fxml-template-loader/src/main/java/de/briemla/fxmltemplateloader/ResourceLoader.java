@@ -65,10 +65,11 @@ class ResourceLoader implements TemplateLoader {
     @Override
 	public <T> T doLoad(URL resource) throws IOException {
         try {
-            if (parser.controller() != null) {
-                return rootify(doLoadTemplate(resource)).create(parser.controller());
+            ITemplate template = rootify(doLoadTemplate(resource));
+			if (parser.controller() != null) {
+                return template.create(parser.controller());
             }
-            return doLoadTemplate(resource).create();
+            return template.create();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
             throw new IOException("Could not instatiate Nodes.", exception);
         }
