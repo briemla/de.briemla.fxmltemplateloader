@@ -17,7 +17,7 @@ public class FxmlTemplateLoader {
 	}
 
 	public FxmlTemplateLoader() {
-		this(new TemplateLoader());
+		this(new ResourceLoader());
 	}
 
 	public static <T> T load(URL resource) throws IOException {
@@ -25,7 +25,7 @@ public class FxmlTemplateLoader {
 	}
 
 	private static FxmlTemplateLoader createLoader() {
-		return new FxmlTemplateLoader(new TemplateLoader());
+		return new FxmlTemplateLoader(new ResourceLoader());
 	}
 
 	/**
