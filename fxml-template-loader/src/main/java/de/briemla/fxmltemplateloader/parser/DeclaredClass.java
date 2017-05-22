@@ -14,7 +14,5 @@ public class DeclaredClass {
 	public Class<?> load() throws ClassNotFoundException {
 		return classLoader.loadClass(className);
 	}
-	
-	
 
 }
