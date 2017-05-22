@@ -29,14 +29,25 @@ public class CachedLoaderTest {
 
 		when(loader.doLoadTemplate(resource)).thenReturn(template);
 	}
-	
+
 	@Test
 	public void loadsElementViaOtherLoader() throws Exception {
 		cache.doLoad(resource);
-		
+
 		verify(loader).doLoadTemplate(resource);
+		verify(template).create();
 	}
 
+	@Test
+	public void loadsElementWithController() throws Exception {
+		Object controller = mock(Object.class);
+
+		cache.setController(controller);
+		cache.doLoad(resource);
+
+		verify(template).create(controller);
+	}
+	
 	@Test
 	public void loadsTemplateViaOtherLoader() throws IOException {
 		cache.doLoadTemplate(resource);

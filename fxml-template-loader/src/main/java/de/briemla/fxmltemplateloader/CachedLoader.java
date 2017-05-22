@@ -54,10 +54,18 @@ public class CachedLoader implements TemplateLoader {
 	@Override
 	public <T> T doLoad(URL resource) throws IOException {
 		try {
-			return doLoadTemplate(resource).create(controller);
+			return loadViaTemplate(resource);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
 			throw new IOException("Could not instatiate Nodes.", e);
 		}
+	}
+
+	private <T> T loadViaTemplate(URL resource)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
+		if (null == controller) {
+			return doLoadTemplate(resource).create();
+		}
+		return doLoadTemplate(resource).create(controller);
 	}
 
 	@Override
