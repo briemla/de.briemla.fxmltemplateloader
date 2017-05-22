@@ -29,6 +29,13 @@ public class CachedLoaderTest {
 
 		when(loader.doLoadTemplate(resource)).thenReturn(template);
 	}
+	
+	@Test
+	public void loadsElementViaOtherLoader() throws Exception {
+		cache.doLoad(resource);
+		
+		verify(loader).doLoadTemplate(resource);
+	}
 
 	@Test
 	public void loadsTemplateViaOtherLoader() throws IOException {

@@ -2,6 +2,7 @@ package de.briemla.fxmltemplateloader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class CachedLoader implements TemplateLoader {
 
 	private final TemplateLoader loader;
 	private final Map<URL, ITemplate> cache;
+	private Object controller;
 
 	public CachedLoader(TemplateLoader loader) {
 		super();
@@ -34,8 +36,7 @@ public class CachedLoader implements TemplateLoader {
 
 	@Override
 	public void setController(Object controller) {
-		// TODO Auto-generated method stub
-
+		this.controller = controller;
 	}
 
 	@Override
@@ -52,7 +53,11 @@ public class CachedLoader implements TemplateLoader {
 
 	@Override
 	public <T> T doLoad(URL resource) throws IOException {
-		return loader.doLoad(resource);
+		try {
+			return doLoadTemplate(resource).create(controller);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new IOException("Could not instatiate Nodes.", e);
+		}
 	}
 
 	@Override
