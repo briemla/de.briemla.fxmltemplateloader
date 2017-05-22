@@ -19,7 +19,6 @@ import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import de.briemla.fxmltemplateloader.FxmlTemplateLoader;
 import de.briemla.fxmltemplateloader.InstatiatedController;
 import de.briemla.fxmltemplateloader.PropertyCollection;
 import de.briemla.fxmltemplateloader.template.BuilderTemplate;
@@ -114,7 +113,7 @@ public class Parser {
 		if (factory.hasClassLoader() && valueResolver.hasClassLoader()) {
 			return;
 		}
-		setClassLoader(FxmlTemplateLoader.class.getClassLoader());
+		setClassLoader(Parser.class.getClassLoader());
 	}
 
     private ITemplate parseXml()
