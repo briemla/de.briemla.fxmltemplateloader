@@ -25,7 +25,7 @@ public class FxmlTemplateLoader {
 	}
 
 	private static FxmlTemplateLoader createLoader(ResourceBundle bundle) {
-		return new FxmlTemplateLoader(new ResourceLoader(bundle));
+		return new FxmlTemplateLoader(new CachedLoader(new ResourceLoader(bundle)));
 	}
 
 	private static FxmlTemplateLoader createLoader() {
