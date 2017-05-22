@@ -88,18 +88,26 @@ public class ValueResolver {
     }
 
     private Object resolveResource(String value) throws LoadException {
-        if (bundle == null) {
+        verifyResourceBundle();
+        String resourceKey = unwrap(value);
+        return loadResource(resourceKey);
+    }
+
+	private void verifyResourceBundle() throws LoadException {
+		if (bundle == null) {
             throw new LoadException("No resources specified.");
         }
-        String resourceKey = unwrap(value);
-        if (bundle.containsKey(resourceKey)) {
-            return bundle.getString(resourceKey);
-        }
-        throw new LoadException("Resource \"" + resourceKey + "\" not found.");
-    }
+	}
 
     private static String unwrap(String value) {
         return value.substring(1);
+    }
+    
+    private Object loadResource(String resourceKey) throws LoadException {
+    	if (bundle.containsKey(resourceKey)) {
+    		return bundle.getString(resourceKey);
+    	}
+    	throw new LoadException("Resource \"" + resourceKey + "\" not found.");
     }
 
     public boolean hasClassLoader() {
