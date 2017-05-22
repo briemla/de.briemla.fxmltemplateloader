@@ -57,11 +57,6 @@ class ResourceLoader implements TemplateLoader {
 	public void setController(Object controller) {
         parser.setController(controller);
     }
-
-    @Override
-	public void setLocation(URL location) {
-    	parser.setLocation(location);
-    }
     
     @Override
 	public void setRoot(Object root) {
@@ -95,6 +90,10 @@ class ResourceLoader implements TemplateLoader {
     	try (InputStream xmlInput = resource.openStream()) {
     		return loadTemplate(xmlInput);
     	}
+    }
+
+	private void setLocation(URL location) {
+    	parser.setLocation(location);
     }
 
     @Override

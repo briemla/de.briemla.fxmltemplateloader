@@ -40,12 +40,6 @@ public class CachedLoader implements TemplateLoader {
 	}
 
 	@Override
-	public void setLocation(URL location) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setRoot(Object root) {
 		// TODO Auto-generated method stub
 

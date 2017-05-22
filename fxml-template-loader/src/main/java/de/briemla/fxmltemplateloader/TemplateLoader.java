@@ -21,8 +21,6 @@ interface TemplateLoader {
 
 	void setController(Object controller);
 
-	void setLocation(URL location);
-
 	void setRoot(Object root);
 
 	/**
