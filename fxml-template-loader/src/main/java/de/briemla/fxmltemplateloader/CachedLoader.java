@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import de.briemla.fxmltemplateloader.template.ITemplate;
 
@@ -20,12 +19,6 @@ public class CachedLoader implements TemplateLoader {
 		super();
 		this.loader = loader;
 		cache = new HashMap<>();
-	}
-
-	@Override
-	public void setResourceBundle(ResourceBundle bundle) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

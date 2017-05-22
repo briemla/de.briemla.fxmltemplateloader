@@ -3,13 +3,10 @@ package de.briemla.fxmltemplateloader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ResourceBundle;
 
 import de.briemla.fxmltemplateloader.template.ITemplate;
 
 interface TemplateLoader {
-
-	void setResourceBundle(ResourceBundle bundle);
 
 	/**
 	 * This method changes the classLoader on an necessary objects.

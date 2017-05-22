@@ -24,8 +24,12 @@ public class FxmlTemplateLoader {
 		return createLoader().doLoad(resource);
 	}
 
+	private static FxmlTemplateLoader createLoader(ResourceBundle bundle) {
+		return new FxmlTemplateLoader(new ResourceLoader(bundle));
+	}
+
 	private static FxmlTemplateLoader createLoader() {
-		return new FxmlTemplateLoader(new ResourceLoader());
+		return createLoader(null);
 	}
 
 	/**
@@ -41,9 +45,7 @@ public class FxmlTemplateLoader {
 	 *             in case the file can not be loaded or can not be parsed
 	 */
 	public static <T> T load(URL resource, ResourceBundle bundle) throws IOException {
-		FxmlTemplateLoader fxmlTemplateLoader = createLoader();
-		fxmlTemplateLoader.setResourceBundle(bundle);
-		return fxmlTemplateLoader.doLoad(resource);
+		return createLoader(bundle).doLoad(resource);
 	}
 
 	public static ITemplate loadTemplate(URL resource) throws IOException {
@@ -61,10 +63,6 @@ public class FxmlTemplateLoader {
 	 */
 	public <T> T doLoad(URL resource) throws IOException {
 		return loader.doLoad(resource);
-	}
-
-	private void setResourceBundle(ResourceBundle bundle) {
-		loader.setResourceBundle(bundle);
 	}
 
 	public void setController(Object controller) {

@@ -23,23 +23,26 @@ class ResourceLoader implements TemplateLoader {
 	
 	private Object root;
 
+	private final ResourceBundle bundle;
+
     /**
      * Class to load FXML files. The class creates {@link ITemplate} which can be reused to speed up
      * generation of several objects from the same FXML file without reading it several times from
      * the file system.
      */
-    ResourceLoader() {
+    ResourceLoader(ResourceBundle bundle) {
         super();
+		this.bundle = bundle;
         ImportFactory factory = new ImportFactory(ResourceLoader.class.getClassLoader());
         ImportCollection imports = new ImportCollection(factory);
         JavaFXBuilderFactory builderFactory = new JavaFXBuilderFactory();
         ValueResolver valueResolver = new ValueResolver();
         parser = new Parser(factory, imports, builderFactory, valueResolver);
+        parser.setResourceBundle(this.bundle);
     }
-
-    @Override
-	public void setResourceBundle(ResourceBundle bundle) {
-    	parser.setResourceBundle(bundle);
+    
+    ResourceLoader() {
+    	this(null);
     }
 
     /**
