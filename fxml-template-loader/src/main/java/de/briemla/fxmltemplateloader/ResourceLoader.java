@@ -19,6 +19,8 @@ import javafx.fxml.LoadException;
 
 class ResourceLoader implements TemplateLoader {
 
+	private static final ResourceBundle withoutResourceBundle = null;
+	
 	private final Parser parser;
 	private Object root;
 	private final ResourceBundle bundle;
@@ -63,7 +65,12 @@ class ResourceLoader implements TemplateLoader {
      *             in case the file can not be loaded or can not be parsed
      */
     @Override
-	public <T> T doLoad(URL resource) throws IOException {
+    public <T> T doLoad(URL resource) throws IOException {
+    	return doLoad(resource, withoutResourceBundle);
+    }
+    
+    @Override
+	public <T> T doLoad(URL resource, ResourceBundle bundle) throws IOException {
         try {
             ITemplate template = rootify(doLoadTemplate(resource));
 			if (parser.controller() != null) {

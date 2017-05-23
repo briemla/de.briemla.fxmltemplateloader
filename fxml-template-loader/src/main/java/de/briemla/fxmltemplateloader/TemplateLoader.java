@@ -3,6 +3,7 @@ package de.briemla.fxmltemplateloader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import de.briemla.fxmltemplateloader.template.ITemplate;
 
@@ -22,6 +23,8 @@ interface TemplateLoader {
 	 *             in case the file can not be loaded or can not be parsed
 	 */
 	<T> T doLoad(URL resource) throws IOException;
+	
+	<T> T doLoad(URL resource, ResourceBundle bundle) throws IOException;
 
 	ITemplate doLoadTemplate(URL resource) throws IOException;
 

@@ -6,11 +6,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.briemla.fxmltemplateloader.template.ITemplate;
 
 public class CachedLoader implements TemplateLoader {
 
+	private static final ResourceBundle withoutResourceBundle = null;
+	
 	private final TemplateLoader loader;
 	private final Map<URL, ITemplate> cache;
 	private Object controller;
@@ -34,6 +37,11 @@ public class CachedLoader implements TemplateLoader {
 
 	@Override
 	public <T> T doLoad(URL resource) throws IOException {
+		return doLoad(resource, withoutResourceBundle);
+	}
+	
+	@Override
+	public <T> T doLoad(URL resource, ResourceBundle bundle) throws IOException {
 		try {
 			return loadViaTemplate(resource);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
