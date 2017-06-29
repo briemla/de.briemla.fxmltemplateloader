@@ -21,14 +21,14 @@ public class FxmlTemplateLoader {
 	}
 
 	public static <T> T load(URL resource) throws IOException {
-		return createLoader().doLoad(resource);
+		return createCachedLoader().doLoad(resource);
 	}
 
 	private static FxmlTemplateLoader createLoader(ResourceBundle bundle) {
 		return new FxmlTemplateLoader(new CachedLoader(new ResourceLoader(bundle)));
 	}
 
-	private static FxmlTemplateLoader createLoader() {
+	public static FxmlTemplateLoader createCachedLoader() {
 		return createLoader(null);
 	}
 
@@ -49,7 +49,7 @@ public class FxmlTemplateLoader {
 	}
 
 	public static ITemplate loadTemplate(URL resource) throws IOException {
-		return createLoader().doLoadTemplate(resource);
+		return createCachedLoader().doLoadTemplate(resource);
 	}
 
 	/**
